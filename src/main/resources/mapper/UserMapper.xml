@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.checkin.mapper.UserMapper">
+
+    <insert id="createUser" parameterType="com.checkin.dto.request.UserRequest">
+        insert into users(
+            "employee_code",
+            "fullname",
+            "email",
+            "password",
+            "avatar",
+            "role",
+            "status",
+            "gender",
+            "phone",
+            "department",
+            "unit",
+            "job_title",
+            "position",
+            "cccd",
+            "cccd_image",
+            "face_image"
+        )VALUES(
+           #{employeeCode},
+           #{fullname},
+           #{email},
+           #{password},
+           #{avatar},
+           #{roleId},
+            #{statusId},
+            #{genderId},
+            #{phone},
+            #{departmentId},
+            #{unitId},
+            #{jobTitleId},
+            #{positionId},
+            #{cccd},
+            #{cccdImage},
+            #{faceImage}
+        )
+    </insert>
+    <select id="findByEmail" resultType="com.checkin.dto.response.UserResponse">
+        select * from users where email = #{email} limit 1
+    </select>
+
+</mapper>
