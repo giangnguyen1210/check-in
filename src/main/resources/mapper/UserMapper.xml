@@ -39,8 +39,18 @@
             #{faceImage}
         )
     </insert>
+    <update id="resetPassword">
+        update users set password = #{password} where email = #{email}
+    </update>
     <select id="findByEmail" resultType="com.checkin.dto.response.UserResponse">
         select * from users where email = #{email} limit 1
     </select>
+    <select id="checkEmailExist" resultType="java.lang.Integer">
+        select * from users where email = #{email} limit 1
+    </select>
+    <select id="totalUser" resultType="Integer">
+        SELECT count(*) from users where status!=1
+    </select>
+
 
 </mapper>

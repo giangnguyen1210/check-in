@@ -5,31 +5,33 @@ import lombok.Data;
 import java.util.Date;
 @Data
 public class UserResponse {
-    private int id;
+    private Integer id;
     private String employeeCode;
     private String fullname;
     private Date dob;
     private String phone;
-    private int genderId;
+    private Integer genderId;
     private String gender;
-    private int departmentId;
+    private Integer departmentId;
     private String department;
-    private int unitId;
+    private Integer unitId;
     private String unit;
-    private int jobTitleId;
+    private Integer jobTitleId;
     private String jobTitle;
-    private int positionId;
+    private Integer positionId;
     private String position;
     private String password;
+    private String rePassword;
     private String email;
     private String avatar;
-    private int roleId;
+    private Integer roleId;
     private String role;
-    private int statusId;
+    private Integer statusId;
     private String status;
-    private int cccd;
+    private Integer cccd;
     private String cccdImage;
     private String faceImage;
+    private String otp;
 
 
 }

@@ -6,6 +6,6 @@ import lombok.Data;
 import java.util.Date;
 @Data
 public class UserRequest extends UserResponse {
-    private int page;
-    private int limit;
+    private Integer page;
+    private Integer limit;
 }

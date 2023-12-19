@@ -6,8 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper {
-    int createUser(UserRequest userRequest);
+    Integer createUser(UserRequest userRequest);
 
     UserResponse findByEmail(String email);
+
+    Integer checkEmailExist(UserRequest userRequest);
+    Integer totalUser();
+
+    Integer resetPassword(UserRequest request);
 
 }

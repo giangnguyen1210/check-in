@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.checkin.mapper.OTPMapper">
+    <insert id="saveOTP" parameterType="com.checkin.dto.response.OTP">
+        INSERT INTO otp (otp, expiry_time, email) VALUES (#{otp}, #{expiryTime}, #{email})
+    </insert>
+
+    <select id="validateOTP" resultType="com.checkin.dto.response.OTP">
+        SELECT * FROM otp WHERE otp = #{otp} AND email = #{email}
+    </select>
+</mapper>
