@@ -5,10 +5,13 @@ import com.checkin.dto.response.BaseResponse;
 import com.checkin.dto.response.UserResponse;
 import com.checkin.mapper.UserMapper;
 import com.checkin.service.UserService;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -67,12 +70,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResponse getListUser(UserRequest request) {
-        return null;
+        BaseResponse baseResponse = new BaseResponse();
+        List<UserResponse> list = userMapper.getListUser(request);
+        baseResponse.setTotalRecords(list.size());
+        baseResponse.setData(list);
+        return baseResponse;
     }
 
     @Override
-    public BaseResponse editUser(UserRequest response) {
-        return null;
+    public BaseResponse updateUser(UserRequest request) {
+        BaseResponse baseResponse = new BaseResponse();
+        if (request == null || Strings.isNullOrEmpty(request.getFullname())
+                || Strings.isNullOrEmpty(request.getEmail())) {
+            return new BaseResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()),
+                    "Fields is required");
+        }
+        int b = userMapper.updateUser(request);
+        if (b !=0) {
+            baseResponse.setData(request);
+            baseResponse.setErrorCode(HttpStatus.OK.name());
+            baseResponse.setTotalRecords(userMapper.totalUser());
+            baseResponse.setErrorDesc("chỉnh sửa người dùng thành công");
+        } else {
+            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            baseResponse.setErrorDesc("chỉnh sửa người dùng thất bại");
+            return baseResponse;
+        }
+        return baseResponse;
     }
 
     @Override

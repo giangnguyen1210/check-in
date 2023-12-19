@@ -32,6 +32,7 @@ public class UserResponse {
     private String cccdImage;
     private String faceImage;
     private String otp;
+    private String keyword;
 
 
 }

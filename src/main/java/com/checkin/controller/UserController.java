@@ -21,4 +21,13 @@ public class UserController {
     public ResponseEntity<BaseResponse> createUser(@RequestBody UserRequest request){
         return new ResponseEntity<>(userService.createUser(request), HttpStatus.OK);
     }
+
+    @PostMapping("/update")
+    public ResponseEntity<BaseResponse> updateUser(@RequestBody UserRequest request){
+        return new ResponseEntity<>(userService.updateUser(request), HttpStatus.OK);
+    }
+    @PostMapping("/list")
+    public ResponseEntity<BaseResponse> listUser(@RequestBody UserRequest request){
+        return new ResponseEntity<>(userService.getListUser(request), HttpStatus.OK);
+    }
 }

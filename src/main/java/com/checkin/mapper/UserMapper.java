@@ -4,6 +4,8 @@ import com.checkin.dto.request.UserRequest;
 import com.checkin.dto.response.UserResponse;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     Integer createUser(UserRequest userRequest);
@@ -14,5 +16,9 @@ public interface UserMapper {
     Integer totalUser();
 
     Integer resetPassword(UserRequest request);
+
+    List<UserResponse> getListUser(UserRequest request);
+
+    Integer updateUser(UserRequest request);
 
 }

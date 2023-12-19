@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.checkin.mapper.RoleMapper">
+
+    <insert id="createRole">
+        insert into role(name) values (#{name})
+    </insert>
+    <select id="listRole" resultType="com.checkin.dto.response.RoleResponse">
+        select * from role
+    </select>
+    <select id="checkRoleExist" resultType="java.lang.Integer">
+        select * from role where name=#{name}
+    </select>
+</mapper>

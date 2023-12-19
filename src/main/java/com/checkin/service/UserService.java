@@ -9,7 +9,7 @@ public interface UserService {
 
     BaseResponse getListUser(UserRequest request);
 
-    BaseResponse editUser(UserRequest response);
+    BaseResponse updateUser(UserRequest response);
 
     BaseResponse deleteUser(UserRequest request);
 

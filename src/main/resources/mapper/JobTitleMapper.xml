@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.checkin.mapper.JobTitleMapper">
+
+    <insert id="createJobTitle">
+        insert into job_title(name) values (#{name})
+    </insert>
+    <select id="listJobTitle" resultType="com.checkin.dto.response.JobTitleResponse">
+        select * from job_title
+    </select>
+    <select id="checkJobTitleExist" resultType="java.lang.Integer">
+        select * from job_title where name=#{name}
+    </select>
+</mapper>
