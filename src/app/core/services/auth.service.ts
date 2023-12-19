@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { HeaderService } from './header.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -29,13 +30,24 @@ export class AuthService {
   setJwtToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
+  isTokenExpired(token: any): boolean {
+    if (!token) {
+      return true; // Nếu không có token, coi như đã hết hạn
+    }
 
-  removeJwtToken(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
+    const decodedToken: any = jwtDecode(token);
+
+    if (!decodedToken.exp) {
+      return true; // Nếu không có thời gian hết hạn, coi như đã hết hạn
+    }
+
+    // Lấy thời gian hiện tại
+    const currentTime = Date.now() / 1000;
+
+    // So sánh thời gian hết hạn với thời gian hiện tại
+    return decodedToken.exp < currentTime;
   }
 
-  
-  
   login(user: any): Observable<any> {
     const loginUrl = `${this.apiUrl}/auth/login`; 
     return this.http.post(loginUrl, user).pipe(

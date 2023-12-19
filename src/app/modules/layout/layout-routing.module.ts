@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout.component';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
 // import { AuthGuard } from 'src/app/core/guards/auth.guard';
 
 const routes: Routes = [
@@ -8,15 +9,15 @@ const routes: Routes = [
     path: 'dashboard',
     component: LayoutComponent,
     loadChildren: () => import('../dashboard/dashboard.module').then((m) => m.DashboardModule),
-    // canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
+    canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
-    path: 'product',
+    path: 'users',
     component: LayoutComponent,
-    // loadChildren: () => import('../product')
-
-  }
+    loadChildren: () => import('../users/users.module').then((m) => m.UsersModule),
+    canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
+  },
   // { path: '**', redirectTo: 'error/404' },
 ];
 

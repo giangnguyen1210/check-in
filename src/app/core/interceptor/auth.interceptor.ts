@@ -8,10 +8,11 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     
   }
 
@@ -20,10 +21,8 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('token');
-    console.log(req)
-    console.log(this.router)
-
-    if (token) {
+    const isExpired = this.authService.isTokenExpired(token);
+    if (!isExpired) {
       req = req.clone({
         setHeaders: {
             'Content-Type': 'application/json',
