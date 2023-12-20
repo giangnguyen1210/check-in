@@ -12,13 +12,13 @@ public class UserResponse {
     private String phone;
     private Integer genderId;
     private String gender;
-    private Integer departmentId;
+    private String departmentCode;
     private String department;
-    private Integer unitId;
+    private String unitCode;
     private String unit;
-    private Integer jobTitleId;
+    private String jobTitleCode;
     private String jobTitle;
-    private Integer positionId;
+    private String positionCode;
     private String position;
     private String password;
     private String rePassword;

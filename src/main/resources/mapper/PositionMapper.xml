@@ -4,12 +4,15 @@
 <mapper namespace="com.checkin.mapper.PositionMapper">
 
     <insert id="createPosition">
-        insert into position(name) values (#{name})
+        insert into position(name, code) values (#{name}, #{code})
     </insert>
     <select id="listPosition" resultType="com.checkin.dto.response.PositionResponse">
         select * from position
     </select>
     <select id="checkPositionExist" resultType="java.lang.Integer">
         select * from position where name=#{name}
+    </select>
+    <select id="getNextCode" resultType="com.checkin.dto.response.PositionResponse">
+        SELECT * FROM position ORDER BY code DESC LIMIT 1
     </select>
 </mapper>

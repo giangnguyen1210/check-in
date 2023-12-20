@@ -6,4 +6,5 @@ import lombok.Data;
 public class JobTitleResponse {
     private Integer id;
     private String name;
+    private String code;
 }

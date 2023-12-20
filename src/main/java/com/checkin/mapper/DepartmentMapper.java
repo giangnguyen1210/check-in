@@ -8,8 +8,10 @@ import java.util.List;
 
 @Mapper
 public interface DepartmentMapper {
-    int createDepartment(DepartmentRequest request);
+    Integer createDepartment(DepartmentRequest request);
 
     List<DepartmentResponse> listDepartment();
-    int checkDepartmentExist(DepartmentRequest request);
+    Integer checkDepartmentExist(DepartmentRequest request);
+
+    DepartmentResponse getNextCode();
 }

@@ -38,7 +38,7 @@ public class CommonController {
     public ResponseEntity<BaseResponse> getListDepartment(){
         return new ResponseEntity<>(commonService.listDepartment(), HttpStatus.OK);
     }
-    @PostMapping(value = "/create-Department")
+    @PostMapping(value = "/create-department")
     public ResponseEntity<BaseResponse> createRole(@RequestBody DepartmentRequest request){
         return new ResponseEntity<>(commonService.createDepartment(request), HttpStatus.OK);
     }

@@ -1,7 +1,9 @@
 package com.checkin.service.impl;
 
+import com.checkin.common.SupportService;
 import com.checkin.dto.request.UserRequest;
 import com.checkin.dto.response.BaseResponse;
+import com.checkin.dto.response.PositionResponse;
 import com.checkin.dto.response.UserResponse;
 import com.checkin.mapper.UserMapper;
 import com.checkin.service.UserService;
@@ -20,6 +22,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private SupportService service;
     @Override
     public BaseResponse createUser(UserRequest request) {
         BaseResponse baseResponse = new BaseResponse();
@@ -36,34 +40,45 @@ public class UserServiceImpl implements UserService {
             baseResponse.setErrorCode("Full name is required");
             baseResponse.setErrorDesc(HttpStatus.BAD_REQUEST.name());
             return baseResponse;
-        }else if(request.getDepartmentId() == null){
+        }else if(request.getDepartmentCode() == null){
             baseResponse.setErrorCode("Department is required ");
             baseResponse.setErrorDesc(HttpStatus.BAD_REQUEST.name());
             return baseResponse;
-        }else if(request.getUnitId() == null){
+        }else if(request.getUnitCode() == null){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Unit is required ");
             return baseResponse;
-        }else if(request.getJobTitleId() == null){
+        }else if(request.getJobTitleCode() == null){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Job title is required ");
             return baseResponse;
-        }else if(request.getPositionId() == null){
+        }else if(request.getPositionCode() == null){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Position is required ");
             return baseResponse;
         }else{
-            Integer b = userMapper.createUser(request);
-            if (b !=0) {
-                baseResponse.setData(request);
-                baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setTotalRecords(userMapper.totalUser());
-                baseResponse.setErrorDesc("Thêm mới thành công");
-            } else {
-                baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-                baseResponse.setErrorDesc("Thêm mới thất bại");
-                return baseResponse;
+            String id = "EMPLOYEE-";
+            int getNextId = 0;
+            System.out.println(userMapper.getListUser(request).size()>0);
+            System.out.println("hello"+userMapper.getNextCode());
+            if(userMapper.getListUser(request).size()>0) {
+                UserResponse userResponse = userMapper.getNextCode();
+                getNextId = Integer.parseInt(userResponse.getEmployeeCode().substring(userResponse.getEmployeeCode().length() - 4)) + 1;
             }
+            String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
+            request.setEmployeeCode((id+pad).trim());
+            System.out.println("employeecode: "+request.getEmployeeCode());
+//            Integer b = userMapper.createUser(request);
+//            if (b !=0) {
+//                baseResponse.setData(request);
+//                baseResponse.setErrorCode(HttpStatus.OK.name());
+//                baseResponse.setTotalRecords(userMapper.totalUser());
+//                baseResponse.setErrorDesc("Thêm mới thành công");
+//            } else {
+//                baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+//                baseResponse.setErrorDesc("Thêm mới thất bại");
+//                return baseResponse;
+//            }
         }
         return baseResponse;
     }

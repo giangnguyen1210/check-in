@@ -13,10 +13,10 @@
             "status_id",
             "gender_id",
             "phone",
-            "department_id",
-            "unit_id",
-            "job_title_id",
-            "position_id",
+            "department_code",
+            "unit_code",
+            "job_title_code",
+            "position_code",
             "cccd",
             "cccd_image",
             "face_image",
@@ -31,10 +31,10 @@
             1,
             #{genderId},
             #{phone},
-            #{departmentId},
-            #{unitId},
-            #{jobTitleId},
-            #{positionId},
+            #{departmentCode},
+            #{unitCode},
+            #{jobTitleCode},
+            #{positionCode},
             #{cccd},
             #{cccdImage},
             #{faceImage},
@@ -51,10 +51,10 @@
                         email=#{email},
                         gender_id = #{genderId},
                         phone=#{phone},
-                        department_id=#{departmentId},
-                        unit_id=#{unitId},
-                        job_title_id=#{jobTitleId},
-                        position_id=#{positionId},
+                        department_code=#{departmentCode},
+                        unit_code=#{unitCode},
+                        job_title_code=#{jobTitleCode},
+                        position_code=#{positionCode},
                         cccd=#{cccd},
                         cccd_image=#{cccdImage},
                         face_image=#{faceImage}
@@ -102,19 +102,19 @@
         SELECT  users.*,
                 role.name as role,
                 status.name as status,
-                department.name as department,
                 gender.name as gender,
+                department.name as department,
                 job_title.name as jobtitle,
                 unit.name as unit,
                 position.name as position
         FROM users
         LEFT JOIN role ON users.role_id = role.id
         LEFT JOIN status ON users.status_id = status.id
-        LEFT JOIN department ON users.department_id = department.id
         LEFT JOIN gender ON users.gender_id = gender.id
-        LEFT JOIN job_title ON users.job_title_id = job_title.id
-        LEFT JOIN unit ON users.unit_id = unit.id
-        LEFT JOIN position ON users.position_id = position.id
+        LEFT JOIN department ON users.department_code = department.code
+        LEFT JOIN job_title ON users.job_title_code = job_title.code
+        LEFT JOIN unit ON users.unit_code = unit.code
+        LEFT JOIN position ON users.position_code = position.code
         <where>
             <if test="keyword != null and keyword != ''">
                 AND (
@@ -123,14 +123,14 @@
                 OR users.employee_code LIKE CONCAT('%', #{keyword}, '%')
                 )
             </if>
-            <if test="departmentId != null and departmentId != ''">
-                AND users.department_id = #{departmentId}
+            <if test="departmentCode != null and departmentCode != ''">
+                AND users.department_code = #{departmentCode}
             </if>
             <if test="genderId != null and genderId != ''">
                 AND users.gender_id = #{genderId}
             </if>
-            <if test="jobTitleId != null and jobTitleId != ''">
-                AND users.job_title_id = #{jobTitleId}
+            <if test="jobTitleCode != null and jobTitleCode != ''">
+                AND users.job_title_code = #{jobTitleCode}
             </if>
             <if test="statusId != null and statusId != ''">
                 AND users.status_id = #{statusId}
@@ -139,6 +139,9 @@
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
         </if>
+    </select>
+    <select id="getNextCode" resultType="com.checkin.dto.response.UserResponse">
+        SELECT * FROM users ORDER BY employee_code DESC LIMIT 1
     </select>
 
 

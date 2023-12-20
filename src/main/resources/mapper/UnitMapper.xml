@@ -4,12 +4,15 @@
 <mapper namespace="com.checkin.mapper.UnitMapper">
 
     <insert id="createUnit">
-        insert into unit(name) values (#{name})
+        insert into unit(name, code) values (#{name}, #{code})
     </insert>
     <select id="listUnit" resultType="com.checkin.dto.response.UnitResponse">
         select * from unit
     </select>
     <select id="checkUnitExist" resultType="java.lang.Integer">
         select * from unit where name=#{name}
+    </select>
+    <select id="getNextCode" resultType="com.checkin.dto.response.UnitResponse">
+        SELECT * FROM unit ORDER BY code DESC LIMIT 1
     </select>
 </mapper>

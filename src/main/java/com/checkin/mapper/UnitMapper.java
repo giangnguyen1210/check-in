@@ -12,5 +12,6 @@ public interface UnitMapper {
 
     List<UnitResponse> listUnit();
 
+    UnitResponse getNextCode();
     Integer checkUnitExist(UnitRequest unitRequest);
 }

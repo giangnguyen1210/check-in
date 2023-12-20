@@ -14,4 +14,6 @@ public interface JobTitleMapper {
     List<JobTitleResponse> listJobTitle();
     Integer checkJobTitleExist(JobTitleRequest request);
 
+    JobTitleResponse getNextCode();
+
 }

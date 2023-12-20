@@ -4,12 +4,16 @@
 <mapper namespace="com.checkin.mapper.JobTitleMapper">
 
     <insert id="createJobTitle">
-        insert into job_title(name) values (#{name})
+        insert into job_title(name, code) values (#{name}, #{code})
     </insert>
     <select id="listJobTitle" resultType="com.checkin.dto.response.JobTitleResponse">
         select * from job_title
     </select>
     <select id="checkJobTitleExist" resultType="java.lang.Integer">
         select * from job_title where name=#{name}
+    </select>
+
+    <select id="getNextCode" resultType="com.checkin.dto.response.JobTitleResponse">
+        SELECT * FROM job_title ORDER BY code DESC LIMIT 1
     </select>
 </mapper>

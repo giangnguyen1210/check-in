@@ -1,5 +1,6 @@
 package com.checkin.service.impl;
 
+import com.checkin.common.SupportService;
 import com.checkin.dto.request.*;
 import com.checkin.dto.response.*;
 import com.checkin.mapper.*;
@@ -26,6 +27,9 @@ public class CommonServiceImpl implements CommonService {
     private GenderMapper genderMapper;
     @Autowired
     private UnitMapper unitMapper;
+
+    @Autowired
+    private SupportService service;
     @Override
     public BaseResponse listRole() {
         BaseResponse baseResponse = new BaseResponse();
@@ -38,8 +42,8 @@ public class CommonServiceImpl implements CommonService {
     public BaseResponse createRole(RoleRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         Integer role = roleMapper.checkRoleExist(request);
-        if(role!=1){
-            if(request!=null && !request.equals("")){
+        if(role==null || role!=1){
+            if(request!=null && !request.getName().equals("")){
                 roleMapper.createRole(request);
                 baseResponse.setErrorCode(HttpStatus.CREATED.name());
                 baseResponse.setErrorDesc("Create success");
@@ -61,16 +65,26 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public BaseResponse createDepartment(DepartmentRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        Integer department = departmentMapper.checkDepartmentExist(request);
-        if(department!=1){
-            if(request!=null && !request.equals("")){
+        Integer departmentCheckExist = departmentMapper.checkDepartmentExist(request);
+        System.out.println(departmentCheckExist);
+        if(departmentCheckExist==0){
+            String id = "DEPARTMENT-";
+            int getNextId = 0;
+            if(departmentMapper.listDepartment().size()>0){
+                DepartmentResponse department = departmentMapper.getNextCode();
+                getNextId = Integer.parseInt(department.getCode().substring(department.getCode().length() - 4))+1;
+            }
+            String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
+            request.setCode((id+pad).trim());
+
+            if(request!=null && !request.getName().equals("")){
                 departmentMapper.createDepartment(request);
                 baseResponse.setErrorCode(HttpStatus.CREATED.name());
                 baseResponse.setErrorDesc("Create success");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail");
+            baseResponse.setErrorDesc("Create fail, Department existed!");
         }
         return baseResponse;
     }
@@ -87,8 +101,8 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public BaseResponse createStatus(StatusRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        Integer jobTitle = statusMapper.checkStatusExist(request);
-        if(jobTitle!=1){
+        Integer status = statusMapper.checkStatusExist(request);
+        if(status==null || status!=1){
             if(request!=null && !request.equals("")){
                 statusMapper.createStatus(request);
                 baseResponse.setErrorCode(HttpStatus.CREATED.name());
@@ -111,9 +125,18 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public BaseResponse createUnit(UnitRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        Integer unit = unitMapper.checkUnitExist(request);
-        if(unit!=1){
-            if(request!=null && !request.equals("")){
+        Integer unitCheckExist = unitMapper.checkUnitExist(request);
+        if(unitCheckExist==null || unitCheckExist!=1){
+            String id = "UNIT-";
+            int getNextId = 0;
+            if(unitMapper.listUnit().size()>0){
+                UnitResponse unit = unitMapper.getNextCode();
+                getNextId = Integer.parseInt(unit.getCode().substring(unit.getCode().length() - 4))+1;
+            }
+            String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
+            request.setCode((id+pad).trim());
+
+            if(request!=null && !request.getName().equals("")){
                 unitMapper.createUnit(request);
                 baseResponse.setErrorCode(HttpStatus.CREATED.name());
                 baseResponse.setErrorDesc("Create success");
@@ -137,9 +160,19 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public BaseResponse createPosition(PositionRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        Integer position = positionMapper.checkPositionExist(request);
-        if(position!=1){
-            if(request!=null && !request.equals("")){
+        Integer positionCheckExist = positionMapper.checkPositionExist(request);
+        if(positionCheckExist == null || positionCheckExist!=1){
+            String id = "POSITION-";
+            int getNextId = 0;
+            if(positionMapper.listPosition().size()>0){
+                PositionResponse position = positionMapper.getNextCode();
+                getNextId = Integer.parseInt(position.getCode().substring(position.getCode().length() - 4))+1;
+            }
+            String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
+            request.setCode((id+pad).trim());
+
+
+            if(request!=null && !request.getName().equals("")){
                 positionMapper.createPosition(request);
                 baseResponse.setErrorCode(HttpStatus.CREATED.name());
                 baseResponse.setErrorDesc("Create success");
@@ -162,8 +195,17 @@ public class CommonServiceImpl implements CommonService {
     public BaseResponse createJobTitle(JobTitleRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         Integer jobTitle = jobTitleMapper.checkJobTitleExist(request);
-        if(jobTitle!=1){
-            if(request!=null && !request.equals("")){
+        if(jobTitle==null || jobTitle!=1){
+            String id = "JOB-";
+            int getNextId = 0;
+            if(jobTitleMapper.listJobTitle().size()>0){
+                JobTitleResponse jobTitleResponse = jobTitleMapper.getNextCode();
+                getNextId = Integer.parseInt(jobTitleResponse.getCode().substring(jobTitleResponse.getCode().length() - 4))+1;
+            }
+            String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
+            request.setCode((id+pad).trim());
+
+            if(request!=null && !request.getName().equals("")){
                 jobTitleMapper.createJobTitle(request);
                 baseResponse.setErrorCode(HttpStatus.CREATED.name());
                 baseResponse.setErrorDesc("Create success");
@@ -188,7 +230,7 @@ public class CommonServiceImpl implements CommonService {
     public BaseResponse createGender(GenderRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         Integer gender = genderMapper.checkGenderExist(request);
-        if(gender!=1){
+        if(gender==null || gender!=1){
             genderMapper.createGender(request);
             baseResponse.setErrorCode(HttpStatus.CREATED.name());
             baseResponse.setErrorDesc("Create success");

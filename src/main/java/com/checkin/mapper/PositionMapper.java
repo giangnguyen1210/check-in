@@ -13,4 +13,6 @@ public interface PositionMapper {
     List<PositionResponse> listPosition();
 
     Integer checkPositionExist(PositionRequest request);
+
+    PositionResponse getNextCode();
 }

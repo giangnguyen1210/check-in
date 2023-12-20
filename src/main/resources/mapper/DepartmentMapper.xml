@@ -4,12 +4,16 @@
 <mapper namespace="com.checkin.mapper.DepartmentMapper">
 
     <insert id="createDepartment">
-        insert into department(name) values (#{name})
+        insert into department(name, code) values (#{name}, #{code})
     </insert>
     <select id="listDepartment" resultType="com.checkin.dto.response.DepartmentResponse">
         select * from department
     </select>
     <select id="checkDepartmentExist" resultType="java.lang.Integer">
-        select * from department where name=#{name}
+        select count(*) from department where name=#{name}
+    </select>
+
+    <select id="getNextCode" resultType="com.checkin.dto.response.DepartmentResponse">
+        SELECT * FROM department ORDER BY code DESC LIMIT 1
     </select>
 </mapper>
