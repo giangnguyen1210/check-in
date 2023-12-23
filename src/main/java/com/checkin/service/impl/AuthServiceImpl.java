@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -49,6 +50,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public BaseResponse login(UserRequest request) {
         UserResponse user = userMapper.findByEmail(request.getEmail());
+        Date newDate = new Date();
+        System.out.println(newDate);
         AuthResponse authResponse = new AuthResponse("");
         if(user==null){
             authResponse.setErrorCode(HttpStatus.NOT_FOUND.name());

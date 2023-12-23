@@ -10,8 +10,11 @@ import java.util.List;
 public interface UnitMapper {
     Integer createUnit(UnitRequest request);
 
-    List<UnitResponse> listUnit();
+    List<UnitResponse> listUnit(UnitRequest request);
+    Integer totalUnit();
 
     UnitResponse getNextCode();
     Integer checkUnitExist(UnitRequest unitRequest);
+
+    Integer updateUnit(UnitRequest request);
 }

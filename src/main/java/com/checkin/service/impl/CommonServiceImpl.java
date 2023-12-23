@@ -18,8 +18,6 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     private StatusMapper statusMapper;
     @Autowired
-    private DepartmentMapper departmentMapper;
-    @Autowired
     private PositionMapper positionMapper;
     @Autowired
     private JobTitleMapper jobTitleMapper;
@@ -29,6 +27,8 @@ public class CommonServiceImpl implements CommonService {
     private UnitMapper unitMapper;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private BranchMapper branchMapper;
 
     @Autowired
     private TypeOfQuestionMapper toqMapper;
@@ -60,41 +60,6 @@ public class CommonServiceImpl implements CommonService {
         return baseResponse;
     }
     @Override
-    public BaseResponse listDepartment() {
-        BaseResponse baseResponse = new BaseResponse();
-        List<DepartmentResponse> departments = departmentMapper.listDepartment();
-        baseResponse.setData(departments);
-        baseResponse.setTotalRecords(departments.size());
-        return baseResponse;
-    }
-    @Override
-    public BaseResponse createDepartment(DepartmentRequest request) {
-        BaseResponse baseResponse = new BaseResponse();
-        Integer departmentCheckExist = departmentMapper.checkDepartmentExist(request);
-        System.out.println(departmentCheckExist);
-        if(departmentCheckExist==0){
-            String id = "DEPARTMENT-";
-            int getNextId = 0;
-            if(departmentMapper.listDepartment().size()>0){
-                DepartmentResponse department = departmentMapper.getNextCode();
-                getNextId = Integer.parseInt(department.getCode().substring(department.getCode().length() - 4))+1;
-            }
-            String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
-            request.setCode((id+pad).trim());
-
-            if(request!=null && !request.getName().equals("")){
-                departmentMapper.createDepartment(request);
-                baseResponse.setErrorCode(HttpStatus.CREATED.name());
-                baseResponse.setErrorDesc("Create success");
-            }
-        }else{
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail, Department existed!");
-        }
-        return baseResponse;
-    }
-
-    @Override
     public BaseResponse listStatus() {
         BaseResponse baseResponse = new BaseResponse();
         List<StatusResponse> statuses = statusMapper.listStatus();
@@ -110,39 +75,6 @@ public class CommonServiceImpl implements CommonService {
         if(status==null || status!=1){
             if(request!=null && !request.equals("")){
                 statusMapper.createStatus(request);
-                baseResponse.setErrorCode(HttpStatus.CREATED.name());
-                baseResponse.setErrorDesc("Create success");
-            }
-        }else{
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail");
-        }
-        return baseResponse;
-    }
-    @Override
-    public BaseResponse listUnit() {
-        BaseResponse baseResponse = new BaseResponse();
-        List<UnitResponse> units = unitMapper.listUnit();
-        baseResponse.setData(units);
-        baseResponse.setTotalRecords(units.size());
-        return baseResponse;
-    }
-    @Override
-    public BaseResponse createUnit(UnitRequest request) {
-        BaseResponse baseResponse = new BaseResponse();
-        Integer unitCheckExist = unitMapper.checkUnitExist(request);
-        if(unitCheckExist==null || unitCheckExist!=1){
-            String id = "UNIT-";
-            int getNextId = 0;
-            if(unitMapper.listUnit().size()>0){
-                UnitResponse unit = unitMapper.getNextCode();
-                getNextId = Integer.parseInt(unit.getCode().substring(unit.getCode().length() - 4))+1;
-            }
-            String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
-            request.setCode((id+pad).trim());
-
-            if(request!=null && !request.getName().equals("")){
-                unitMapper.createUnit(request);
                 baseResponse.setErrorCode(HttpStatus.CREATED.name());
                 baseResponse.setErrorDesc("Create success");
             }
@@ -256,6 +188,15 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
+    public BaseResponse listBranch() {
+        BaseResponse baseResponse = new BaseResponse();
+        List<BranchResponse> branch = branchMapper.listBranch();
+        baseResponse.setData(branch);
+        baseResponse.setTotalRecords(branch.size());
+        return baseResponse;
+    }
+
+    @Override
     public BaseResponse createTypeOfQuestion(TypeOfQuestionRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         toqMapper.createTypeOfQuestion(request);
@@ -270,6 +211,15 @@ public class CommonServiceImpl implements CommonService {
         List<ObjectResponse> object = commonMapper.getListObject();
         baseResponse.setData(object);
         baseResponse.setTotalRecords(object.size());
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse createBranch(BranchRequest request) {
+        BaseResponse baseResponse = new BaseResponse();
+        branchMapper.createBranch(request);
+        baseResponse.setErrorCode(HttpStatus.CREATED.name());
+        baseResponse.setErrorDesc("Create success");
         return baseResponse;
     }
 }

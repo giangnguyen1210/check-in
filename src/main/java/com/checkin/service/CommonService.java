@@ -5,13 +5,12 @@ import com.checkin.dto.response.BaseResponse;
 
 public interface CommonService {
     BaseResponse listRole();
-    BaseResponse listDepartment();
     BaseResponse listStatus();
-    BaseResponse listUnit();
     BaseResponse listPosition();
     BaseResponse listJobTitle();
     BaseResponse listGender();
     BaseResponse listTypeOfQuestion();
+    BaseResponse listBranch();
 
     BaseResponse createGender(GenderRequest genderRequest);
 
@@ -19,14 +18,13 @@ public interface CommonService {
 
     BaseResponse createStatus(StatusRequest request);
 
-    BaseResponse createUnit(UnitRequest request);
-
     BaseResponse createPosition(PositionRequest request);
 
     BaseResponse createRole(RoleRequest request);
 
-    BaseResponse createDepartment(DepartmentRequest request);
     BaseResponse createTypeOfQuestion(TypeOfQuestionRequest request);
 
     BaseResponse getListObject();
+
+    BaseResponse createBranch(BranchRequest request);
 }

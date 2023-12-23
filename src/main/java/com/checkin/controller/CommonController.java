@@ -34,23 +34,7 @@ public class CommonController {
     public ResponseEntity<BaseResponse> createStatus(@RequestBody StatusRequest request){
         return new ResponseEntity<>(commonService.createStatus(request), HttpStatus.OK);
     }
-    @PostMapping(value = "/list-department")
-    public ResponseEntity<BaseResponse> getListDepartment(){
-        return new ResponseEntity<>(commonService.listDepartment(), HttpStatus.OK);
-    }
-    @PostMapping(value = "/create-department")
-    public ResponseEntity<BaseResponse> createRole(@RequestBody DepartmentRequest request){
-        return new ResponseEntity<>(commonService.createDepartment(request), HttpStatus.OK);
-    }
-    @PostMapping(value = "/list-unit")
-    public ResponseEntity<BaseResponse> getListUnit(){
-        return new ResponseEntity<>(commonService.listUnit(), HttpStatus.OK);
-    }
 
-    @PostMapping(value = "/create-unit")
-    public ResponseEntity<BaseResponse> createUnit(@RequestBody UnitRequest request){
-        return new ResponseEntity<>(commonService.createUnit(request), HttpStatus.OK);
-    }
     @PostMapping(value = "/list-gender")
     public ResponseEntity<BaseResponse> getListGender(){
         return new ResponseEntity<>(commonService.listGender(), HttpStatus.OK);
@@ -92,5 +76,15 @@ public class CommonController {
     @PostMapping(value = "/list-objects")
     public ResponseEntity<BaseResponse> getListObject(){
         return new ResponseEntity<>(commonService.getListObject(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/create-branch")
+    public ResponseEntity<BaseResponse> createBranch(@RequestBody BranchRequest request){
+        return new ResponseEntity<>(commonService.createBranch(request), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/list-branch")
+    public ResponseEntity<BaseResponse> getListBranch(){
+        return new ResponseEntity<>(commonService.listBranch(), HttpStatus.OK);
     }
 }

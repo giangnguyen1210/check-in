@@ -4,16 +4,51 @@
 <mapper namespace="com.checkin.mapper.DepartmentMapper">
 
     <insert id="createDepartment">
-        insert into department(name, code) values (#{name}, #{code})
+        insert into department(name, code, branch, note) values (#{name}, #{code}, #{branch}, #{note})
     </insert>
+
     <select id="listDepartment" resultType="com.checkin.dto.response.DepartmentResponse">
-        select * from department
+        SELECT
+        d.name AS name,
+        b.name AS branchName,
+        d.branch as branch,
+        d.note as note,
+        d.code as code
+        FROM
+        department d
+        LEFT JOIN
+        branch b ON d.branch = b.code
+        <where>
+            <if test="name != null and name != ''">
+                AND (
+                LOWER(d.name) LIKE CONCAT('%', LOWER(#{name}), '%')
+                )
+            </if>
+            <if test="branch != null and branch != ''">
+                AND (
+                d.branch = #{branch}
+                )
+            </if>
+        </where>
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
     </select>
     <select id="checkDepartmentExist" resultType="java.lang.Integer">
-        select count(*) from department where name=#{name}
+        select count(*) from department where name=#{name} AND branch=#{branch}
     </select>
 
     <select id="getNextCode" resultType="com.checkin.dto.response.DepartmentResponse">
         SELECT * FROM department ORDER BY code DESC LIMIT 1
     </select>
+    <select id="totalDepartment" resultType="Integer">
+        SELECT count(*) from department
+    </select>
+    <update id="updateDepartment">
+        update department set
+                          name=#{name},
+                          note=#{note},
+                          branch=#{branch}
+        where code = #{code}
+    </update>
 </mapper>

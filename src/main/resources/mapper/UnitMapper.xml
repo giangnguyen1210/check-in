@@ -4,15 +4,50 @@
 <mapper namespace="com.checkin.mapper.UnitMapper">
 
     <insert id="createUnit">
-        insert into unit(name, code) values (#{name}, #{code})
+        insert into unit(name, code, note,branch) values (#{name}, #{code},#{note},#{branch})
     </insert>
     <select id="listUnit" resultType="com.checkin.dto.response.UnitResponse">
-        select * from unit
+        SELECT
+        u.name AS name,
+        b.name AS branchName,
+        u.branch as branch,
+        u.note as note,
+        u.code as code
+        FROM
+        unit u
+        LEFT JOIN
+        branch b ON u.branch = b.code
+        <where>
+            <if test="name != null and name != ''">
+                AND (
+                LOWER(u.name) LIKE CONCAT('%', LOWER(#{name}), '%')
+                )
+            </if>
+            <if test="branch != null and branch != ''">
+                AND (
+                u.branch = #{branch}
+                )
+            </if>
+        </where>
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
     </select>
     <select id="checkUnitExist" resultType="java.lang.Integer">
-        select * from unit where name=#{name}
+        select count(*) from unit where name=#{name} AND branch=#{branch}
     </select>
     <select id="getNextCode" resultType="com.checkin.dto.response.UnitResponse">
         SELECT * FROM unit ORDER BY code DESC LIMIT 1
     </select>
+    <select id="totalUnit" resultType="java.lang.Integer">
+        SELECT count(*) from unit
+    </select>
+
+    <update id="updateUnit">
+        update unit set
+                  name=#{name},
+                  note=#{note},
+                  branch=#{branch}
+        where code = #{code}
+    </update>
 </mapper>
