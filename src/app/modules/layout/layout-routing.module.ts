@@ -24,6 +24,12 @@ const routes: Routes = [
     loadChildren: () => import('../form-management/form-management.module').then((m) => m.FormManagementModule),
     canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
   },
+  {
+    path: 'category',
+    component: LayoutComponent,
+    loadChildren: () => import('../category/category.module').then((m) => m.CategoryManagementModule),
+    canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
+  },
   // { path: '**', redirectTo: 'error/404' },
 ];
 

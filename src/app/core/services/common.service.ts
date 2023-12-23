@@ -61,6 +61,12 @@ export class CommonService {
     const headers = this.headerService.getHeaders()
     return this.http.post(url, {},{ headers });
   }
+
+  getBranchList(): Observable<any>{
+    const url = `${this.apiUrl}/admin/common/list-branch`;
+    const headers = this.headerService.getHeaders()
+    return this.http.post(url, {},{ headers });
+  }
 //   getListRole(): Observable<any>{
 //     const url = `${this.apiUrl}/admin/common/list-role`;
 //     const headers = this.headerService.getHeaders()

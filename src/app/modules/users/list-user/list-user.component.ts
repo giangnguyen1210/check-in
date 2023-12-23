@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
+import { DepartmentService } from 'src/app/core/services/department.service';
 import { UserService } from 'src/app/core/services/users.service';
 import { formatDate } from 'src/app/core/utils/format.util';
 @Component({
@@ -31,7 +32,7 @@ export class ListUserComponent implements OnInit{
     return formattedDate;
   }
   //constructor
-  constructor(private userService: UserService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
+  constructor(private userService: UserService, private commonService: CommonService, private departmentService: DepartmentService, private router: Router, private fb: FormBuilder) {}
   nameImage: any;
   base64CccdImage: string ='';
   base64FaceImage: string ='';
@@ -45,6 +46,7 @@ export class ListUserComponent implements OnInit{
   unitList:any;
   genderList: any;
   departmentList: any;
+  test: any;
   positionList: any;
   jobTitleList: any;
   showModal: boolean=false;
@@ -192,9 +194,10 @@ export class ListUserComponent implements OnInit{
   }
   //get service
   getDepartmentService(){
-    this.commonService.getDepartmentList().subscribe(
+    this.departmentService.getDepartmentList({}).subscribe(
       (data) => {
-        this.departmentList = data;;
+        this.departmentList = data;
+        console.log(this.test);
       },
       (error) => {
         console.error('API Error:', error);

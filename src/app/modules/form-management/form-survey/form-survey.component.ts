@@ -166,8 +166,6 @@ export class FormSurveyComponent implements OnInit{
       // console.log(survey.option1);
       this.formSurveyEdit.patchValue(survey);
      
-      this.formSurveyEdit.patchValue({option1: this.option1});
-      console.log(this.formSurveyEdit);
     } else if(survey.option1!==null){
       this.formSurveyEdit.patchValue(survey);
     }

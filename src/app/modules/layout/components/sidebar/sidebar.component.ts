@@ -12,12 +12,15 @@ export class SidebarComponent {
     this.router.navigate([route]);
   }
   isDropdownOpen:boolean = false;
+  isDropdownCategoryOpen: boolean = false;
 
 
-  toggleDropdown() {
+  toggleDropdownCategory() {
+    this.isDropdownCategoryOpen = !this.isDropdownCategoryOpen;
+
+  }
+  toggleDropdownForm() {
     this.isDropdownOpen = !this.isDropdownOpen;
-    console.log(this.isDropdownOpen);
-
   }
 
 }
