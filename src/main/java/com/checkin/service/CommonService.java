@@ -11,6 +11,7 @@ public interface CommonService {
     BaseResponse listPosition();
     BaseResponse listJobTitle();
     BaseResponse listGender();
+    BaseResponse listTypeOfQuestion();
 
     BaseResponse createGender(GenderRequest genderRequest);
 
@@ -25,4 +26,7 @@ public interface CommonService {
     BaseResponse createRole(RoleRequest request);
 
     BaseResponse createDepartment(DepartmentRequest request);
+    BaseResponse createTypeOfQuestion(TypeOfQuestionRequest request);
+
+    BaseResponse getListObject();
 }

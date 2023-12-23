@@ -12,6 +12,5 @@ public interface DepartmentMapper {
 
     List<DepartmentResponse> listDepartment();
     Integer checkDepartmentExist(DepartmentRequest request);
-
     DepartmentResponse getNextCode();
 }

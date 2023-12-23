@@ -68,36 +68,8 @@
         select * from users where email = #{email} limit 1
     </select>
     <select id="totalUser" resultType="Integer">
-        SELECT count(*) from users where status_id!=1
+        SELECT count(*) from users where status_id!=2
     </select>
-<!--    <select id="getListUser" resultType="com.checkin.dto.response.UserResponse">-->
-<!--        select * from users where-->
-<!--        <if test="keyword!=null and keyword!=''">-->
-<!--            (users.fullname = #{keyword}-->
-<!--                OR users.email = #{keyword}-->
-<!--                OR users.employeeCode = #{keyword}-->
-<!--                OR users.dob =#{keyword})-->
-<!--        </if>-->
-<!--        <if test="departmentId!=null and departmentId!=''">-->
-<!--            OR-->
-<!--            (users.department = #{departmentId})-->
-<!--        </if>-->
-<!--        <if test="genderId!=null and genderId!=''">-->
-<!--            OR-->
-<!--            (users.gender = #{genderId})-->
-<!--        </if>-->
-<!--        <if test="jobTitleId!=null and jobTitleId!=''">-->
-<!--            OR-->
-<!--            (users.job_title = #{jobTitleId})-->
-<!--        </if>-->
-<!--        <if test="statusId!=null and statusId!=''">-->
-<!--            OR-->
-<!--            (users.status = #{statusId})-->
-<!--        </if>-->
-<!--        <if test="limit > 0">-->
-<!--            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY-->
-<!--        </if>-->
-<!--    </select>-->
     <select id="getListUser" resultType="com.checkin.dto.response.UserResponse">
         SELECT  users.*,
                 role.name as role,

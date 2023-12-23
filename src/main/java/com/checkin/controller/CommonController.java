@@ -78,4 +78,19 @@ public class CommonController {
     public ResponseEntity<BaseResponse> createJobTitle(@RequestBody JobTitleRequest request){
         return new ResponseEntity<>(commonService.createJobTitle(request), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/list-toq")
+    public ResponseEntity<BaseResponse> getListTypeOfQuestion(){
+        return new ResponseEntity<>(commonService.listTypeOfQuestion(), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/create-toq")
+    public ResponseEntity<BaseResponse> createTypeOfQuestion(@RequestBody TypeOfQuestionRequest request){
+        return new ResponseEntity<>(commonService.createTypeOfQuestion(request), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/list-objects")
+    public ResponseEntity<BaseResponse> getListObject(){
+        return new ResponseEntity<>(commonService.getListObject(), HttpStatus.OK);
+    }
 }

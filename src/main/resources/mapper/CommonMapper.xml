@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.checkin.mapper.CommonMapper">
+
+
+    <select id="getListObject" resultType="com.checkin.dto.response.ObjectResponse">
+        SELECT name, code FROM position
+        union
+        select name,code from unit
+        union
+        select name, code from job_title
+        union
+        select fullname as name, employee_code as code from users
+        union
+        SELECT name, code FROM department order by code
+    </select>
+</mapper>

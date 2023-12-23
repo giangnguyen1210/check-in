@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.checkin.mapper.RegisterMapper">
+
+    <insert id="createRegister">
+        insert into
+            register(name,
+                   code,
+                   question_1,
+                   type_of_question_1_id,
+                   question_2,
+                   type_of_question_2_id,
+                   created_date,
+                   mandatory_object,
+                   completion_rate,
+                   start_time,
+                   end_time)
+        values
+            (#{name},
+             #{code},
+             #{question1},
+             #{typeOfQuestion1Id},
+             #{question2},
+             #{typeOfQuestion2Id},
+             Now(),
+             #{mandatoryObject},
+             #{completionRate},
+             #{startTime},
+             #{endTime})
+    </insert>
+    <update id="updateRegister">
+        update register set
+                         name=#{name},
+                         question_1=#{question1},
+                         question_2=#{question2},
+                         type_of_question_1_id = #{typeOfQuestion1Id},
+                         type_of_question_2_id=#{typeOfQuestion2Id},
+                         option_question_1=#{optionQuestion1},
+                         option_question_2=#{optionQuestion2}
+        where code = #{code}
+    </update>
+    <select id="getNextCode" resultType="com.checkin.dto.response.RegisterResponse">
+        SELECT * FROM register ORDER BY code DESC LIMIT 1
+    </select>
+
+    <select id="totalRegister" resultType="Integer">
+        SELECT count(*) from register
+    </select>
+    <select id="getListRegister" resultType="com.checkin.dto.response.RegisterResponse">
+        SELECT
+        s.id AS id,
+        s.name AS name,
+        s.code AS code,
+        s.created_date as created_date,
+        s.start_time as start_time,
+        s.end_time as end_time,
+        s.completion_rate as rate,
+        s.question_1 as question_1,
+        toq1.name as type_of_question_1,
+        toq1.id as type_of_question_1_id,
+        s.question_2 as question_2,
+        toq2.name as type_of_question_2,
+        toq2.id as type_of_question_2_id,
+        s.completion_rate as completionRate,
+        s.option_question_1 as optionQuestion1,
+        s.option_question_2 as optionQuestion2,
+        COALESCE(p.name, d.name) AS mandatory_object
+        FROM
+        register s
+        LEFT JOIN
+        position p ON s.mandatory_object = p.code
+        LEFT JOIN
+        unit u ON s.mandatory_object = u.code
+        LEFT JOIN
+        job_title jt ON s.mandatory_object = jt.code
+        LEFT JOIN
+        department d ON s.mandatory_object = d.code
+        LEFT JOIN
+        type_of_question toq1  ON s.type_of_question_1_id = toq1.id
+        LEFT JOIN
+        type_of_question toq2  ON s.type_of_question_2_id = toq2.id
+        <where>
+            <if test="code != null and code != ''">
+                AND (
+                LOWER(s.code) LIKE CONCAT('%', LOWER(#{code}), '%')
+                )
+            </if>
+            <if test="name != null and name != ''">
+                AND (
+                LOWER(s.name) LIKE CONCAT('%', LOWER(#{name}), '%')
+                )
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND s.start_time >= #{startTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND s.end_time >= #{endTime, jdbcType=TIMESTAMP}
+            </if>
+
+            <if test="typeOfQuestionId != null and typeOfQuestionId  != ''">
+                AND (s.type_of_question_1_id  = #{typeOfQuestionId}
+                OR s.type_of_question_2_id = #{typeOfQuestionId})
+            </if>
+        </where>
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
+</mapper>

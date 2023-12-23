@@ -27,6 +27,11 @@ public class CommonServiceImpl implements CommonService {
     private GenderMapper genderMapper;
     @Autowired
     private UnitMapper unitMapper;
+    @Autowired
+    private CommonMapper commonMapper;
+
+    @Autowired
+    private TypeOfQuestionMapper toqMapper;
 
     @Autowired
     private SupportService service;
@@ -238,6 +243,33 @@ public class CommonServiceImpl implements CommonService {
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Create fail");
         }
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse listTypeOfQuestion() {
+        BaseResponse baseResponse = new BaseResponse();
+        List<TypeOfQuestionResponse> toqs = toqMapper.listTypeOfQuestion();
+        baseResponse.setData(toqs);
+        baseResponse.setTotalRecords(toqs.size());
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse createTypeOfQuestion(TypeOfQuestionRequest request) {
+        BaseResponse baseResponse = new BaseResponse();
+        toqMapper.createTypeOfQuestion(request);
+        baseResponse.setErrorCode(HttpStatus.CREATED.name());
+        baseResponse.setErrorDesc("Create success");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse getListObject() {
+        BaseResponse baseResponse = new BaseResponse();
+        List<ObjectResponse> object = commonMapper.getListObject();
+        baseResponse.setData(object);
+        baseResponse.setTotalRecords(object.size());
         return baseResponse;
     }
 }

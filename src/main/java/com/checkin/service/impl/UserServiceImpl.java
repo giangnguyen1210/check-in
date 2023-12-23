@@ -59,26 +59,24 @@ public class UserServiceImpl implements UserService {
         }else{
             String id = "EMPLOYEE-";
             int getNextId = 0;
-            System.out.println(userMapper.getListUser(request).size()>0);
-            System.out.println("hello"+userMapper.getNextCode());
-            if(userMapper.getListUser(request).size()>0) {
+            if(userMapper.totalUser()>0 || userMapper.totalUser()==null) {
                 UserResponse userResponse = userMapper.getNextCode();
                 getNextId = Integer.parseInt(userResponse.getEmployeeCode().substring(userResponse.getEmployeeCode().length() - 4)) + 1;
             }
             String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
             request.setEmployeeCode((id+pad).trim());
             System.out.println("employeecode: "+request.getEmployeeCode());
-//            Integer b = userMapper.createUser(request);
-//            if (b !=0) {
-//                baseResponse.setData(request);
-//                baseResponse.setErrorCode(HttpStatus.OK.name());
-//                baseResponse.setTotalRecords(userMapper.totalUser());
-//                baseResponse.setErrorDesc("Thêm mới thành công");
-//            } else {
-//                baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-//                baseResponse.setErrorDesc("Thêm mới thất bại");
-//                return baseResponse;
-//            }
+            Integer b = userMapper.createUser(request);
+            if (b !=0) {
+                baseResponse.setData(request);
+                baseResponse.setErrorCode(HttpStatus.OK.name());
+                baseResponse.setTotalRecords(userMapper.totalUser());
+                baseResponse.setErrorDesc("Thêm mới thành công");
+            } else {
+                baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+                baseResponse.setErrorDesc("Thêm mới thất bại");
+                return baseResponse;
+            }
         }
         return baseResponse;
     }
