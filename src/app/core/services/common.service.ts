@@ -49,6 +49,18 @@ export class CommonService {
     const headers = this.headerService.getHeaders()
     return this.http.post(url, {},{ headers });
   }
+
+  getToQList(): Observable<any> {
+    const url = `${this.apiUrl}/admin/common/list-toq`;
+    const headers = this.headerService.getHeaders()
+    return this.http.post(url, {},{ headers });
+  }
+
+  getObjectsList(): Observable<any>{
+    const url = `${this.apiUrl}/admin/common/list-objects`;
+    const headers = this.headerService.getHeaders()
+    return this.http.post(url, {},{ headers });
+  }
 //   getListRole(): Observable<any>{
 //     const url = `${this.apiUrl}/admin/common/list-role`;
 //     const headers = this.headerService.getHeaders()

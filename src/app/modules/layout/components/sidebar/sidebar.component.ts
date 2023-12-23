@@ -8,12 +8,16 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
   constructor(private router: Router) {}
-  navigateToDashboard(route: string){
+  navigateTo(route: string){
     this.router.navigate([route]);
   }
   isDropdownOpen:boolean = false;
 
+
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
+    console.log(this.isDropdownOpen);
+
   }
+
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CommonService } from 'src/app/core/services/department.service';
+import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/users.service';
 import { formatDate } from 'src/app/core/utils/format.util';
 @Component({
@@ -54,10 +54,10 @@ export class ListUserComponent implements OnInit{
   ngOnInit(): void {
     this.initFormSearch();
     this.getUserService();
-    this.getDepartmentService();
     this.getGenderService();
     this.getStatusService();
     this.getJobTitleService();
+    this.getDepartmentService();
     this.getUnitService();
     this.getPositionService();
   }
@@ -68,8 +68,8 @@ export class ListUserComponent implements OnInit{
       keyword: [''],
       statusId: [],
       genderId: [],
-      departmentId: [],
-      jobTitleId: []
+      departmentCode: [],
+      jobTitleCode: []
     })
   }
   search(){
@@ -77,6 +77,7 @@ export class ListUserComponent implements OnInit{
   }
   resetForm(){
     this.formSearch.reset();
+    this.getUserService();
   }
   addCccdImage(event: any) {
     if (event.target.files && event.target.files[0]) {
@@ -102,28 +103,34 @@ export class ListUserComponent implements OnInit{
   //form user
   initFormUser(){
     this.formUser = this.fb.group({
-      employeeCode: ['',Validators.required],
+      // employeeCode: [''],
       fullname: ['',Validators.required],
       dob: ['', Validators.required],
       genderId: ['',Validators.required],
-      departmentId: ['',Validators.required],
-      jobTitleId: ['',Validators.required],
-      unitId: ['',Validators.required],
+      departmentCode: ['',Validators.required],
+      jobTitleCode: ['',Validators.required],
+      unitCode: ['',Validators.required],
       email: ['',Validators.required],
-      positionId: ['',Validators.required],
-      faceImage: [],
+      positionCode: ['',Validators.required],
+      faceImage: [''],
       cccd: [],
-      cccdImage: [],
+      cccdImage: [''],
       phone: []
     })
   }
 
   // edit
   editUser(user:any){
-    console.log(user);
+    this.getJobTitleService();
+    this.getDepartmentService();
+    this.getUnitService();
+    this.getPositionService();
     this.showModalEdit = true;
+    console.log(this.showModalEdit);
     this.initFormUser();
-    console.log(this.formUser.patchValue(user));
+    this.formUser.patchValue(user);
+    console.log(this.formUser);
+    // console.log(this.formUser.patchValue(user));
   }
   updateUser(){
     const json = {
@@ -135,7 +142,10 @@ export class ListUserComponent implements OnInit{
     if(this.formUser.valid){
       this.userService.updateUser(json).subscribe(
         (data)=>{
-          console.log(data);
+          if(data.errorCode==="OK"){
+            this.showModalEdit = false;
+            this.getUserService();
+          }
         }
       )
     }
@@ -158,11 +168,17 @@ export class ListUserComponent implements OnInit{
       faceImage: this.base64FaceImage,
       cccdImage: this.base64CccdImage,
     };
+    console.log(this.base64CccdImage);
+    console.log(this.base64FaceImage);
     console.log(json);
     if(this.formUser.valid){
       this.userService.createUser(json).subscribe(
         (data)=>{
           console.log(data);
+          if(data.errorCode==="OK"){
+            this.showModal = false;
+            this.getUserService();
+          }
         }
       )
     }
@@ -242,14 +258,14 @@ export class ListUserComponent implements OnInit{
       keyword: this.formSearch.get('keyword').value,
       statusId: this.formSearch.get('statusId').value,
       genderId: this.formSearch.get('genderId').value,
-      departmentId: this.formSearch.get('departmentId').value,
-      jobTitleId: this.formSearch.get('jobTitleId').value,
+      departmentCode: this.formSearch.get('departmentCode').value,
+      jobTitleCode: this.formSearch.get('jobTitleCode').value,
     };
     console.log(json);
     this.userService.getUserList(json).subscribe(
       (data) => {
         this.userList = data;
-        this.stt = data.totalRecords;
+        console.log(this.userList);
       },
       (error) => {
         console.error('API Error:', error);

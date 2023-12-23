@@ -7,26 +7,26 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class SurveyService {
 
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private headerService: HeaderService) { }
   
-  getUserList(json: any): Observable<any> {
-    const url = `${this.apiUrl}/admin/users/list`;
+  getSurveyList(json: any): Observable<any> {
+    const url = `${this.apiUrl}/admin/survey/list`;
     const headers = this.headerService.getHeaders()
     return this.http.post(url, json,{ headers });
   }
 
-  createUser(user: any): Observable<any> {
-    const url = `${this.apiUrl}/admin/users/create`
+  createSurvey(json: any): Observable<any> {
+    const url = `${this.apiUrl}/admin/survey/create`
     const headers = this.headerService.getHeaders()
-    return this.http.post(url, user, { headers });
+    return this.http.post(url, json, { headers });
   }
-  updateUser(user:any): Observable<any>{
+  updateSurvey(user:any): Observable<any>{
     const headers = this.headerService.getHeaders();
-    const url = `${this.apiUrl}/admin/users/update`;
+    const url = `${this.apiUrl}/admin/survey/update`;
     return this.http.post(url, user, { headers });
     
   }

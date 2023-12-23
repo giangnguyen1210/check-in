@@ -13,8 +13,8 @@
           <div class="grid grid-cols-4 gap-4 pt-2">
             <div class="col-span-1">
               <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phòng ban</label>
-              <select formControlName="departmentId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option *ngFor="let department of departmentList?.data" [value]="department.id">{{ department.name }}</option>
+              <select formControlName="departmentCode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option *ngFor="let department of departmentList?.data" [value]="department.code">{{ department.name }}</option>
               </select>
             </div>
             <div class="col-span-1">
@@ -25,15 +25,15 @@
             </div>
             <div class="col-span-1">
                 <label for="jobTitle" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Chức vụ</label>
-                <select formControlName="jobTitleId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  <option *ngFor="let jobTitle of jobTitleList?.data" [value]="jobTitle.id">{{ jobTitle.name }}</option>
+                <select formControlName="jobTitleCode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <option *ngFor="let jobTitle of jobTitleList?.data" [value]="jobTitle.code">{{ jobTitle.name }}</option>
               </select>
             </div>
             <div class="col-span-1">
                 <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Trạng thái</label>
                 <select formControlName="statusId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                   <option *ngFor="let status of statusList?.data" [value]="status.id">{{ status.name }}</option>
-              </select>
+                </select>
             </div>
           </div>
           <div class="flex justify-end pt-4 space-x-4">
@@ -177,14 +177,14 @@
     </div>
     <div [formGroup]="formUser" class="mx-auto pt-5">
       <div class="grid md:grid-cols-2 md:gap-6">
-        <div class="relative z-0 w-full mb-2 group">
+        <!-- <div class="relative z-0 w-full mb-2 group">
           <label for="employeeCode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mã nhân viên <span class="text-red-500">*</span></label>
           <input type="text" formControlName="employeeCode" id="employeeCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập mã nhân viên">
-       </div>
+       </div> -->
         <div class="relative z-0 w-full mb-2 group">
           <label for="unit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Đơn vị<span class="text-red-500">*</span></label>
-          <select formControlName="unitId" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option *ngFor="let unit of unitList?.data" [value]="unit.id">{{ unit.name }}</option>
+          <select formControlName="unitCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let unit of unitList?.data" [value]="unit.code">{{ unit.name }}</option>
           </select> 
         </div>
       </div>
@@ -195,8 +195,8 @@
         </div>
         <div class="relative z-0 w-full mb-2 group">
           <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phòng ban<span class="text-red-500">*</span></label>
-          <select formControlName="departmentId" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option *ngFor="let department of departmentList?.data" [value]="department.id">{{ department.name }}</option>
+          <select formControlName="departmentCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let department of departmentList?.data" [value]="department.code">{{ department.name }}</option>
           </select>  
         </div>
       </div>
@@ -212,8 +212,8 @@
         </div>
         <div class="relative z-0 w-full mb-2 group">
           <label for="jobTitle" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Chức vụ<span class="text-red-500">*</span></label>
-          <select formControlName="jobTitleId" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option *ngFor="let jobTitle of jobTitleList?.data" [value]="jobTitle.id">{{ jobTitle.name }}</option>
+          <select formControlName="jobTitleCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let jobTitle of jobTitleList?.data" [value]="jobTitle.code">{{ jobTitle.name }}</option>
           </select> 
           </div>
       </div>
@@ -227,8 +227,8 @@
         </div>
         <div class="relative z-0 w-full mb-2 group">
           <label for="position" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vị trí công việc:<span class="text-red-500">*</span></label>
-          <select formControlName="positionId" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option *ngFor="let position of positionList?.data" [value]="position.id">{{ position.name }}</option>
+          <select formControlName="positionCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let position of positionList?.data" [value]="position.code">{{ position.name }}</option>
           </select> 
         </div>
       </div>
@@ -266,17 +266,17 @@
       <div class="relative z-0 w-full mb-2 group">
         <label for="cccdImage" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File ảnh CMND/CCCD <span class="text-red-500">*</span></label>
         <input
-          type="file"
-          accept="image/*" 
-          class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          formControlName="cccdImage"
-          (change)="addCccdImage($event)"
-          [ngClass]="{ 'is-invalid': isSubmit && f.image.errors }"
-        />
-        <div *ngIf="isSubmit && f.image.errors" class="invalid-feedback">
-          <span *ngIf="f.image.errors.required">Please enter your image</span
-          ><br />
-        </div>
+        type="file"
+        accept="image/*" 
+        class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        formControlName="cccdImage"
+        (change)="addCccdImage($event)"
+        [ngClass]="{ 'is-invalid': isSubmit && f.image.errors }"
+      />
+      <div *ngIf="isSubmit && f.image.errors" class="invalid-feedback">
+        <span *ngIf="f.image.errors.required">Please enter your image</span
+        ><br />
+      </div>
       </div>
       <div class="mt-4 flex justify-end">
         <button (click)="resetFormUser()" class="flex-shrink-0 text-blue-500 border border-blue-500 py-1 px-4 rounded-lg focus:outline-none" >Làm mới</button>
@@ -306,14 +306,14 @@
     </div>
     <div [formGroup]="formUser" class="mx-auto pt-5">
       <div class="grid md:grid-cols-2 md:gap-6">
-        <div class="relative z-0 w-full mb-2 group">
+        <!-- <div class="relative z-0 w-full mb-2 group">
           <label for="employeeCode" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mã nhân viên <span class="text-red-500">*</span></label>
           <input type="text" formControlName="employeeCode" id="employeeCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập mã nhân viên">
-       </div>
+       </div> -->
         <div class="relative z-0 w-full mb-2 group">
           <label for="unit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Đơn vị<span class="text-red-500">*</span></label>
-          <select formControlName="unitId" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option *ngFor="let unit of unitList?.data" [value]="unit.id">{{ unit.name }}</option>
+          <select formControlName="unitCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let unit of unitList?.data" [value]="unit.code">{{ unit.name }}</option>
           </select> 
         </div>
       </div>
@@ -324,8 +324,8 @@
         </div>
         <div class="relative z-0 w-full mb-2 group">
           <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phòng ban<span class="text-red-500">*</span></label>
-          <select formControlName="departmentId" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option *ngFor="let department of departmentList?.data" [value]="department.id">{{ department.name }}</option>
+          <select formControlName="departmentCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let department of departmentList?.data" [value]="department.code">{{ department.name }}</option>
           </select>  
         </div>
       </div>
@@ -341,8 +341,8 @@
         </div>
         <div class="relative z-0 w-full mb-2 group">
           <label for="jobTitle" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Chức vụ<span class="text-red-500">*</span></label>
-          <select formControlName="jobTitleId" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option *ngFor="let jobTitle of jobTitleList?.data" [value]="jobTitle.id">{{ jobTitle.name }}</option>
+          <select formControlName="jobTitleCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let jobTitle of jobTitleList?.data" [value]="jobTitle.code">{{ jobTitle.name }}</option>
           </select> 
           </div>
       </div>
@@ -356,8 +356,8 @@
         </div>
         <div class="relative z-0 w-full mb-2 group">
           <label for="position" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vị trí công việc:<span class="text-red-500">*</span></label>
-          <select formControlName="positionId" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option *ngFor="let position of positionList?.data" [value]="position.id">{{ position.name }}</option>
+          <select formControlName="positionCode" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option *ngFor="let position of positionList?.data" [value]="position.code">{{ position.name }}</option>
           </select> 
         </div>
       </div>

@@ -13,3 +13,8 @@ export interface BaseResponse{
     errorDesc: string;
     totalRecords: number;
 }
+
+export interface Option {
+    optionText: string;
+  }
+  
