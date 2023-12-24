@@ -2,9 +2,8 @@ package com.checkin.dto.response;
 
 import lombok.Data;
 
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
-import java.util.Timer;
 
 @Data
 public class EventResponse {
@@ -13,7 +12,7 @@ public class EventResponse {
     private String code;
     private String note;
     private Date startDate;
-    private Time startTime;
+    private LocalTime startTime;
     private Date endDate;
-    private Time endTime;
+    private LocalTime endTime;
 }

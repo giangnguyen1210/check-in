@@ -55,7 +55,7 @@
         </if>
     </select>
     <select id="getNextCode" resultType="com.checkin.dto.response.EventResponse">
-        SELECT * FROM holiday ORDER BY code DESC LIMIT 1
+        SELECT * FROM event ORDER BY code DESC LIMIT 1
     </select>
     <select id="totalEvent" resultType="java.lang.Integer">
         SELECT count(*) from holiday
@@ -72,6 +72,6 @@
         where code = #{code}
     </update>
     <select id="checkEventExist" resultType="java.lang.Integer">
-        select count(*) from event where name=#{name}
+        select count(*) from event where name=#{name} and code!=#{code}
     </select>
 </mapper>
