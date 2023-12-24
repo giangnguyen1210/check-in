@@ -56,9 +56,23 @@
     </div>
     
 </div>
-<button type="button" (click)="createUser()" class=" bg-blue-500 border text-white py-1 px-4 rounded-lg focus:outline-none">
-  Tạo mới
-</button>
+<div class="flex justify-between">
+  <div class="pl-20">
+    <button type="button" (click)="createUser()" class=" bg-blue-500 border text-white py-1 px-4 rounded-lg focus:outline-none">
+      Tạo mới
+    </button>
+  </div>
+  <div class="pr-20">
+    <button type="button" (click)="activate()" class=" bg-red-500 border text-white py-1 px-4 rounded-lg focus:outline-none">
+      Kích hoạt  
+    </button>
+    <button type="button" (click)="deactivate()" class=" bg-white border text-red-500 border-red-500 py-1 px-4 rounded-lg focus:outline-none">
+      Huỷ kích hoạt  
+    </button>
+  </div>
+  
+</div>
+
 
 <div class="mt-4 mr-4">
     <div class="w-full overflow-hidden rounded-lg shadow-xs">
@@ -83,81 +97,48 @@
               <th class="px-4 py-3">Thao tác</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-            <tr *ngFor="let user of userList?.data; let i = index " class="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400">
-                <td class="w-4 p-4">
-                    <div class="flex items-center">
-                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+              <tr *ngFor="let user of userList?.data; let i = index "
+              [ngClass]="{'text-red-500': user.statusId === 2}"
+              class="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400">
+                  <td class="w-4 p-4">
+                      <div class="flex items-center">
+                        <input 
+                        id="checkbox-table-search-{{i}}" 
+                        type="checkbox" 
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        [(ngModel)]="user.checked"
+                        (change)="onCheckboxChange(user)"
+                      >
                         <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                    </div>
+                      </div>
+                  </td>
+                  <td class="px-4 py-3">
+                  {{i+1}} 
                 </td>
-                <td class="px-4 py-3">
-                {{i+1}}
-              </td>
-              <td class="px-4 py-3 text-sm">{{user.employeeCode}}</td>
-              <td class="px-4 py-3 text-sm"> {{user.fullname}}</td>
-              <td class="px-4 py-3 text-sm">{{formatDate(user.dob)}}</td>
-              <td class="px-4 py-3 text-sm">{{user.gender}}</td>
-              <td class="px-4 py-3 text-sm">{{user.department}}</td>
-              <td class="px-4 py-3 text-sm">{{user.jobTitle}}</td>
-              <td class="px-4 py-3 text-sm">{{user.status}}</td>
-              <td class="px-4 py-3 text-sm">
-                <button (click)="editUser(user)">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" data-slot="icon" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                  </svg>
-                </button>
-              </td>
-            </tr>
-
-          </tbody>
+                <td class="px-4 py-3 text-sm">{{user.employeeCode}}</td>
+                <td class="px-4 py-3 text-sm"> {{user.fullname}}</td>
+                <td class="px-4 py-3 text-sm">{{formatDate(user.dob)}}</td>
+                <td class="px-4 py-3 text-sm">{{user.gender}}</td>
+                <td class="px-4 py-3 text-sm">{{user.department}}</td>
+                <td class="px-4 py-3 text-sm">{{user.jobTitle}}</td>
+                <td class="px-4 py-3 text-sm">{{user.status}}</td>
+                <td class="px-4 py-3 text-sm">
+                  <button (click)="editUser(user)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" data-slot="icon" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+  
+            </tbody>
         </table>
       </div>
-      <div class="grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800">
-        <span class="flex items-center col-span-3"> Showing 21-30 of 100 </span>
-        <span class="col-span-2"></span>
-        <!-- Pagination -->
-        <span class="flex col-span-4 mt-2 sm:mt-auto sm:justify-end">
-          <nav aria-label="Table navigation">
-            <ul class="inline-flex items-center">
-              <li>
-                <button class="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple" aria-label="Previous">
-                  <svg aria-hidden="true" class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                    <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
-                  </svg>
-                </button>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">1</button>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">2</button>
-              </li>
-              <li>
-                <button class="px-3 py-1 text-white dark:text-gray-800 transition-colors duration-150 bg-blue-600 dark:bg-gray-100 border border-r-0 border-blue-600 dark:border-gray-100 rounded-md focus:outline-none focus:shadow-outline-purple">3</button>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">4</button>
-              </li>
-              <li>
-                <span class="px-3 py-1">...</span>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">8</button>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple">9</button>
-              </li>
-              <li>
-                <button class="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple" aria-label="Next">
-                  <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
-                    <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
-                  </svg>
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </span>
+      <div class="pagination">
+        <button (click)="prevPage()" [disabled]="page === 1">Previous</button>
+        <span>Page {{ page }} of {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="page === totalPages">Next</button>
       </div>
     </div>
     
@@ -296,7 +277,7 @@
    
   <div class="flex items-center justify-between border-b rounded-t dark:border-gray-600">
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-      Tạo người dùng mới
+       Chỉnh sửa người dùng
     </h3>
     <button (click)="cancelEdit()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -401,6 +382,7 @@
           class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           formControlName="cccdImage"
           (change)="addCccdImage($event)"
+          [value]=""
           [ngClass]="{ 'is-invalid': isSubmit && f.image.errors }"
         />
         <div *ngIf="isSubmit && f.image.errors" class="invalid-feedback">

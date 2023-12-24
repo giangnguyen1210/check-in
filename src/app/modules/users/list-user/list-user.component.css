@@ -1,0 +1,16 @@
+.data-container {
+    margin-bottom: 20px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }

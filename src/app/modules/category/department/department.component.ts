@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Option } from 'src/app/core/models/response';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -48,20 +51,24 @@ export class DepartmentComponent implements OnInit{
   positionList: any;
   toqList: any;
   jobTitleList: any;
-  departmentList: any;
+  departmentList!: any[];
   showModal: boolean=false;
   showModalEdit: boolean = false;
   selectedParent: any;
   selectedChild: any;
-  listOption: any;
-  childOptions!: { id: number, name: string }[];
+  currentPage = 1;
+  pageSize = 2;
 
   //ng oninit
   ngOnInit(): void {
     this.initFormSearch();
     this.getDepartmentService();
     this.getBranchService();
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+    console.log(this.departmentList);
   }
+
 
   //form search
   initFormSearch(){
@@ -170,13 +177,14 @@ export class DepartmentComponent implements OnInit{
     };
     this.departmentService.getDepartmentList(json).subscribe(
       (data) => {
-        this.departmentList = data;;
+        this.departmentList = data.data;
       },
       (error) => {
         console.error('API Error:', error);
       }
     );
   }
+
   getBranchService(){
     this.commonService.getBranchList().subscribe(
       (data) => {
@@ -191,8 +199,4 @@ export class DepartmentComponent implements OnInit{
   get f() {
     return this.formDepartment.controls;
   }
-
-  
- 
-  
 }

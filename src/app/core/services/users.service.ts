@@ -31,4 +31,10 @@ export class UserService {
     
   }
 
+  deActivateUser(user: any): Observable<any> {
+    const headers = this.headerService.getHeaders();
+    const url = `${this.apiUrl}/admin/users/deactivate`;
+    return this.http.post(url, user, { headers });
+  }
+
 }

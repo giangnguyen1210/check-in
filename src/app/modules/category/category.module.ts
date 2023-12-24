@@ -12,6 +12,9 @@ import { UnitComponent } from './unit/unit.component';
 import { HolidayComponent } from './holiday/holiday.component';
 import { EventComponent } from './event/event.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -30,8 +33,10 @@ import { AnnouncementComponent } from './announcement/announcement.component';
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
-
+    FormsModule,
+    MatTableModule,
+    MatButtonModule ,
+    MatPaginatorModule
   ],
 
 })

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { DepartmentService } from 'src/app/core/services/department.service';
+import { UnitService } from 'src/app/core/services/unit.service';
 import { UserService } from 'src/app/core/services/users.service';
 import { formatDate } from 'src/app/core/utils/format.util';
 @Component({
@@ -32,7 +33,7 @@ export class ListUserComponent implements OnInit{
     return formattedDate;
   }
   //constructor
-  constructor(private userService: UserService, private commonService: CommonService, private departmentService: DepartmentService, private router: Router, private fb: FormBuilder) {}
+  constructor(private userService: UserService, private commonService: CommonService, private unitService: UnitService, private departmentService: DepartmentService, private router: Router, private fb: FormBuilder) {}
   nameImage: any;
   base64CccdImage: string ='';
   base64FaceImage: string ='';
@@ -45,13 +46,19 @@ export class ListUserComponent implements OnInit{
   stt: any;
   unitList:any;
   genderList: any;
+  status: any;
   departmentList: any;
   test: any;
   positionList: any;
+ 
   jobTitleList: any;
   showModal: boolean=false;
   showModalEdit: boolean = false;
-
+  selectedUserCodes: string[] = [];
+  page: any = 1;
+  limit: any = 10;
+  totalPages: number = 0;
+  totalRecords: any;
   //ng oninit
   ngOnInit(): void {
     this.initFormSearch();
@@ -64,6 +71,19 @@ export class ListUserComponent implements OnInit{
     this.getPositionService();
   }
 
+  onCheckboxChange(user: any) {
+    if (user.checked) {
+      this.selectedUserCodes.push(user.employeeCode);
+    } 
+    else {
+      this.selectedUserCodes = this.selectedUserCodes.filter(code => code !== user.employeeCode);
+      user.checked = false;
+      console.log(this.selectedUserCodes.filter(code=>code!=user.employeeCode));
+    }
+    console.log(user.checked);
+
+    // console.log('Selected User Codes:', this.selectedUserCodes);
+  }
   //form search
   initFormSearch(){
     this.formSearch = this.fb.group({
@@ -82,15 +102,20 @@ export class ListUserComponent implements OnInit{
     this.getUserService();
   }
   addCccdImage(event: any) {
-    if (event.target.files && event.target.files[0]) {
-        this.nameImage = event.target.files[0].name;
-        var reader = new FileReader();
-        reader.onload = (event: any) => {
-            this.base64CccdImage = event.target.result;
-        }
-        reader.readAsDataURL(event.target.files[0]);
+    const file = event?.target?.files?.[0];
+  
+    if (file) {
+      this.nameImage = file.name;
+  
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.base64CccdImage = e.target.result;
+      };
+  
+      reader.readAsDataURL(file);
     }
   }
+  
   addFaceImage(event: any) {
     if (event.target.files && event.target.files[0]) {
         this.nameImage = event.target.files[0].name;
@@ -105,7 +130,7 @@ export class ListUserComponent implements OnInit{
   //form user
   initFormUser(){
     this.formUser = this.fb.group({
-      // employeeCode: [''],
+      employeeCode: [''],
       fullname: ['',Validators.required],
       dob: ['', Validators.required],
       genderId: ['',Validators.required],
@@ -115,26 +140,22 @@ export class ListUserComponent implements OnInit{
       email: ['',Validators.required],
       positionCode: ['',Validators.required],
       faceImage: [''],
-      cccd: [],
       cccdImage: [''],
+      cccd: [],
       phone: []
     })
   }
 
   // edit
   editUser(user:any){
-    this.getJobTitleService();
-    this.getDepartmentService();
-    this.getUnitService();
-    this.getPositionService();
-    this.showModalEdit = true;
-    console.log(this.showModalEdit);
+    console.log(user);
     this.initFormUser();
+    this.showModalEdit = true;
     this.formUser.patchValue(user);
     console.log(this.formUser);
-    // console.log(this.formUser.patchValue(user));
   }
   updateUser(){
+    console.log(this.formUser);
     const json = {
       ...this.formUser.value,
       faceImage: this.base64FaceImage,
@@ -170,8 +191,8 @@ export class ListUserComponent implements OnInit{
       faceImage: this.base64FaceImage,
       cccdImage: this.base64CccdImage,
     };
-    console.log(this.base64CccdImage);
-    console.log(this.base64FaceImage);
+    // console.log(this.base64CccdImage);
+    // console.log(this.base64FaceImage);
     console.log(json);
     if(this.formUser.valid){
       this.userService.createUser(json).subscribe(
@@ -191,6 +212,47 @@ export class ListUserComponent implements OnInit{
 
   resetFormUser(){
     this.formUser.reset();
+  }
+
+  // activate and deactivate user
+  activate(){
+    const json = {
+      employeeCodes: this.selectedUserCodes,
+      statusId: 1
+    }
+    // console.log(this.selectedUserCodes);
+    this.selectedUserCodes = [''];
+    this.userService.deActivateUser(json).subscribe(
+      (response) => {
+        console.log('Update successful', response);
+        this.getUserService();
+        // Thực hiện các hành động cần thiết sau khi cập nhật thành công
+      },
+      (error) => {
+        console.error('Error updating users', error);
+        // Xử lý lỗi nếu cần
+      }
+    );
+  }
+  deactivate(){
+    const json = {
+      employeeCodes: this.selectedUserCodes,
+      statusId: 2
+    }
+    this.selectedUserCodes = [''];
+    this.userService.deActivateUser(json).subscribe(
+      (response) => {
+        console.log('Update successful', response);
+        this.getUserService();
+        // Thực hiện các hành động cần thiết sau khi cập nhật thành công
+      },
+      (error) => {
+        console.error('Error updating users', error);
+        // Xử lý lỗi nếu cần
+      }
+    );
+    console.log('Deactivate Employees:', this.selectedUserCodes);
+
   }
   //get service
   getDepartmentService(){
@@ -236,7 +298,7 @@ export class ListUserComponent implements OnInit{
     );
   }
   getUnitService(){
-    this.commonService.getUnitList().subscribe(
+    this.unitService.getUnitList({}).subscribe(
       (data) => {
         this.unitList = data;
       },
@@ -263,18 +325,52 @@ export class ListUserComponent implements OnInit{
       genderId: this.formSearch.get('genderId').value,
       departmentCode: this.formSearch.get('departmentCode').value,
       jobTitleCode: this.formSearch.get('jobTitleCode').value,
+      page: this.page,
+      limit: this.limit
     };
     console.log(json);
     this.userService.getUserList(json).subscribe(
       (data) => {
-        this.userList = data;
+        if (data && data.data) {
+  
+          this.userList = data;
+          console.log(data.totalRecords);
+          // Kiểm tra nếu có trang tiếp theo
+          this.totalPages = data.totalRecords;
+        }
         console.log(this.userList);
       },
       (error) => {
         console.error('API Error:', error);
       }
     );
+    this.userService.getUserList({}).subscribe(
+      (data) => {
+        if (data && data.data) {
+          this.totalRecords = data.totalRecords;
+          console.log(this.totalRecords);
+        }
+      },
+      (error) => {
+        console.error('API Error:', error);
+      }
+    );
   }
+
+  nextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      this.getUserService();
+    }
+  }
+
+  prevPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.getUserService();
+    }
+  }
+
   get f() {
     return this.formUser.controls;
   }
