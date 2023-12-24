@@ -22,7 +22,8 @@ public interface UserMapper {
 
     UserResponse getNextCode();
 
-
     Integer updateUser(UserRequest request);
+
+    Integer deActivateUser(UserRequest request);
 
 }

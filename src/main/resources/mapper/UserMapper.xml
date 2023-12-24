@@ -61,7 +61,14 @@
         where employee_code = #{employeeCode}
 
     </update>
-    <select id="findByEmail" resultType="com.checkin.dto.response.UserResponse">
+    <update id="deActivateUser" parameterType="com.checkin.dto.request.UserRequest">
+        <foreach collection="employeeCodes" item="employeeCode" separator=";">
+            UPDATE users
+            SET status_id = #{statusId}
+            WHERE employee_code = #{employeeCode}
+        </foreach>
+    </update>
+    <select id="findByEmail" resultType="com.checkin.dto.request.UserRequest">
         select * from users where email = #{email} limit 1
     </select>
     <select id="checkEmailExist" resultType="java.lang.Integer">

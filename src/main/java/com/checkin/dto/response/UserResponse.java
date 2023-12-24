@@ -3,6 +3,8 @@ package com.checkin.dto.response;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
+
 @Data
 public class UserResponse {
     private Integer id;
@@ -33,6 +35,7 @@ public class UserResponse {
     private String faceImage;
     private String otp;
     private String keyword;
+    private List<String> employeeCodes;
 
 
 }

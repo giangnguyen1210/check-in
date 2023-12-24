@@ -30,4 +30,9 @@ public class UserController {
     public ResponseEntity<BaseResponse> listUser(@RequestBody UserRequest request){
         return new ResponseEntity<>(userService.getListUser(request), HttpStatus.OK);
     }
+
+    @PostMapping("/deactivate")
+    public ResponseEntity<BaseResponse> deActivate(@RequestBody UserRequest request){
+        return new ResponseEntity<>(userService.deActivateUser(request), HttpStatus.OK);
+    }
 }

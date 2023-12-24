@@ -3,7 +3,6 @@ package com.checkin.service.impl;
 import com.checkin.common.SupportService;
 import com.checkin.dto.request.UserRequest;
 import com.checkin.dto.response.BaseResponse;
-import com.checkin.dto.response.PositionResponse;
 import com.checkin.dto.response.UserResponse;
 import com.checkin.mapper.UserMapper;
 import com.checkin.service.UserService;
@@ -110,6 +109,14 @@ public class UserServiceImpl implements UserService {
             return baseResponse;
         }
         return baseResponse;
+    }
+    @Override
+    public BaseResponse deActivateUser(UserRequest request){
+        Integer deactive = userMapper.deActivateUser(request);
+        if(deactive==1){
+            return new BaseResponse(deactive, HttpStatus.OK.name(), "Thanh cong");
+        }
+        return null;
     }
 
     @Override
