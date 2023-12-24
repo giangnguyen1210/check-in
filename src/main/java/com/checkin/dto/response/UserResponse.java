@@ -36,6 +36,8 @@ public class UserResponse {
     private String otp;
     private String keyword;
     private List<String> employeeCodes;
+    private Date createdTime;
+    private Date updatedTime;
 
 
 }

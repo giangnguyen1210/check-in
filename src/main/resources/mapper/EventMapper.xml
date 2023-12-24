@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.checkin.mapper.EventMapper">
+
+    <insert id="createEvent">
+        insert into
+            event(name,
+                  code,
+                  note,
+                  start_date,
+                  start_time,
+                  end_date,
+                  end_time)
+        values
+         (#{name},
+          #{code},
+          #{note},
+          #{startDate},
+          #{startTime},
+          #{endDate},
+          #{endTime})
+    </insert>
+    <select id="getListEvent" resultType="com.checkin.dto.response.EventResponse">
+        SELECT * from event
+        <where>
+            <if test="name != null and name != ''">
+                AND (
+                LOWER(name) LIKE CONCAT('%', LOWER(#{name}), '%')
+                )
+            </if>
+            <if test="startDate != null and startDate != ''">
+                AND (
+                start_date = #{startDate}
+                )
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND (
+                start_time = #{startTime}
+                )
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND (
+                end_date = #{endDate}
+                )
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND (
+                end_time = #{endTime}
+                )
+            </if>
+        </where>
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="getNextCode" resultType="com.checkin.dto.response.EventResponse">
+        SELECT * FROM holiday ORDER BY code DESC LIMIT 1
+    </select>
+    <select id="totalEvent" resultType="java.lang.Integer">
+        SELECT count(*) from holiday
+    </select>
+
+    <update id="updateEvent">
+        update event set
+                  name=#{name},
+                  note=#{note},
+                  start_date=#{startDate},
+                  start_time=#{startTime},
+                  end_date=#{endDate},
+                  end_time=#{endTime},
+        where code = #{code}
+    </update>
+    <select id="checkEventExist" resultType="java.lang.Integer">
+        select count(*) from event where name=#{name}
+    </select>
+</mapper>

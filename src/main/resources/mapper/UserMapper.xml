@@ -20,7 +20,9 @@
             "cccd",
             "cccd_image",
             "face_image",
-            "dob"
+            "dob",
+            "created_time",
+            "updated_time"
         )VALUES(
            #{employeeCode},
            #{fullname},
@@ -38,7 +40,9 @@
             #{cccd},
             #{cccdImage},
             #{faceImage},
-                #{dob}
+            #{dob},
+            now(),
+            now()
         )
     </insert>
     <update id="resetPassword">
@@ -57,14 +61,16 @@
                         position_code=#{positionCode},
                         cccd=#{cccd},
                         cccd_image=#{cccdImage},
-                        face_image=#{faceImage}
+                        face_image=#{faceImage},
+                        updated_time=Now()
         where employee_code = #{employeeCode}
 
     </update>
     <update id="deActivateUser" parameterType="com.checkin.dto.request.UserRequest">
         <foreach collection="employeeCodes" item="employeeCode" separator=";">
             UPDATE users
-            SET status_id = #{statusId}
+            SET status_id = #{statusId},
+                updated_time=Now()
             WHERE employee_code = #{employeeCode}
         </foreach>
     </update>
@@ -94,6 +100,7 @@
         LEFT JOIN job_title ON users.job_title_code = job_title.code
         LEFT JOIN unit ON users.unit_code = unit.code
         LEFT JOIN position ON users.position_code = position.code
+        order by updated_time desc
         <where>
             <if test="keyword != null and keyword != ''">
                 AND (

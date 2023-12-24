@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.checkin.mapper.HolidayMapper">
+
+    <insert id="createHoliday">
+        insert into holiday(name, code, note,date) values (#{name}, #{code},#{note},#{date})
+    </insert>
+    <select id="getListHoliday" resultType="com.checkin.dto.response.HolidayResponse">
+        SELECT * from holiday
+        <where>
+            <if test="name != null and name != ''">
+                AND (
+                LOWER(name) LIKE CONCAT('%', LOWER(#{name}), '%')
+                )
+            </if>
+            <if test="date != null and date != ''">
+                AND (
+                date = #{date}
+                )
+            </if>
+        </where>
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
+    <select id="checkHolidayExist" resultType="java.lang.Integer">
+        select count(*) from holiday where name=#{name} AND date = #{date} and code!=#{code}
+    </select>
+    <select id="getNextCode" resultType="com.checkin.dto.response.HolidayResponse">
+        SELECT * FROM holiday ORDER BY code DESC LIMIT 1
+    </select>
+    <select id="totalHoliday" resultType="java.lang.Integer">
+        SELECT count(*) from holiday
+    </select>
+
+    <update id="updateHoliday">
+        update holiday set
+                  name=#{name},
+                  note=#{note},
+                  date=#{date}
+        where code = #{code}
+    </update>
+</mapper>
