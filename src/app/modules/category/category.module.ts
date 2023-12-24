@@ -15,6 +15,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { HolidayComponent } from './holiday/holiday.component';
+// import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {NgxMatTimepickerModule} from 'ngx-mat-timepicker';  
+import { MomentModule } from 'ngx-moment';
+
 
 
 @NgModule({
@@ -36,7 +40,9 @@ import { HolidayComponent } from './holiday/holiday.component';
     FormsModule,
     MatTableModule,
     MatButtonModule ,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NgxMatTimepickerModule,
+    MomentModule
   ],
 
 })

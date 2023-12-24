@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { FormManagementRoutingModule } from './form-management-routing.module';
 import { FormManagementComponent } from './form-management.component';
 import { FormSurveyComponent } from './form-survey/form-survey.component';

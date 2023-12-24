@@ -30,6 +30,12 @@ const routes: Routes = [
     loadChildren: () => import('../category/category.module').then((m) => m.CategoryManagementModule),
     canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
   },
+  {
+    path: 'statistic',
+    component: LayoutComponent,
+    loadChildren: () => import('../statistic/statistic.module').then((m) => m.StatisticModule),
+    canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
+  },
   // { path: '**', redirectTo: 'error/404' },
 ];
 

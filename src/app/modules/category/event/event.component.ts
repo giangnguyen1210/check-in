@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 import { CommonService } from 'src/app/core/services/common.service';
-import { HolidayService } from 'src/app/core/services/holiday.service';
+import { EventService } from 'src/app/core/services/event.service';
+
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
@@ -29,18 +31,21 @@ export class EventComponent implements OnInit{
     
     return formattedDate;
   }
+  
+  
   //constructor
-  constructor(private holidayService: HolidayService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
+  constructor(private eventService: EventService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
+ 
   nameImage: any;
   formSearch: any;
-  formHoliday!: FormGroup;
-  formHolidayEdit!: FormGroup;
+  formEvent!: FormGroup;
+  formEventEdit!: FormGroup;
   isSubmit = false;
   userList: any;
   roleList: any;
   statusList: any;
   stt: any;
-  holidayList:any;
+  eventList:any;
   showModal: boolean=false;
   showModalEdit: boolean = false;
   selectedParent: any;
@@ -51,55 +56,72 @@ export class EventComponent implements OnInit{
   //ng oninit
   ngOnInit(): void {
     this.initFormSearch();
-    this.getHolidayService();
+    this.getEventService();
   }
-
+  formatTime(time:any){
+    return  moment(time, 'HH:mm:ss').format('hh:mm');
+  }
+  
   //form search
   initFormSearch(){
     this.formSearch = this.fb.group({
       name: [],
-      date: []
+      startDate: [],
+      startTime: [],
+      endDate: [],
+      endTime: [],
     })
   }
   search(){
-    this.getHolidayService();
+    this.getEventService();
   }
   resetForm(){
     this.formSearch.reset();
-    this.getHolidayService();
+    this.getEventService();
   }
 
-  initFormHoliday(){
-    this.formHoliday = this.fb.group({
+  initFormEvent(){
+    this.formEvent = this.fb.group({
       name: ['',Validators.required],
       code: [],
       note: [],
-      date: [],
+      startDate: [],
+      startTime: [],
+      endDate: [],
+      endTime: []
     })
   }
 
-
+  selectedTime: string = '12:00 PM';
   // edit
-  editHoliday(holiday:any){
-    console.log(holiday);
+  editEvent(event:any){
+    console.log(event);
     this.showModalEdit = true;
-    this.initFormHoliday();
-    console.log(holiday);
-    this.formHoliday.patchValue(holiday);
+    this.initFormEvent();
+    console.log(event);
+    this.formEvent.patchValue(event);
+    const startTime = this.formatTime(this.formEvent.get('startTime')?.value);
+    const endTime = this.formatTime(this.formEvent.get('endTime')?.value);
+    this.formEvent.patchValue({
+      startTime: startTime,
+      endTime: endTime
+    });
+
+
   }
   
-  updateHoliday(){
+  updateEvent(){
     
     const json = {
-      ...this.formHoliday.value,
+      ...this.formEvent.value,
     }
-    console.log(this.formHoliday);
-    if(this.formHoliday.valid){
-     this.holidayService.updateHoliday(json).subscribe(
+    console.log(this.formEvent);
+    if(this.formEvent.valid){
+     this.eventService.updateEvent(json).subscribe(
       (data)=> {
         console.log(data);
         this.showModalEdit = false;
-        this.getHolidayService();
+        this.getEventService();
       }
      )
     }
@@ -111,23 +133,23 @@ export class EventComponent implements OnInit{
   
 
   // create
-  createHoliday(){
+  createEvent(){
     this.showModal=true;
-    this.initFormHoliday();
+    this.initFormEvent();
   }
-  submitHoliday(){
+  submitEvent(){
     const json = {
-      ...this.formHoliday.value,
+      ...this.formEvent.value,
     };
     console.log(json);
-    console.log(this.formHoliday);
-    if(this.formHoliday.valid){
-      this.holidayService.createHoliday(json).subscribe(
+    console.log(this.formEvent);
+    if(this.formEvent.valid){
+      this.eventService.createEvent(json).subscribe(
         (data)=>{
           console.log(data);
           if(data.errorCode==="OK"){
             this.showModal = false;
-            this.getHolidayService();
+            this.getEventService();
           }
         }
       )
@@ -137,19 +159,22 @@ export class EventComponent implements OnInit{
     this.showModal = false;
   }
 
-  resetFormHoliday(){
-    this.formHoliday.reset();
+  resetFormEvent(){
+    this.formEvent.reset();
   }
   //get service
   
-  getHolidayService(){
+  getEventService(){
     const json = {
       name: this.formSearch.get('name').value,
-      date: this.formSearch.get('date').value
+      startDate: this.formSearch.get('startDate').value,
+      startTime: this.formSearch.get('startTime').value,
+      endDate: this.formSearch.get('endDate').value,
+      endTime: this.formSearch.get('endTime').value,
     };
-    this.holidayService.getHolidayList(json).subscribe(
+    this.eventService.getEventList(json).subscribe(
       (data) => {
-        this.holidayList = data;;
+        this.eventList = data;;
       },
       (error) => {
         console.error('API Error:', error);
@@ -158,7 +183,7 @@ export class EventComponent implements OnInit{
   }
   
   get f() {
-    return this.formHoliday.controls;
+    return this.formEvent.controls;
   }
 
   

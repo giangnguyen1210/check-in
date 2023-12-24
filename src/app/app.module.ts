@@ -11,7 +11,10 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
-import { CategoryComponent } from './modules/category/category.component';
+import { NgxTimepickerModule } from 'ngx-timepicker';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { StatisticComponent } from './modules/statistic/statistic.component';
+
 
 
 @NgModule({
@@ -26,7 +29,9 @@ import { CategoryComponent } from './modules/category/category.component';
     MatDatepickerModule,
     MatInputModule,
     MatFormFieldModule,
-    MatNativeDateModule 
+    MatNativeDateModule ,
+    NgxTimepickerModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [
     {
