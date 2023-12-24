@@ -9,12 +9,12 @@ import { CategoryRoutingModule } from './category-routing.module';
 import { CategoryComponent } from './category.component';
 import { DepartmentComponent } from './department/department.component';
 import { UnitComponent } from './unit/unit.component';
-import { HolidayComponent } from './holiday/holiday.component';
 import { EventComponent } from './event/event.component';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { HolidayComponent } from './holiday/holiday.component';
 
 
 @NgModule({
@@ -22,9 +22,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     CategoryComponent,
     DepartmentComponent,
     UnitComponent,
-    HolidayComponent,
     EventComponent,
     AnnouncementComponent,
+    HolidayComponent
 ],
   imports: [
     CommonModule,

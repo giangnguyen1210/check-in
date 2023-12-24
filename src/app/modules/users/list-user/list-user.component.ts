@@ -344,17 +344,6 @@ export class ListUserComponent implements OnInit{
         console.error('API Error:', error);
       }
     );
-    this.userService.getUserList({}).subscribe(
-      (data) => {
-        if (data && data.data) {
-          this.totalRecords = data.totalRecords;
-          console.log(this.totalRecords);
-        }
-      },
-      (error) => {
-        console.error('API Error:', error);
-      }
-    );
   }
 
   nextPage(): void {
