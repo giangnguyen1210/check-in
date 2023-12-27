@@ -21,39 +21,63 @@
           #{endDate},
           #{endTime})
     </insert>
+<!--    <select id="getListEvent" resultType="com.checkin.dto.response.EventResponse">-->
+<!--        SELECT * from event-->
+<!--        <where>-->
+<!--            <if test="name != null and name != ''">-->
+<!--                AND (-->
+<!--                LOWER(name) LIKE CONCAT('%', LOWER(#{name}), '%')-->
+<!--                )-->
+<!--            </if>-->
+<!--            <if test="startDate != null and startDate != ''">-->
+<!--                AND (-->
+<!--                start_date = #{startDate}-->
+<!--                )-->
+<!--            </if>-->
+<!--            <if test="startTime != null and startTime != ''">-->
+<!--                AND (-->
+<!--                start_time = #{startTime}-->
+<!--                )-->
+<!--            </if>-->
+<!--            <if test="endDate != null and endDate != ''">-->
+<!--                AND (-->
+<!--                end_date = #{endDate}-->
+<!--                )-->
+<!--            </if>-->
+<!--            <if test="endTime != null and endTime != ''">-->
+<!--                AND (-->
+<!--                end_time = #{endTime}-->
+<!--                )-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        <if test="limit > 0">-->
+<!--            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY-->
+<!--        </if>-->
+<!--    </select>-->
     <select id="getListEvent" resultType="com.checkin.dto.response.EventResponse">
-        SELECT * from event
+        SELECT * FROM event
         <where>
             <if test="name != null and name != ''">
-                AND (
-                LOWER(name) LIKE CONCAT('%', LOWER(#{name}), '%')
-                )
+                AND LOWER(name) LIKE CONCAT('%', LOWER(#{name}), '%')
             </if>
-            <if test="startDate != null and startDate != ''">
-                AND (
-                start_date = #{startDate}
-                )
+            <if test="startDate != null">
+                AND start_date = #{startDate}
             </if>
-            <if test="startTime != null and startTime != ''">
-                AND (
-                start_time = #{startTime}
-                )
+            <if test="endDate != null">
+                AND end_date = #{endDate}
             </if>
-            <if test="endDate != null and endDate != ''">
-                AND (
-                end_date = #{endDate}
-                )
+            <if test="startTime != null">
+                AND start_time = #{startTime}
             </if>
-            <if test="endTime != null and endTime != ''">
-                AND (
-                end_time = #{endTime}
-                )
+            <if test="endTime != null">
+                AND end_time = #{endTime}
             </if>
         </where>
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
         </if>
     </select>
+
     <select id="getNextCode" resultType="com.checkin.dto.response.EventResponse">
         SELECT * FROM event ORDER BY code DESC LIMIT 1
     </select>

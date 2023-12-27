@@ -91,11 +91,11 @@
                 LOWER(s.name) LIKE CONCAT('%', LOWER(#{name}), '%')
                 )
             </if>
-            <if test="startTime != null and startTime != ''">
-                AND s.start_time >= #{startTime, jdbcType=TIMESTAMP}
+            <if test="startTime != null">
+                AND s.start_time = #{startTime}
             </if>
-            <if test="endTime != null and endTime != ''">
-                AND s.end_time >= #{endTime, jdbcType=TIMESTAMP}
+            <if test="endTime != null">
+                AND s.end_time = #{endTime}
             </if>
 
             <if test="typeOfQuestionId != null and typeOfQuestionId  != ''">

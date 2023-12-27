@@ -51,7 +51,9 @@ public class EventServiceImpl implements EventService {
     @Override
     public BaseResponse getListEvent(EventRequest request) {
         BaseResponse baseResponse = new BaseResponse();
+        System.out.println("request: "+request.getStartTime());
         List<EventResponse> list = eventMapper.getListEvent(request);
+
         baseResponse.setTotalRecords(list.size());
         baseResponse.setData(list);
         return baseResponse;

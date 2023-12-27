@@ -14,7 +14,7 @@
                 LOWER(name) LIKE CONCAT('%', LOWER(#{name}), '%')
                 )
             </if>
-            <if test="date != null and date != ''">
+            <if test="date != null">
                 AND (
                 date = #{date}
                 )

@@ -12,8 +12,4 @@ public interface UserService {
     BaseResponse updateUser(UserRequest response);
 
     BaseResponse deActivateUser(UserRequest request);
-
-    BaseResponse deleteUser(UserRequest request);
-
-    BaseResponse userDetail(UserRequest request);
 }

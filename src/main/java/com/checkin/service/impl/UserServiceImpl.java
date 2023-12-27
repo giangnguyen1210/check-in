@@ -118,14 +118,4 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
-    @Override
-    public BaseResponse deleteUser(UserRequest request) {
-        return null;
-    }
-
-    @Override
-    public BaseResponse userDetail(UserRequest request) {
-        return null;
-    }
 }

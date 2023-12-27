@@ -17,15 +17,15 @@ public class EventController {
     @Autowired
     private EventService eventService;
     @PostMapping("/create-event")
-    public ResponseEntity<BaseResponse> createHoliday(@RequestBody EventRequest request){
+    public ResponseEntity<BaseResponse> createEvent(@RequestBody EventRequest request){
         return new ResponseEntity<>(eventService.createEvent(request), HttpStatus.OK);
     }
     @PostMapping("/list-event")
-    public ResponseEntity<BaseResponse> listHoliday(@RequestBody EventRequest request){
+    public ResponseEntity<BaseResponse> listEvent(@RequestBody EventRequest request){
         return new ResponseEntity<>(eventService.getListEvent(request), HttpStatus.OK);
     }
     @PostMapping("/update-event")
-    public ResponseEntity<BaseResponse> updateHoliday(@RequestBody EventRequest request){
+    public ResponseEntity<BaseResponse> updateEvent(@RequestBody EventRequest request){
         return new ResponseEntity<>(eventService.updateEvent(request), HttpStatus.OK);
     }
 }
