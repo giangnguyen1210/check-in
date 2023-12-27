@@ -42,7 +42,10 @@ export class InOutComponent implements OnInit{
   stt: any;
   unitList:any;
   departmentList: any;
- 
+  showModalCheckinDetail: boolean = false;
+  formDate: any;
+  checkinCheckoutDetailList: any;
+  employeeCode: any;
   formatTime(time: any) {
     if(time==null){
       return '';
@@ -56,6 +59,12 @@ export class InOutComponent implements OnInit{
     this.getDepartmentService();
     this.getUnitService();
     this.getCheckinOutService();
+    this.initFromSearchDate();
+  }
+  initFromSearchDate(){
+    this.formDate = this.fb.group({
+      date: ['']
+    })
   }
 
   //form search
@@ -76,6 +85,20 @@ export class InOutComponent implements OnInit{
     this.getCheckinOutService();
   }
  
+  showDetail(employeeCode: any){
+    this.showModalCheckinDetail = true;
+    this.employeeCode = employeeCode;
+    this.getCheckinOutService();
+  }
+  cancelShow(){
+    this.showModalCheckinDetail = false;
+  }
+  getData(){
+    this.getCheckinOutDetailService();
+  }
+  exportDetail(){
+
+  }
   //get service
   getDepartmentService(){
     this.departmentService.getDepartmentList({}).subscribe(
@@ -121,6 +144,22 @@ export class InOutComponent implements OnInit{
       (data) => {
         console.log(data.totalRecords);
         this.checkinCheckoutList = data;
+      },
+      (error) => {
+        console.error('API Error:', error);
+      }
+    );
+  }
+
+  getCheckinOutDetailService(){
+    const json={
+      employeeCode: this.employeeCode,
+      date: this.formDate.get('date')?.value
+    }
+    this.checkinCheckoutService.getCheckinCheckoutDetailList(json).subscribe(
+      (data) => {
+        console.log(data.totalRecords);
+        this.checkinCheckoutDetailList = data;
       },
       (error) => {
         console.error('API Error:', error);

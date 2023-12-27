@@ -13,10 +13,16 @@ export class CheckinCheckoutService {
 
   constructor(private http: HttpClient, private headerService: HeaderService) { }
   
-  getCheckinCheckoutList(holiday: any): Observable<any> {
+  getCheckinCheckoutList(checkin: any): Observable<any> {
     const url = `${this.apiUrl}/admin/history-checkin-checkout/list`;
     const headers = this.headerService.getHeaders()
-    return this.http.post(url, holiday,{ headers });
+    return this.http.post(url, checkin,{ headers });
+  }
+
+  getCheckinCheckoutDetailList(checkin: any): Observable<any> {
+    const url = `${this.apiUrl}/admin/history-checkin-checkout/detail`;
+    const headers = this.headerService.getHeaders()
+    return this.http.post(url, checkin,{ headers });
   }
 
  

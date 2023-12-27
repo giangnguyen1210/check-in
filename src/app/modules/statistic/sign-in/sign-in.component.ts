@@ -91,7 +91,6 @@ export class SignInComponent implements OnInit{
     this.showModalLoginDetail = true;
     this.employeeCode = employeeCode;
     this.getHistoryDetailService()
-    this.initFormSearch();
   }
   cancelShow(){
     this.showModalLoginDetail=false;
