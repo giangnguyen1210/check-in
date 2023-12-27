@@ -33,24 +33,14 @@ export class UnitComponent implements OnInit{
   }
   //constructor
   constructor(private unitService: UnitService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
-  nameImage: any;
   formSearch: any;
   formUnit!: FormGroup;
   formUnitEdit!: FormGroup;
   isSubmit = false;
-  userList: any;
-  roleList: any;
-  statusList: any;
-  stt: any;
   unitList:any;
-  genderList: any;
   branchList: any;
   showModal: boolean=false;
   showModalEdit: boolean = false;
-  selectedParent: any;
-  selectedChild: any;
-  listOption: any;
-  childOptions!: { id: number, name: string }[];
 
   //ng oninit
   ngOnInit(): void {

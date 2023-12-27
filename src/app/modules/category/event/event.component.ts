@@ -31,35 +31,29 @@ export class EventComponent implements OnInit{
     
     return formattedDate;
   }
+
+  
   
   
   //constructor
   constructor(private eventService: EventService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
  
-  nameImage: any;
   formSearch: any;
   formEvent!: FormGroup;
   formEventEdit!: FormGroup;
-  isSubmit = false;
-  userList: any;
-  roleList: any;
   statusList: any;
   stt: any;
   eventList:any;
   showModal: boolean=false;
   showModalEdit: boolean = false;
-  selectedParent: any;
-  selectedChild: any;
-  listOption: any;
-  childOptions!: { id: number, name: string }[];
 
   //ng oninit
   ngOnInit(): void {
     this.initFormSearch();
     this.getEventService();
   }
-  formatTime(time:any){
-    return  moment(time, 'HH:mm:ss').format('hh:mm');
+  formatTime(time: any) {
+    return moment(time, 'HH:mm:ss').format('HH:mm');
   }
   
   //form search
@@ -92,7 +86,6 @@ export class EventComponent implements OnInit{
     })
   }
 
-  selectedTime: string = '12:00 PM';
   // edit
   editEvent(event:any){
     console.log(event);
@@ -165,6 +158,7 @@ export class EventComponent implements OnInit{
   //get service
   
   getEventService(){
+
     const json = {
       name: this.formSearch.get('name').value,
       startDate: this.formSearch.get('startDate').value,
@@ -172,6 +166,7 @@ export class EventComponent implements OnInit{
       endDate: this.formSearch.get('endDate').value,
       endTime: this.formSearch.get('endTime').value,
     };
+    console.log(json);
     this.eventService.getEventList(json).subscribe(
       (data) => {
         this.eventList = data;;

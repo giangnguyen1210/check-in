@@ -31,22 +31,13 @@ export class HolidayComponent implements OnInit{
   }
   //constructor
   constructor(private holidayService: HolidayService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
-  nameImage: any;
   formSearch: any;
   formHoliday!: FormGroup;
   formHolidayEdit!: FormGroup;
-  isSubmit = false;
-  userList: any;
-  roleList: any;
-  statusList: any;
   stt: any;
   holidayList:any;
   showModal: boolean=false;
   showModalEdit: boolean = false;
-  selectedParent: any;
-  selectedChild: any;
-  listOption: any;
-  childOptions!: { id: number, name: string }[];
 
   //ng oninit
   ngOnInit(): void {

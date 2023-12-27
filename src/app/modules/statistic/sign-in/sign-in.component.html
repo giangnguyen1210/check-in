@@ -1,1 +1,221 @@
-<p>sign-in works!</p>
+
+<div class="flex justify-center">
+    <div [formGroup]="formSearch" class=" bg-white dark:bg-gray-900 border p-8 mr-4 rounded-lg w-2/3">
+        <label for="table-search" class="sr-only">Search</label>
+        <div class="relative mt-1">
+            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+            </div>
+            <input type="text" formControlName="keyword" id="table-search" class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập thông tin cần tìm kiếm">
+          </div>
+          <div class="grid grid-cols-4 gap-4 pt-2">
+            <div class="col-span-1">
+              <label for="department" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phòng ban</label>
+              <select formControlName="departmentCode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option *ngFor="let department of departmentList?.data" [value]="department.code">{{ department.name }}</option>
+              </select>
+            </div>
+           
+            <div class="col-span-1">
+                <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giới tính</label>
+                <select formControlName="genderId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option *ngFor="let gender of genderList?.data" [value]="gender.id">{{ gender.name }}</option>
+                </select>
+            </div>
+            <div class="col-span-1">
+                <label for="unit" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Đơn vị</label>
+                <select formControlName="unitCode" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <option *ngFor="let unit of unitList?.data" [value]="unit.code">{{ unit.name }}</option>
+              </select>
+            </div>
+            <div class="col-span-1">
+                <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Trạng thái</label>
+                <select formControlName="statusId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                  <option *ngFor="let status of statusList?.data" [value]="status.id">{{ status.name }}</option>
+                </select>
+            </div>
+          </div>
+          <div class="flex justify-end pt-4 space-x-4">
+            <button (click)="search()" type="button" class="flex items-center bg-blue-500 text-white py-1 px-4 rounded-lg focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  </svg>
+                Xuất
+              </button>
+            <!-- Refresh Button -->
+            <button type="button" (click)="resetForm()"  class="flex-shrink-0 text-blue-500 border border-blue-500 py-1 px-4 rounded-lg focus:outline-none">
+              Làm mới
+            </button>
+          
+            <!-- Search Button -->
+            <button (click)="search()" type="button" class="flex items-center bg-blue-500 text-white py-1 px-4 rounded-lg focus:outline-none">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" data-slot="icon" class="w-6 h-6 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
+              Tìm kiếm
+            </button>
+          </div>
+        
+          
+          
+    </div>
+    
+</div>
+<div class="mt-4 mr-4">
+    <div class="w-full overflow-hidden rounded-lg shadow-xs">
+      <div class="w-full overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                <th scope="col" class="p-4">
+                    <div class="flex items-center">
+                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                    </div>
+                </th>
+                <th class="px-4 py-3">STT</th>
+              <th class="px-4 py-3">Mã nhân viên</th>
+              <th class="px-4 py-3">Họ và tên</th>
+              <th class="px-4 py-3">Phòng ban</th>
+              <th class="px-4 py-3">Đơn vị</th>
+              <th class="px-4 py-3">Ngày</th>
+              <th class="px-4 py-3">Thời gian đăng nhập gần nhất</th>
+            </tr>
+          </thead>
+            <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+              <tr *ngFor="let historyLogin of historyLoginList?.data; let i = index "
+              class="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400"
+              (click)="showDetail(historyLogin.employeeCode)">
+                  <td class="w-4 p-4">
+                      <div class="flex items-center">
+                        <input 
+                        id="checkbox-table-search-{{i}}" 
+                        type="checkbox" 
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      >
+                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                      </div>
+                  </td>
+                  <td class="px-4 py-3">
+                  {{i+1}} 
+                </td>
+                <td class="px-4 py-3 text-sm">{{historyLogin.employeeCode}}</td>
+                <td class="px-4 py-3 text-sm"> {{historyLogin.fullname}}</td>
+                <td class="px-4 py-3 text-sm">{{historyLogin.departmentName}}</td>
+                <td class="px-4 py-3 text-sm">{{historyLogin.unitName}}</td>
+                <td class="px-4 py-3 text-sm">{{formatDate(historyLogin.date)}}</td>
+                <td class="px-4 py-3 text-sm">{{formatTime(historyLogin.loginTime)}}</td>
+              </tr>
+              <tr *ngIf="historyLoginList?.data.length==0">
+                Không có dữ liệu
+            </tr>
+  
+            </tbody>
+        </table>
+      </div>
+     
+    </div>
+    
+  </div>
+
+  <div *ngIf="showModalLoginDetail" class="fixed z-20 inset-0 bg-gray-500 bg-opacity-20 flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-md w-[1000px]"> <!-- Thiết lập chiều rộng là 800px -->
+        <div class="flex items-center justify-between border-b rounded-t dark:border-gray-600">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                Thống kê chi tiết đăng nhập
+            </h3>
+            <button (click)="cancelShow()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+            <div [formGroup]="formDate" class="mx-auto pt-5">
+                <div class="relative z-0 w-full mb-2 group">
+                    <mat-form-field>
+                      <mat-label>Chọn ngày đăng nhập</mat-label>
+                      <input matInput [matDatepicker]="picker" formControlName="date">
+                      <mat-hint>MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                   
+                </div>
+                <div class="flex pt-4 space-x-4">
+                    <button (click)="getData()" type="button" class="items-center bg-blue-500 text-white py-1 px-4 rounded-lg focus:outline-none">
+                    Áp dụng
+                    </button>
+                    <button (click)="exportDetail()" type="button" class="flex items-center bg-blue-500 text-white py-1 px-4 rounded-lg focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                          </svg>
+                        Xuất
+                      </button>
+                </div>
+              </div>
+          
+          <div class="w-full overflow-hidden rounded-lg shadow-xs">
+            <div class="w-full overflow-x-auto">
+              <table class="w-full">
+                <thead>
+                  <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
+                      <th scope="col" class="p-4">
+                          <div class="flex items-center">
+                              <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                              <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                          </div>
+                      </th>
+                      <th class="px-4 py-3">STT</th>
+                    <th class="px-4 py-3">Mã nhân viên</th>
+                    <th class="px-4 py-3">Họ và tên</th>
+                    <th class="px-4 py-3">Ngày sinh</th>
+                    <th class="px-4 py-3">Giới tính</th>
+                    <th class="px-4 py-3">Chức danh</th>
+                    <th class="px-4 py-3">Phòng ban</th>
+                    <th class="px-4 py-3">Đơn vị</th>
+                    <th class="px-4 py-3">Ngày</th>
+                    <th class="px-4 py-3">Thời gian đăng nhập</th>
+                  </tr>
+                </thead>
+                  <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    <tr *ngFor="let historyLogin of historyLoginDetail?.data; let i = index "
+                    class="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400">
+                        <td class="w-4 p-4">
+                            <div class="flex items-center">
+                              <input 
+                              id="checkbox-table-search-{{i}}" 
+                              type="checkbox" 
+                              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            >
+                              <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                        {{i+1}} 
+                      </td>
+                      <td class="px-4 py-3 text-sm">{{historyLogin.employeeCode}}</td>
+                      <td class="px-4 py-3 text-sm"> {{historyLogin.fullname}}</td>
+                      <td class="px-4 py-3 text-sm"> {{historyLogin.dob}}</td>
+                      <td class="px-4 py-3 text-sm"> {{historyLogin.gender}}</td>
+                      <td class="px-4 py-3 text-sm"> {{historyLogin.jobTitleName}}</td>
+                      <td class="px-4 py-3 text-sm">{{historyLogin.departmentName}}</td>
+                      <td class="px-4 py-3 text-sm">{{historyLogin.unitName}}</td>
+                      <td class="px-4 py-3 text-sm">{{formatDate(historyLogin.date)}}</td>
+                      <td class="px-4 py-3 text-sm">{{formatTime(historyLogin.loginTime)}}</td>
+                    </tr>
+                    <tr *ngIf="historyLoginDetail?.data.length==0">
+                        <td colspan="11" class="py-8">No data available.</td>
+                    </tr>
+                  </tbody>
+              </table>
+            </div>
+           
+          </div>
+    </div>
+   
+  </div>
+  
+  

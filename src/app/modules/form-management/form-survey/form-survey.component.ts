@@ -11,29 +11,29 @@ import { formatDate } from 'src/app/core/utils/format.util';
   templateUrl: './form-survey.component.html',
   styleUrls: ['./form-survey.component.css']
 })
-export class FormSurveyComponent implements OnInit{
+export class FormSurveyComponent implements OnInit {
   // format date
-  formatDate(date: any){
-    if(date==null){
+  formatDate(date: any) {
+    if (date == null) {
       return null;
     }
     const serverDate = new Date(date);
 
     // Hàm để định dạng số để luôn có 2 chữ số (vd: 01, 02, ..., 12)
     const formatTwoDigits = (number: number): string => (number < 10 ? `0${number}` : `${number}`);
-  
+
     // Lấy ngày, tháng, năm từ đối tượng ngày
     const day = serverDate.getDate();
     const month = serverDate.getMonth() + 1; // Tháng bắt đầu từ 0
     const year = serverDate.getFullYear();
-  
+
     // Định dạng ngày theo "dd/MM/yyyy"
     const formattedDate = `${formatTwoDigits(day)}/${formatTwoDigits(month)}/${year}`;
-    
+
     return formattedDate;
   }
   //constructor
-  constructor(private userService: UserService, private surveyService: SurveyService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
+  constructor(private userService: UserService, private surveyService: SurveyService, private commonService: CommonService, private router: Router, private fb: FormBuilder) { }
   nameImage: any;
   formSearch: any;
   formSurvey!: FormGroup;
@@ -43,14 +43,14 @@ export class FormSurveyComponent implements OnInit{
   roleList: any;
   statusList: any;
   stt: any;
-  unitList:any;
+  unitList: any;
   genderList: any;
   objectList: any;
   positionList: any;
   toqList: any;
   jobTitleList: any;
   surveyList: any;
-  showModal: boolean=false;
+  showModal: boolean = false;
   showModalEdit: boolean = false;
   selectedParent: any;
   selectedChild: any;
@@ -65,7 +65,7 @@ export class FormSurveyComponent implements OnInit{
   }
 
   //form search
-  initFormSearch(){
+  initFormSearch() {
     this.formSearch = this.fb.group({
       code: [''],
       name: [],
@@ -74,41 +74,43 @@ export class FormSurveyComponent implements OnInit{
       startTime: []
     })
   }
-  search(){
+  search() {
     this.getSurveyService();
   }
-  resetForm(){
+  resetForm() {
     this.formSearch.reset();
     this.getSurveyService();
   }
 
   //form user
-  initFormSurvey(){
+  initFormSurvey() {
     this.formSurvey = this.fb.group({
-      name: ['',Validators.required],
-      question1: ['',Validators.required],
-      typeOfQuestion1Id: ['',Validators.required],
-      question2: ['',Validators.required],
-      typeOfQuestion2Id: ['',Validators.required],
-      mandatoryObject: ['',Validators.required],
+      name: ['', Validators.required],
+      question1: ['', Validators.required],
+      typeOfQuestion1Id: ['', Validators.required],
+      question2: ['', Validators.required],
+      typeOfQuestion2Id: ['', Validators.required],
+      mandatoryObject: ['', Validators.required],
       completionRate: [],
-      startTime: ['',Validators.required],
-      endTime: ['',Validators.required],
-      optionQuestion1:  [],
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
+      optionQuestion1: [],
       option1: this.fb.array([])
     })
   }
 
-  
-  initFormSurveyEdit(){
+  splitOptionsString(optionsString: string): string[] {
+    return optionsString.split('|');
+  }
+  initFormSurveyEdit() {
     this.formSurveyEdit = this.fb.group({
       code: [],
-      name: ['',Validators.required],
+      name: ['', Validators.required],
       question1: [],
       typeOfQuestion1Id: [],
       question2: [],
       typeOfQuestion2Id: [],
-      optionQuestion1:  [],
+      optionQuestion1: [],
       option1: this.fb.array([])
     })
   }
@@ -123,7 +125,7 @@ export class FormSurveyComponent implements OnInit{
     }));
     console.log(this.option1.length);
   }
-  
+
   removeOption(index: number) {
     this.option1.removeAt(index);
   }
@@ -132,9 +134,9 @@ export class FormSurveyComponent implements OnInit{
     this.formSurveyEdit.get('typeOfQuestion1Id')?.valueChanges.subscribe(value => {
       if (value === '1') {
         console.log(this.option1);
-        if(this.option1.length<2){
+        if (this.option1.length < 2) {
           this.addOption();
-        }else{
+        } else {
           return;
         }
       } else {
@@ -146,40 +148,36 @@ export class FormSurveyComponent implements OnInit{
   }
 
   // edit
-  editSurvey(survey:any){
+  editSurvey(survey: any) {
     console.log(survey);
     this.showModalEdit = true;
     this.initFormSurveyEdit();
-    console.log(survey);
-    if (survey.optionQuestion1!==null) {
-      // Transform optionQuestion1 to the expected structure
-      // const optionsArray = survey.option1.map((optionText: string) => ({ optionText }));
-
-      // const surveyWithTransformedOptions = { ...survey, option1: optionsArray };
-      const text = survey.optionQuestion1;
-      this.listOption = text.split('|');
-      // this.option1.push(this.fb.group({
-      //   optionText: this.listOption.map((list:any)=>list) // 'optionText' should match the control name in your form definition
-      //   // this.listOption.
-      // }));
-      console.log(this.listOption[0]);
-      // console.log(survey.option1);
+    if (survey.optionQuestion1 !== null) {
+      const optionsArray = this.splitOptionsString(survey.optionQuestion1);
+      // const text = survey.optionQuestion1;
+      // this.listOption = text.split('|');
       this.formSurveyEdit.patchValue(survey);
-     
-    } else if(survey.option1!==null){
+      const option1FormArray = this.formSurveyEdit.get('option1') as FormArray;
+      optionsArray.forEach(option => {
+        option1FormArray.push(this.fb.group({
+          optionText: option
+        }));
+      });
+
+    } else if (survey.option1 !== null) {
       this.formSurveyEdit.patchValue(survey);
     }
   }
-  
-  updateSurvey(){
-    
+
+  updateSurvey() {
+
     console.log(this.formSurveyEdit.value.optionQuestion1);
     // Lấy giá trị của optionText từ một FormGroup trong options1
     // Lấy mảng chứa tất cả các giá trị của optionText từ options1
     const optionTextArray = this.option1.value.map((option: Option) => option.optionText);
     console.log(optionTextArray);
     const resultString: string = optionTextArray.join('|');
-    
+
     // console.log(resultString);
     const json = {
       ...this.formSurveyEdit.value,
@@ -187,39 +185,39 @@ export class FormSurveyComponent implements OnInit{
     }
 
     console.log(this.formSurveyEdit);
-    if(this.formSurveyEdit.valid){
+    if (this.formSurveyEdit.valid) {
       this.surveyService.updateSurvey(json).subscribe(
-        (data)=>{
+        (data) => {
           console.log(data);
         }
       )
     }
   }
 
-  cancelEdit(){
-    this.showModalEdit=false;
+  cancelEdit() {
+    this.showModalEdit = false;
   }
-  
+
 
   // create
-  createSurvey(){
-    this.showModal=true;
+  createSurvey() {
+    this.showModal = true;
     this.initFormSurvey();
     this.getToQService();
     this.getObjectService();
   }
-  submitSurvey(){
+  submitSurvey() {
     // console.log(this.formUser);
     const json = {
       ...this.formSurvey.value,
     };
     console.log(json);
     console.log(this.formSurvey);
-    if(this.formSurvey.valid){
+    if (this.formSurvey.valid) {
       this.surveyService.createSurvey(json).subscribe(
-        (data)=>{
+        (data) => {
           console.log(data);
-          if(data.errorCode==="OK"){
+          if (data.errorCode === "OK") {
             this.showModal = false;
             this.getSurveyService();
           }
@@ -227,16 +225,16 @@ export class FormSurveyComponent implements OnInit{
       )
     }
   }
-  cancel(){
+  cancel() {
     this.showModal = false;
   }
 
-  resetFormSurvey(){
+  resetFormSurvey() {
     this.formSurveyEdit.reset();
   }
   //get service
-  
-  getSurveyService(){
+
+  getSurveyService() {
     const json = {
       code: this.formSearch.get('code').value,
       name: this.formSearch.get('name').value,
@@ -253,7 +251,7 @@ export class FormSurveyComponent implements OnInit{
       }
     );
   }
-  getToQService(){
+  getToQService() {
     this.commonService.getToQList().subscribe(
       (data) => {
         this.toqList = data;
@@ -265,7 +263,7 @@ export class FormSurveyComponent implements OnInit{
     );
   }
 
-  getObjectService(){
+  getObjectService() {
     this.commonService.getObjectsList().subscribe(
       (data) => {
         this.objectList = data;
@@ -275,12 +273,12 @@ export class FormSurveyComponent implements OnInit{
       }
     );
   }
-  
+
   get f() {
     return this.formSurvey.controls;
   }
 
-  
- 
-  
+
+
+
 }

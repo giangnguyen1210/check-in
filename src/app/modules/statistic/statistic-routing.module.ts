@@ -13,17 +13,17 @@ const routes: Routes = [
     component: StatisticComponent,
     canActivate: [AuthGuard], // Apply the AuthGuard to the DashboardComponent
     children: [
-        {
-            path: 'in-out',
-            component: InOutComponent,
-        },
-        {
-            path: 'sign-in',
-            component: SignInComponent,
-        },
-        {
-          path: 'survey',
-          component: SurveyComponent,
+      {
+          path: 'in-out',
+          component: InOutComponent,
+      },
+      {
+          path: 'sign-in',
+          component: SignInComponent,
+      },
+      {
+        path: 'survey',
+        component: SurveyComponent,
       },
       {
           path: 'register',
@@ -36,8 +36,6 @@ const routes: Routes = [
     ],
     
   },
-  
-  // Các routes khác nếu có
 ];
 
 @NgModule({

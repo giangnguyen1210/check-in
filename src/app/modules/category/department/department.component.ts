@@ -36,26 +36,14 @@ export class DepartmentComponent implements OnInit{
   }
   //constructor
   constructor(private userService: UserService, private departmentService: DepartmentService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
-  nameImage: any;
   formSearch: any;
   formDepartment!: FormGroup;
   formDepartmentEdit!: FormGroup;
-  isSubmit = false;
-  userList: any;
-  roleList: any;
-  statusList: any;
-  stt: any;
   unitList:any;
-  genderList: any;
   branchList: any;
-  positionList: any;
-  toqList: any;
-  jobTitleList: any;
   departmentList!: any[];
   showModal: boolean=false;
   showModalEdit: boolean = false;
-  selectedParent: any;
-  selectedChild: any;
   currentPage = 1;
   pageSize = 2;
 
