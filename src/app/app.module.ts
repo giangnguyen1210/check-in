@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptor/auth.interceptor';
-import { UsersComponent } from './modules/users/users.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
@@ -13,7 +12,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxTimepickerModule } from 'ngx-timepicker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import { StatisticComponent } from './modules/statistic/statistic.component';
+import { ToastrModule } from 'ngx-toastr';
+import { OpinionComponent } from './modules/opinion/opinion.component';
 
 
 
@@ -31,7 +31,8 @@ import { StatisticComponent } from './modules/statistic/statistic.component';
     MatFormFieldModule,
     MatNativeDateModule ,
     NgxTimepickerModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    ToastrModule.forRoot(), 
   ],
   providers: [
     {

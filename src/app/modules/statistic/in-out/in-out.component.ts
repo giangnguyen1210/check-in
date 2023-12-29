@@ -6,6 +6,8 @@ import { DepartmentService } from 'src/app/core/services/department.service';
 import { CheckinCheckoutService } from 'src/app/core/services/history-checkin-checkout.service';
 import { UnitService } from 'src/app/core/services/unit.service';
 import * as moment from 'moment';
+import { ToastrService } from 'ngx-toastr';
+import { BaseResponse } from 'src/app/core/models/response';
 @Component({
   selector: 'app-in-out',
   templateUrl: './in-out.component.html',
@@ -33,7 +35,12 @@ export class InOutComponent implements OnInit{
     return formattedDate;
   }
   //constructor
-  constructor(private checkinCheckoutService: CheckinCheckoutService, private commonService: CommonService, private unitService: UnitService, private departmentService: DepartmentService, private fb: FormBuilder) {}
+  constructor(private checkinCheckoutService: CheckinCheckoutService, 
+    private commonService: CommonService, 
+    private unitService: UnitService, 
+    private departmentService: DepartmentService, 
+    private fb: FormBuilder,
+    private toastr: ToastrService) {}
   formSearch: any;
   isSubmit = false;
   checkinCheckoutList: any;
@@ -46,6 +53,7 @@ export class InOutComponent implements OnInit{
   formDate: any;
   checkinCheckoutDetailList: any;
   employeeCode: any;
+  response!: BaseResponse;
   formatTime(time: any) {
     if(time==null){
       return '';
@@ -96,8 +104,49 @@ export class InOutComponent implements OnInit{
   getData(){
     this.getCheckinOutDetailService();
   }
-  exportDetail(){
 
+  exportFile(){
+    const json = {
+      keyword: this.formSearch.get('keyword').value,
+      statusId: this.formSearch.get('statusId').value,
+      date: this.formSearch.get('date').value,
+      departmentCode: this.formSearch.get('departmentCode').value,
+      unitCode: this.formSearch.get('unitCode').value,
+    };
+    this.checkinCheckoutService.exportHistoryCheckin(json).subscribe(
+      (data: any) => {
+        this.response = data;
+        if( this.response.errorCode ==="OK"){
+          this.toastr.success(this.response.errorDesc);
+        }else{
+          this.toastr.error(this.response.errorDesc);
+        }
+      },
+      error => {
+        console.error('Error downloading file:', error);
+      }
+    );
+  }
+
+  exportDetail(){
+    const json={
+      employeeCode: this.employeeCode,
+      date: this.formDate.get('date')?.value
+    }
+    this.checkinCheckoutService.exportHistoryCheckinDetail(json).subscribe(
+      (data: any) => {
+        this.response = data;
+        console.log(this.response);
+        if( this.response.errorCode ==="OK"){
+          this.toastr.success(this.response.errorDesc);
+        }else{
+          this.toastr.error(this.response.errorDesc);
+        }
+      },
+      error => {
+        console.error('Error downloading file:', error);
+      }
+    );
   }
   //get service
   getDepartmentService(){

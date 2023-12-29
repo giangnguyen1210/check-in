@@ -5,6 +5,8 @@ import { DepartmentService } from 'src/app/core/services/department.service';
 import { UnitService } from 'src/app/core/services/unit.service';
 import * as moment from 'moment';
 import { HistoryLoginService } from 'src/app/core/services/history-login.service';
+import { BaseResponse } from 'src/app/core/models/response';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -32,7 +34,12 @@ export class SignInComponent implements OnInit{
     return formattedDate;
   }
   //constructor
-  constructor(private historyLoginService: HistoryLoginService, private commonService: CommonService, private unitService: UnitService, private departmentService: DepartmentService, private fb: FormBuilder) {}
+  constructor(private historyLoginService: HistoryLoginService, 
+    private commonService: CommonService, 
+    private unitService: UnitService, 
+    private departmentService: DepartmentService, 
+    private fb: FormBuilder,
+    private toastr: ToastrService) {}
   formSearch: any;
   isSubmit = false;
   historyLoginList: any;
@@ -46,6 +53,7 @@ export class SignInComponent implements OnInit{
   showModalLoginDetail: boolean = false;
   employeeCode: any;
   formDate: any;
+  response!: BaseResponse;
  
   formatTime(time: any) {
     if(time==null){
@@ -111,8 +119,49 @@ export class SignInComponent implements OnInit{
   }
 
   exportDetail(){
-    
+    const json={
+      employeeCode: this.employeeCode,
+      date: this.formDate.get('date')?.value
+    }
+    this.historyLoginService.exportHistoryLoginDetail(json).subscribe(
+      (data: any) => {
+        this.response = data;
+        console.log(this.response);
+        if( this.response.errorCode ==="OK"){
+          this.toastr.success(this.response.errorDesc);
+        }else{
+          this.toastr.error(this.response.errorDesc);
+        }
+      },
+      error => {
+        console.error('Error downloading file:', error);
+      }
+    );
   }
+  exportFile(): void {
+    const json = {
+      keyword: this.formSearch.get('keyword').value,
+      statusId: this.formSearch.get('statusId').value,
+      genderId: this.formSearch.get('genderId').value,
+      departmentCode: this.formSearch.get('departmentCode').value,
+      unitCode: this.formSearch.get('unitCode').value,
+    };
+    this.historyLoginService.exportHistoryLogin(json).subscribe(
+      (data: any) => {
+        this.response = data;
+        if( this.response.errorCode ==="OK"){
+          this.toastr.success(this.response.errorDesc);
+        }else{
+          this.toastr.error(this.response.errorDesc);
+        }
+      },
+      error => {
+        console.error('Error downloading file:', error);
+      }
+    );
+  }
+  
+  
   getStatusService(){
     this.commonService.getStatusList().subscribe(
       (data) => {

@@ -24,6 +24,17 @@ export class CheckinCheckoutService {
     const headers = this.headerService.getHeaders()
     return this.http.post(url, checkin,{ headers });
   }
+  exportHistoryCheckin(history: any){
+    const url = `${this.apiUrl}/admin/history-checkin-checkout/export`;
+    const headers = this.headerService.getHeaders()
+    return this.http.post(url, history,{ headers });
+  }
+
+  exportHistoryCheckinDetail(history: any){
+    const url = `${this.apiUrl}/admin/history-checkin-checkout/export-detail`;
+    const headers = this.headerService.getHeaders()
+    return this.http.post(url, history,{ headers });
+  }
 
  
 }

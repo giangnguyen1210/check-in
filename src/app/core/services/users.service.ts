@@ -37,4 +37,10 @@ export class UserService {
     return this.http.post(url, user, { headers });
   }
 
+  activateUser(user: any): Observable<any> {
+    const headers = this.headerService.getHeaders();
+    const url = `${this.apiUrl}/admin/users/activate`;
+    return this.http.post(url, user, { headers });
+  }
+
 }

@@ -368,6 +368,7 @@
             (change)="addFaceImage($event)"
             [ngClass]="{ 'is-invalid': isSubmit && f.image.errors }"
           />
+          <!-- <img class="w-20 h-20" src="{{userList.image}}" alt="Jese image"> -->
           <div *ngIf="isSubmit && f.image.errors" class="invalid-feedback">
             <span *ngIf="f.image.errors.required">Please enter your image</span
             ><br />
@@ -376,15 +377,14 @@
       </div>
       <div class="relative z-0 w-full mb-2 group">
         <label for="cccdImage" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File ảnh CMND/CCCD <span class="text-red-500">*</span></label>
-        <input
+        <!-- <input
           type="file"
           accept="image/*" 
           class="block pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           formControlName="cccdImage"
           (change)="addCccdImage($event)"
-          [value]=""
           [ngClass]="{ 'is-invalid': isSubmit && f.image.errors }"
-        />
+        /> -->
         <div *ngIf="isSubmit && f.image.errors" class="invalid-feedback">
           <span *ngIf="f.image.errors.required">Please enter your image</span
           ><br />

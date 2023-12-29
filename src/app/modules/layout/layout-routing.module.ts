@@ -36,6 +36,12 @@ const routes: Routes = [
     loadChildren: () => import('../statistic/statistic.module').then((m) => m.StatisticModule),
     canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
   },
+  {
+    path: 'opinion',
+    component: LayoutComponent,
+    loadChildren: () => import('../opinion/opinion.module').then((m) => m.OpinionModule),
+    canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
+  },
   // { path: '**', redirectTo: 'error/404' },
 ];
 

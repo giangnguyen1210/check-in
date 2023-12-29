@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, catchError, map, of } from 'rxjs';
 import { AuthResponse } from 'src/app/core/models/response';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -13,7 +14,10 @@ export class SignInComponent {
   loginForm: FormGroup;
   response!: AuthResponse;
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private readonly _router: Router) {
+  constructor(private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private readonly _router: Router,
+    private toastr: ToastrService) {
     this.loginForm = this.formBuilder.group({
       email: ['', {
         validators: [Validators.required, Validators.email],
@@ -25,10 +29,10 @@ export class SignInComponent {
   }
 
   ngOnInit() {
-   if(this.authService.isLoggedIn()){
-    this._router.navigate(['/'])
-      return ;
-   }
+    if (this.authService.isLoggedIn()) {
+      this._router.navigate(['/'])
+      return;
+    }
   }
 
 
@@ -56,28 +60,31 @@ export class SignInComponent {
         email: this.loginForm.value.email,
         password: this.loginForm.value.password
       };
-      
+
       this.authService.login(user).subscribe(
         (res) => {
           this.response = res;
-          console.log(this.response);
-          this.authService.setJwtToken(res.accessToken);
-          console.log(res);
-          if(this.authService.isLoggedIn()){
-            this._router.navigate(['/dashboard'])
+          // console.log(this.response.errorCode);
+          if(this.response.errorCode==='OK'){
+            this.authService.setJwtToken(res.accessToken);
+            this.toastr.success(this.response.errorDesc);
+            if (this.authService.isLoggedIn()) {
+              this._router.navigate(['/dashboard'])
+            }
+          }else{
+            this.toastr.error(this.response.errorDesc);
           }
-          // console.log(response.accessToken);
         },
         (error) => {
           console.error('Login error', error);
         }
       );
-      
+
       // this.router.navigate(['/home']);
     }
   }
 
-  forgotPassword(){
+  forgotPassword() {
     this._router.navigate(['/auth/send-email-otp']);
   }
 }

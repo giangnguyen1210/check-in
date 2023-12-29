@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Option } from 'src/app/core/models/response';
+import { ToastrService } from 'ngx-toastr';
+import { BaseResponse, Option } from 'src/app/core/models/response';
 import { CommonService } from 'src/app/core/services/common.service';
 import { SurveyService } from 'src/app/core/services/survey.service';
 import { UserService } from 'src/app/core/services/users.service';
@@ -24,8 +25,9 @@ export class FormSurveyComponent implements OnInit {
 
     // Lấy ngày, tháng, năm từ đối tượng ngày
     const day = serverDate.getDate();
-    const month = serverDate.getMonth() + 1; // Tháng bắt đầu từ 0
     const year = serverDate.getFullYear();
+    const month = serverDate.getMonth() + 1; // Tháng bắt đầu từ 0
+
 
     // Định dạng ngày theo "dd/MM/yyyy"
     const formattedDate = `${formatTwoDigits(day)}/${formatTwoDigits(month)}/${year}`;
@@ -33,29 +35,19 @@ export class FormSurveyComponent implements OnInit {
     return formattedDate;
   }
   //constructor
-  constructor(private userService: UserService, private surveyService: SurveyService, private commonService: CommonService, private router: Router, private fb: FormBuilder) { }
-  nameImage: any;
+  constructor( private surveyService: SurveyService, 
+    private toastr: ToastrService,
+    private commonService: CommonService, 
+    private fb: FormBuilder) { }
   formSearch: any;
   formSurvey!: FormGroup;
   formSurveyEdit!: FormGroup;
-  isSubmit = false;
-  userList: any;
-  roleList: any;
-  statusList: any;
-  stt: any;
-  unitList: any;
-  genderList: any;
   objectList: any;
-  positionList: any;
   toqList: any;
-  jobTitleList: any;
   surveyList: any;
   showModal: boolean = false;
   showModalEdit: boolean = false;
-  selectedParent: any;
-  selectedChild: any;
-  listOption: any;
-  childOptions!: { id: number, name: string }[];
+  response!: BaseResponse;
 
   //ng oninit
   ngOnInit(): void {
@@ -171,14 +163,8 @@ export class FormSurveyComponent implements OnInit {
 
   updateSurvey() {
 
-    console.log(this.formSurveyEdit.value.optionQuestion1);
-    // Lấy giá trị của optionText từ một FormGroup trong options1
-    // Lấy mảng chứa tất cả các giá trị của optionText từ options1
     const optionTextArray = this.option1.value.map((option: Option) => option.optionText);
-    console.log(optionTextArray);
     const resultString: string = optionTextArray.join('|');
-
-    // console.log(resultString);
     const json = {
       ...this.formSurveyEdit.value,
       optionQuestion1: resultString,
@@ -188,7 +174,15 @@ export class FormSurveyComponent implements OnInit {
     if (this.formSurveyEdit.valid) {
       this.surveyService.updateSurvey(json).subscribe(
         (data) => {
-          console.log(data);
+          // console.log(data);
+          this.response = data;
+          if (this.response.errorCode === "OK") {
+            this.showModal = false;
+            this.toastr.success(this.response.errorDesc);
+            this.getSurveyService();
+          }else{
+            this.toastr.error(this.response.errorDesc);
+          }
         }
       )
     }
@@ -207,19 +201,19 @@ export class FormSurveyComponent implements OnInit {
     this.getObjectService();
   }
   submitSurvey() {
-    // console.log(this.formUser);
     const json = {
       ...this.formSurvey.value,
     };
-    console.log(json);
-    console.log(this.formSurvey);
     if (this.formSurvey.valid) {
       this.surveyService.createSurvey(json).subscribe(
         (data) => {
-          console.log(data);
-          if (data.errorCode === "OK") {
+          this.response = data;
+          if (this.response.errorCode === "OK") {
             this.showModal = false;
+            this.toastr.success(this.response.errorDesc);
             this.getSurveyService();
+          }else{
+            this.toastr.error(this.response.errorDesc);
           }
         }
       )
