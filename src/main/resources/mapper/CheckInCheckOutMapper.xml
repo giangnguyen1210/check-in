@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pos.mapper.CheckInCheckOutMapper">
+
+
+<!--    <insert id="checkIn">-->
+<!--        insert into checkin_checkout-->
+<!--            (employee_code,-->
+<!--             date,-->
+<!--             checkin_time,-->
+<!--             status)-->
+<!--        values (-->
+<!--                #{employeeCode},-->
+<!--                Now(),-->
+<!--                now(),-->
+<!--                4-->
+<!--               )-->
+<!--    </insert>-->
+
+    <insert id="checkIn">
+        INSERT INTO checkin_checkout (employee_code, date, checkin_time, status, schedule_id)
+        VALUES (
+                   #{employeeCode},
+                   NOW(),
+                   NOW(),
+                   4,
+                    1
+               )
+    </insert>
+
+
+    <!--    <update id="checkOut">-->
+<!--        update checkin_checkout-->
+<!--        set checkout_time = now(),-->
+<!--            working_time = (now() - checkin_time)::time,-->
+<!--&#45;&#45;             late_time = (checkin_time-)-->
+<!--        where employee_code = #{employeeCode} and date = CURRENT_DATE-->
+<!--    </update>-->
+    <update id="checkOut">
+        UPDATE checkin_checkout c
+        SET
+            checkout_time = now(),
+            working_time = (now() - c.checkin_time)::time,
+         late_time = (c.checkin_time::time - w.start_time::time),
+         early_out_time = (w.end_time::time - c.checkout_time::time)
+
+        FROM work_schedule w
+        WHERE c.employee_code = #{employeeCode}
+          AND c.date = CURRENT_DATE
+            and checkout_time IS NULL
+          AND c.schedule_id = w.id;
+    </update>
+
+
+    <select id="checkCheckInExist" resultType="java.lang.Integer">
+        select count(*) from checkin_checkout where "date"=CURRENT_DATE and employee_code=#{employeeCode}
+    </select>
+    <select id="checkCheckoutExist" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM checkin_checkout
+        WHERE checkout_time IS NULL
+          AND employee_code = #{employeeCode}
+          AND date = current_date
+    </select>
+    <select id="listHistoryCheckin" resultType="com.pos.dto.response.CheckInCheckOutResponse">
+        SELECT
+            cc.employee_code,
+            u.fullname,
+            d.name AS department_name,
+            u2.name AS unit_name,
+            cc.date,
+            MIN(cc.checkin_time)::time as checkin_time,
+                MAX(cc.checkout_time)::time as checkout_time,
+        (MAX(cc.checkout_time)::time - MIN(cc.checkin_time)::time)::time as working_time,
+        (MIN(cc.checkin_time) - ws.start_time)::time as late_time,
+        (ws.end_time - MAX(cc.checkout_time))::time as early_out_time
+        FROM
+            checkin_checkout cc
+                JOIN
+            users u ON cc.employee_code = u.employee_code
+                JOIN
+            department d ON u.department_code = d.code
+                JOIN
+            unit u2 ON u.unit_code = u2.code
+                JOIN
+            status s ON cc.status = s.id
+                JOIN
+            work_schedule ws ON EXTRACT(DOW FROM cc.date) + 1 = ws.day_of_week
+        <where>
+            cc.employee_code = #{employeeCode}
+            <if test="fromDate != null and toDate != null">
+                AND cc.date BETWEEN #{fromDate} AND #{toDate}
+            </if>
+            <if test="month != null and year != null">
+                AND (EXTRACT(MONTH FROM cc.date) = #{month}  -- Thay đổi thành tháng mong muốn
+                AND EXTRACT(YEAR FROM cc.date) = #{year})
+            </if>
+
+
+
+
+        </where>
+        GROUP BY
+            cc.employee_code, u.fullname, department_name, unit_name, cc.date, s.name, ws.start_time, ws.end_time
+        ORDER BY
+            cc.date DESC, checkout_time DESC, checkin_time DESC
+    </select>
+
+
+</mapper>

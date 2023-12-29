@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pos.mapper.OpinionMapper">
+
+    <insert id="createOpinion">
+        insert into opinion (name, content, employee_code, created_date, code, status_id)
+        values (#{name},
+                #{content},
+                #{employeeCode},
+                NOW(),
+                #{code},6)
+    </insert>
+    <select id="checkOpinionExist" resultType="java.lang.Integer">
+        select count(*) from opinion where name=#{name} and employee_code =#{employeeCode}
+    </select>
+    <select id="totalOpinion" resultType="java.lang.Integer">
+        select count(*) from opinion
+    </select>
+    <select id="getNextCode" resultType="com.pos.dto.response.OpinionResponse">
+        SELECT * FROM opinion ORDER BY code DESC LIMIT 1
+    </select>
+</mapper>

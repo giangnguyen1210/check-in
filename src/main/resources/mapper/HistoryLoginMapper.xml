@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pos.mapper.HistoryLoginMapper">
+
+
+    <insert id="createHistoryLogin">
+        insert into login_management (employee_code, date, login_time) values(#{employeeCode}, now(), now())
+    </insert>
+    <update id="updateHistoryLogin">
+        update login_management set date = now(), login_time=now() where employee_code = #{employeeCode}
+    </update>
+    <select id="checkHistoryLoginExist" resultType="java.lang.Integer">
+        select count(*) from login_management where employee_code =#{employeeCode}
+    </select>
+</mapper>
