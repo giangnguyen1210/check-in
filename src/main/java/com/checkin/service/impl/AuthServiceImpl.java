@@ -49,23 +49,27 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public BaseResponse login(UserRequest request) {
-        UserResponse user = userMapper.findByEmail(request.getEmail());
-        Date newDate = new Date();
-        System.out.println(newDate);
         AuthResponse authResponse = new AuthResponse("");
+        UserResponse user = userMapper.findByEmail(request.getEmail());
+        System.out.println(user.getRoleId());
+        if(user.getRoleId()!=1){
+            authResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            authResponse.setErrorDesc("Bạn không có quyền truy cập");
+            return authResponse;
+        }
         if(user==null){
             authResponse.setErrorCode(HttpStatus.NOT_FOUND.name());
-            authResponse.setErrorDesc("User not found");
+            authResponse.setErrorDesc("Tài khoản không tồn tại");
             return authResponse;
         }
         if(request.getEmail()==null || request.getPassword()==null){
-            authResponse.setErrorCode("Email or password is empty");
+            authResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            authResponse.setErrorCode("Email hoặc mật khẩu không được để trống");
         }else{
             if(passwordEncoder.matches(request.getPassword(), user.getPassword())){
                 Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
                 );
-                System.out.printf(authentication.getName());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 String token = jwtGenerator.generateToken(authentication);
                 Claims claims = JwtGenerator.getEmailFromJwt(token);
@@ -75,8 +79,10 @@ public class AuthServiceImpl implements AuthService {
                 authResponse.setAccessToken(token);
                 authResponse.setData(username);
                 authResponse.setErrorCode(HttpStatus.OK.name());
+                authResponse.setErrorDesc("Đăng nhập thành công");
             }else{
-                authResponse.setErrorCode("Mat khau khong trung khop");
+                authResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+                authResponse.setErrorDesc("Mật khẩu không trùng khớp");
             }
 
         }
@@ -89,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
         UserResponse checkEmailExist = userMapper.findByEmail(request.getEmail());
         if(checkEmailExist==null){
             baseResponse.setErrorCode(HttpStatus.NOT_FOUND.name());
-            baseResponse.setErrorDesc("Email is not exist");
+            baseResponse.setErrorDesc("Email không tồn tại");
             return baseResponse;
         }else{
             String otp = generateOTP();
@@ -105,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
             System.out.println(otp);
             sendEmail(request.getEmail(), "OTP ", "Your OTP is: " + otp + " will expire in 30s");
             baseResponse.setErrorCode(HttpStatus.OK.name());
-            baseResponse.setData("Send email Success");
+            baseResponse.setData("Gửi email thành công!, mời bạn nhập mã OTP");
             return baseResponse;
         }
     }
@@ -113,8 +119,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public BaseResponse resetPassword(UserRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-//        System.out.println(validateOtp(request.getOtp(),request.getEmail()));
-
         if(validateOtp(request.getOtp(), request.getEmail())){
             if(request.getPassword().equals(request.getRePassword())){
                 String hashPassword = passwordEncoder.encode(request.getPassword());
@@ -122,17 +126,15 @@ public class AuthServiceImpl implements AuthService {
                 Integer reset = userMapper.resetPassword(request);
                 baseResponse.setData(reset);
                 baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setErrorDesc("Reset password thành công");
+                baseResponse.setErrorDesc("Đặt lại mật khẩu thành công");
             }
             else {
                 baseResponse.setErrorCode(HttpStatus.NOT_ACCEPTABLE.name());
-                baseResponse.setErrorDesc("Password không trùng khớp");
+                baseResponse.setErrorDesc("Mật khẩu không trùng khớp");
             }
-
         }else{
             baseResponse.setErrorDesc("Sai mã OTP hoặc hết hạn");
             baseResponse.setErrorCode(HttpStatus.UNAUTHORIZED.name());
-            return baseResponse;
         }
         return baseResponse;
     }

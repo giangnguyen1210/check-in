@@ -40,6 +40,7 @@ public class CommonServiceImpl implements CommonService {
         BaseResponse baseResponse = new BaseResponse();
         List<RoleResponse> roles = roleMapper.listRole();
         baseResponse.setData(roles);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setTotalRecords(roles.size());
         return baseResponse;
     }
@@ -50,12 +51,12 @@ public class CommonServiceImpl implements CommonService {
         if(role==null || role!=1){
             if(request!=null && !request.getName().equals("")){
                 roleMapper.createRole(request);
-                baseResponse.setErrorCode(HttpStatus.CREATED.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorCode(HttpStatus.OK.name());
+                baseResponse.setErrorDesc("Tạo role thành công");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail");
+            baseResponse.setErrorDesc("Tạo role thất bại");
         }
         return baseResponse;
     }
@@ -64,6 +65,7 @@ public class CommonServiceImpl implements CommonService {
         BaseResponse baseResponse = new BaseResponse();
         List<StatusResponse> statuses = statusMapper.listStatus();
         baseResponse.setData(statuses);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setTotalRecords(statuses.size());
         return baseResponse;
     }
@@ -75,12 +77,12 @@ public class CommonServiceImpl implements CommonService {
         if(status==null || status!=1){
             if(request!=null && !request.equals("")){
                 statusMapper.createStatus(request);
-                baseResponse.setErrorCode(HttpStatus.CREATED.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorCode(HttpStatus.OK.name());
+                baseResponse.setErrorDesc("Tạo trạng thái thành công");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail");
+            baseResponse.setErrorDesc("Tạo trạng thái thất bại");
         }
         return baseResponse;
     }
@@ -90,6 +92,7 @@ public class CommonServiceImpl implements CommonService {
         BaseResponse baseResponse = new BaseResponse();
         List<PositionResponse> positions = positionMapper.listPosition();
         baseResponse.setData(positions);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setTotalRecords(positions.size());
         return baseResponse;
     }
@@ -111,12 +114,12 @@ public class CommonServiceImpl implements CommonService {
 
             if(request!=null && !request.getName().equals("")){
                 positionMapper.createPosition(request);
-                baseResponse.setErrorCode(HttpStatus.CREATED.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorCode(HttpStatus.OK.name());
+                baseResponse.setErrorDesc("Tạo position thành công");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail");
+            baseResponse.setErrorDesc("Tạo position thất bại");
         }
         return baseResponse;
     }
@@ -125,6 +128,7 @@ public class CommonServiceImpl implements CommonService {
         BaseResponse baseResponse = new BaseResponse();
         List<JobTitleResponse> jobTitles = jobTitleMapper.listJobTitle();
         baseResponse.setData(jobTitles);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setTotalRecords(jobTitles.size());
         return baseResponse;
     }
@@ -144,12 +148,12 @@ public class CommonServiceImpl implements CommonService {
 
             if(request!=null && !request.getName().equals("")){
                 jobTitleMapper.createJobTitle(request);
-                baseResponse.setErrorCode(HttpStatus.CREATED.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorCode(HttpStatus.OK.name());
+                baseResponse.setErrorDesc("Tạo job title thành công");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail");
+            baseResponse.setErrorDesc("Tạo job title thất bại");
         }
         return baseResponse;
     }
@@ -159,6 +163,7 @@ public class CommonServiceImpl implements CommonService {
         BaseResponse baseResponse = new BaseResponse();
         List<GenderResponse> genders = genderMapper.listGender();
         baseResponse.setData(genders);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setTotalRecords(genders.size());
         return baseResponse;
     }
@@ -169,11 +174,11 @@ public class CommonServiceImpl implements CommonService {
         Integer gender = genderMapper.checkGenderExist(request);
         if(gender==null || gender!=1){
             genderMapper.createGender(request);
-            baseResponse.setErrorCode(HttpStatus.CREATED.name());
-            baseResponse.setErrorDesc("Create success");
+            baseResponse.setErrorCode(HttpStatus.OK.name());
+            baseResponse.setErrorDesc("Tạo mới giới tính thành công");
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail");
+            baseResponse.setErrorDesc("Tạo mới giới tính thất bại");
         }
         return baseResponse;
     }
@@ -183,6 +188,7 @@ public class CommonServiceImpl implements CommonService {
         BaseResponse baseResponse = new BaseResponse();
         List<TypeOfQuestionResponse> toqs = toqMapper.listTypeOfQuestion();
         baseResponse.setData(toqs);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setTotalRecords(toqs.size());
         return baseResponse;
     }
@@ -192,6 +198,7 @@ public class CommonServiceImpl implements CommonService {
         BaseResponse baseResponse = new BaseResponse();
         List<BranchResponse> branch = branchMapper.listBranch();
         baseResponse.setData(branch);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setTotalRecords(branch.size());
         return baseResponse;
     }
@@ -200,8 +207,8 @@ public class CommonServiceImpl implements CommonService {
     public BaseResponse createTypeOfQuestion(TypeOfQuestionRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         toqMapper.createTypeOfQuestion(request);
-        baseResponse.setErrorCode(HttpStatus.CREATED.name());
-        baseResponse.setErrorDesc("Create success");
+        baseResponse.setErrorCode(HttpStatus.OK.name());
+        baseResponse.setErrorDesc("Tạo mới thành công");
         return baseResponse;
     }
 
@@ -210,6 +217,7 @@ public class CommonServiceImpl implements CommonService {
         BaseResponse baseResponse = new BaseResponse();
         List<ObjectResponse> object = commonMapper.getListObject();
         baseResponse.setData(object);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setTotalRecords(object.size());
         return baseResponse;
     }
@@ -218,8 +226,8 @@ public class CommonServiceImpl implements CommonService {
     public BaseResponse createBranch(BranchRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         branchMapper.createBranch(request);
-        baseResponse.setErrorCode(HttpStatus.CREATED.name());
-        baseResponse.setErrorDesc("Create success");
+        baseResponse.setErrorCode(HttpStatus.OK.name());
+        baseResponse.setErrorDesc("Tạo chi nhánh mới thành công");
         return baseResponse;
     }
 }

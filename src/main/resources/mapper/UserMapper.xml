@@ -74,6 +74,14 @@
             WHERE employee_code = #{employeeCode}
         </foreach>
     </update>
+    <update id="activateUser" parameterType="com.checkin.dto.request.UserRequest">
+        <foreach collection="employeeCodes" item="employeeCode" separator=";">
+            UPDATE users
+            SET status_id = #{statusId},
+            updated_time=Now()
+            WHERE employee_code = #{employeeCode}
+        </foreach>
+    </update>
     <select id="findByEmail" resultType="com.checkin.dto.request.UserRequest">
         select * from users where email = #{email} limit 1
     </select>

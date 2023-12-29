@@ -26,17 +26,20 @@ public class SurveyServiceImpl implements SurveyService {
         if(request.getName().equals("")||request.getName()==null){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Tên khảo sát không được trống");
+            return baseResponse;
         }
-        else if(request.getQuestion1()!=null){
+         if(request.getQuestion1()!=null){
             if(request.getTypeOfQuestion1Id()==null){
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
                 baseResponse.setErrorDesc("Loại câu hỏi 1 không được trống");
+                return baseResponse;
             }
         }
-        else if(request.getQuestion2()!=null){
+        if(request.getQuestion2()!=null){
             if(request.getTypeOfQuestion2Id()==null){
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
                 baseResponse.setErrorDesc("Loại câu hỏi 2 không được trống");
+                return baseResponse;
             }
         }
         else if(request.getMandatoryObject()==null) {
@@ -70,6 +73,7 @@ public class SurveyServiceImpl implements SurveyService {
         BaseResponse baseResponse = new BaseResponse();
         List<SurveyResponse> list = surveyMapper.getListSurvey(request);
         baseResponse.setTotalRecords(list.size());
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setData(list);
         return baseResponse;
     }
@@ -78,7 +82,9 @@ public class SurveyServiceImpl implements SurveyService {
     public BaseResponse updateSurvey(SurveyRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         if(request.getName()==null){
-            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Tên khảo sát không được trống");
+            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            baseResponse.setErrorDesc("Tên khảo sát không được trống");
+            return baseResponse;
         }
         if(request.getQuestion1()!=null){
             if(request.getTypeOfQuestion1Id()==null){

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.checkin.mapper.OpinionMapper">
+
+    <update id="responseOpinion">
+        update opinion set response = #{response},
+                           admin_response_code = #{adminCode},
+                           response_date = now(), status_id=5 where code =#{code}
+    </update>
+    <select id="listOpinion" resultType="com.checkin.dto.response.OpinionResponse">
+
+        SELECT
+            op.code AS code,
+            op.name AS name,
+            op.created_date,
+            op.content as content,
+            u.fullname AS fullname,
+            d.name AS departmentName,
+            d.code as departmentCode,
+            u.employee_code as employeeCode,
+            op.response as response,
+            op.status_id as statusId,
+            s.name as statusName
+        FROM
+            opinion op
+                JOIN
+            users u ON op.employee_code = u.employee_code
+                JOIN
+            department d ON u.department_code = d.code
+                JOIN
+            status s ON op.status_id = s.id
+
+    <where>
+        <if test="code != null and code != ''">
+            AND (
+            LOWER(op.code) LIKE CONCAT('%', LOWER(#{code}), '%')
+            )
+        </if>
+        <if test="name != null and name != ''">
+            AND (
+            LOWER(op.name) LIKE CONCAT('%', LOWER(#{name}), '%')
+            )
+        </if>
+        <if test="fullname != null and fullname != ''">
+            AND (
+            LOWER(u.fullname) LIKE CONCAT('%', LOWER(#{fullname}), '%')
+            )
+        </if>
+        <if test="departmentCode != null and departmentCode != ''">
+            AND u.department_code = #{departmentCode}
+        </if>
+        <if test="createdDate != null">
+            AND (
+            op.created_date = #{createdDate}
+            )
+        </if>
+    </where>
+        order by created_date desc
+        <if test="limit > 0">
+            OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
+        </if>
+    </select>
+</mapper>

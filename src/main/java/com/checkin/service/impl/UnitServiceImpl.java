@@ -47,14 +47,14 @@ public class UnitServiceImpl implements UnitService {
             if(request!=null && !request.getName().equals("") && request.getBranch()!=null){
                 unitMapper.createUnit(request);
                 baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorDesc("Tạo mới thành công");
             }else{
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-                baseResponse.setErrorDesc("Unit Name or Branch is null");
+                baseResponse.setErrorDesc("Tạo mới thất bại, Tên đơn vị không được bỏ trống");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail, Unit existed!");
+            baseResponse.setErrorDesc("Tạo mới thất bại, đơn vị đã tồn tại");
         }
         return baseResponse;
     }
@@ -62,10 +62,10 @@ public class UnitServiceImpl implements UnitService {
     public BaseResponse updateUnit(UnitRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         if(request.getName()==null){
-            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Tên phòng ban không được trống");
+            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Tên đơn vị không được trống");
         }
         if(request.getBranch()==null){
-            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Tên chi nhánh không được trống");
+            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Tên đơn vị không được trống");
 
         }
 

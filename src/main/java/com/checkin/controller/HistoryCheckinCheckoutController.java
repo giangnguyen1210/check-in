@@ -27,4 +27,13 @@ public class HistoryCheckinCheckoutController {
     public ResponseEntity<BaseResponse> listCheckinCheckoutDetail(@RequestBody CheckinCheckoutRequest request){
         return new ResponseEntity<>(checkinCheckoutService.getListCheckinCheckoutDetail(request), HttpStatus.OK);
     }
+    @PostMapping("/export")
+    public ResponseEntity<BaseResponse> exportHistoryCheckin(@RequestBody CheckinCheckoutRequest request) {
+        return new ResponseEntity<>(checkinCheckoutService.exportHistoryCheckinCheckout(request), HttpStatus.OK);
+    }
+
+    @PostMapping("/export-detail")
+    public ResponseEntity<BaseResponse> exportHistoryCheckinDetail(@RequestBody CheckinCheckoutRequest request) {
+        return new ResponseEntity<>(checkinCheckoutService.exportHistoryCheckinCheckoutDetail(request), HttpStatus.OK);
+    }
 }

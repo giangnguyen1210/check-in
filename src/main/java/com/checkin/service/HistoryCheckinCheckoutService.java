@@ -8,4 +8,8 @@ public interface HistoryCheckinCheckoutService {
     BaseResponse getListCheckinCheckout(CheckinCheckoutRequest request);
 
     BaseResponse getListCheckinCheckoutDetail(CheckinCheckoutRequest request);
+
+    BaseResponse exportHistoryCheckinCheckout(CheckinCheckoutRequest request);
+
+    BaseResponse exportHistoryCheckinCheckoutDetail(CheckinCheckoutRequest request);
 }

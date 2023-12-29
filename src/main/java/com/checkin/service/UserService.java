@@ -12,4 +12,6 @@ public interface UserService {
     BaseResponse updateUser(UserRequest response);
 
     BaseResponse deActivateUser(UserRequest request);
+
+    BaseResponse activateUser(UserRequest request);
 }

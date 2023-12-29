@@ -36,14 +36,14 @@ public class EventServiceImpl implements EventService {
             if(request!=null && !request.getName().equals("")){
                 eventMapper.createEvent(request);
                 baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorDesc("Tạo mới thành công");
             }else{
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-                baseResponse.setErrorDesc("Department Name or Branch is null");
+                baseResponse.setErrorDesc("Tạo mới thất bại, Tên sự kiện không được để trống");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail, Department existed!");
+            baseResponse.setErrorDesc("Tạo mới thất bại, Tên sự kiện đã tồn tại");
         }
 
         return baseResponse;
@@ -53,8 +53,8 @@ public class EventServiceImpl implements EventService {
         BaseResponse baseResponse = new BaseResponse();
         System.out.println("request: "+request.getStartTime());
         List<EventResponse> list = eventMapper.getListEvent(request);
-
         baseResponse.setTotalRecords(list.size());
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setData(list);
         return baseResponse;
     }
@@ -67,14 +67,14 @@ public class EventServiceImpl implements EventService {
             if(request!=null && !request.getName().equals("")){
                 eventMapper.updateEvent(request);
                 baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorDesc("Chỉnh sửa thành công");
             }else{
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-                baseResponse.setErrorDesc("Event name is null");
+                baseResponse.setErrorDesc("Chỉnh sửa thất bại, tên sự kiện không được bỏ trống");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail, Event existed!");
+            baseResponse.setErrorDesc("Chỉnh sửa thất bại, tên sự kiện đã tồn tại!");
         }
 
         return baseResponse;

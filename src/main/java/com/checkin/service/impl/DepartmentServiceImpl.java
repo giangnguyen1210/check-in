@@ -46,14 +46,14 @@ public class DepartmentServiceImpl implements DepartmentService {
             if(request!=null && !request.getName().equals("") && request.getBranch()!=null){
                 departmentMapper.createDepartment(request);
                 baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorDesc("Tạo mới phòng ban thành công");
             }else{
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-                baseResponse.setErrorDesc("Department Name or Branch is null");
+                baseResponse.setErrorDesc("Tạo mới thất bại, Tên phòng ban hoặc chi nhánh không được để trống");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail, Department existed!");
+            baseResponse.setErrorDesc("Tạo mới thất bại, Phòng ban đã tồn tại");
         }
         return baseResponse;
     }
@@ -61,10 +61,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     public BaseResponse updateDepartment(DepartmentRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         if(request.getName()==null){
-            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Tên phòng ban không được trống");
+            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Chỉnh sửa thất bại, Tên phòng ban không được trống");
         }
         if(request.getBranch()==null){
-            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Tên chi nhánh không được trống");
+            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Chỉnh sửa thất bại, Tên chi nhánh không được trống");
 
         }
 
@@ -73,10 +73,10 @@ public class DepartmentServiceImpl implements DepartmentService {
             baseResponse.setData(request);
             baseResponse.setErrorCode(HttpStatus.OK.name());
             baseResponse.setTotalRecords(departmentMapper.totalDepartment());
-            baseResponse.setErrorDesc("chỉnh sửa thành công");
+            baseResponse.setErrorDesc("Chỉnh sửa thành công");
         } else {
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("chỉnh sửa thất bại");
+            baseResponse.setErrorDesc("Chỉnh sửa thất bại");
             return baseResponse;
         }
         return baseResponse;

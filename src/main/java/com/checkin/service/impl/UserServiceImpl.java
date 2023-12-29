@@ -30,32 +30,33 @@ public class UserServiceImpl implements UserService {
         String hashedPassword = passwordEncoder.encode(defaultPassword);
         request.setPassword(hashedPassword);
         UserResponse checkEmailExist = userMapper.findByEmail(request.getEmail());
-        if(checkEmailExist!=null){
+        if(request.getFullname()==null || request.getFullname().equals("")){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Email is existed");
+            baseResponse.setErrorDesc("Họ và tên không được để trống");
+            return baseResponse;
+        }else if(request.getDepartmentCode() == null ||  request.getDepartmentCode().equals("")){
+            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            baseResponse.setErrorDesc("Phòng ban không được để trống");
+            return baseResponse;
+        }else if(request.getUnitCode() == null||  request.getUnitCode().equals("")){
+            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            baseResponse.setErrorDesc("Đơn vị không được để trống");
+            return baseResponse;
+        }else if(request.getJobTitleCode() == null ||  request.getJobTitleCode().equals("")){
+            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            baseResponse.setErrorDesc("Chức danh không được để trống");
+            return baseResponse;
+        }else if(request.getPositionCode() == null ||  request.getPositionCode().equals("")){
+            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            baseResponse.setErrorDesc("Vị trí không được để trống");
             return baseResponse;
         }
-        if(request.getFullname()==null){
-            baseResponse.setErrorCode("Full name is required");
-            baseResponse.setErrorDesc(HttpStatus.BAD_REQUEST.name());
-            return baseResponse;
-        }else if(request.getDepartmentCode() == null){
-            baseResponse.setErrorCode("Department is required ");
-            baseResponse.setErrorDesc(HttpStatus.BAD_REQUEST.name());
-            return baseResponse;
-        }else if(request.getUnitCode() == null){
+        if(checkEmailExist!=null){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Unit is required ");
+            baseResponse.setErrorDesc("Email đã tồn tại");
             return baseResponse;
-        }else if(request.getJobTitleCode() == null){
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Job title is required ");
-            return baseResponse;
-        }else if(request.getPositionCode() == null){
-            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Position is required ");
-            return baseResponse;
-        }else{
+        }
+        else{
             String id = "EMPLOYEE-";
             int getNextId = 0;
             if(userMapper.totalUser()>0 || userMapper.totalUser()==null) {
@@ -85,6 +86,7 @@ public class UserServiceImpl implements UserService {
         BaseResponse baseResponse = new BaseResponse();
         List<UserResponse> list = userMapper.getListUser(request);
         baseResponse.setTotalRecords(list.size());
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setData(list);
         return baseResponse;
     }
@@ -94,8 +96,8 @@ public class UserServiceImpl implements UserService {
         BaseResponse baseResponse = new BaseResponse();
         if (request == null || Strings.isNullOrEmpty(request.getFullname())
                 || Strings.isNullOrEmpty(request.getEmail())) {
-            return new BaseResponse(String.valueOf(HttpStatus.BAD_REQUEST.value()),
-                    "Fields is required");
+            return new BaseResponse(HttpStatus.BAD_REQUEST.name(),
+                    "Tên hoặc email không được bỏ trống");
         }
         int b = userMapper.updateUser(request);
         if (b !=0) {
@@ -113,9 +115,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public BaseResponse deActivateUser(UserRequest request){
         Integer deactive = userMapper.deActivateUser(request);
-        if(deactive==1){
-            return new BaseResponse(deactive, HttpStatus.OK.name(), "Thanh cong");
+        if(deactive==0){
+            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Không thành công, Bạn phải chọn dữ liệu để huỷ kích hoạt");
         }
-        return null;
+        return new BaseResponse(deactive, HttpStatus.OK.name(), "Huỷ kích hoạt thành công");
+
+    }
+    @Override
+    public BaseResponse activateUser(UserRequest request){
+        Integer deactive = userMapper.activateUser(request);
+        if(deactive==0){
+            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Không thành công, Bạn phải chọn dữ liệu để kích hoạt");
+        }
+        return new BaseResponse(deactive, HttpStatus.OK.name(), "Kích hoạt hành công");
+
     }
 }

@@ -40,6 +40,7 @@
                          option_question_2=#{optionQuestion2}
         where code = #{code}
     </update>
+
     <select id="getNextCode" resultType="com.checkin.dto.response.SurveyResponse">
         SELECT * FROM survey ORDER BY code DESC LIMIT 1
     </select>

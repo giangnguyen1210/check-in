@@ -28,9 +28,7 @@
         status s ON cc.status = s.id
         JOIN
         work_schedule ws ON EXTRACT(DOW FROM cc.date) + 1 = ws.day_of_week
-        GROUP BY
-        cc.employee_code, u.fullname, department_name, unit_name, cc.date, s.name, ws.start_time, ws.end_time
-        order by cc."date" desc,checkout_time desc, checkin_time desc
+
         <where>
             <if test="keyword != null and keyword != ''">
                 AND (
@@ -52,6 +50,9 @@
                 AND u.unit_code = #{unitCode}
             </if>
         </where>
+        GROUP BY
+        cc.employee_code, u.fullname, department_name, unit_name, cc.date, s.name, ws.start_time, ws.end_time
+        order by cc."date" desc,checkout_time desc, checkin_time desc
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
         </if>

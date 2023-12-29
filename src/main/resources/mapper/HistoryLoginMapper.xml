@@ -3,8 +3,6 @@
 
 <mapper namespace="com.checkin.mapper.HistoryLoginMapper">
     <select id="listHistoryLogin" resultType="com.checkin.dto.response.HistoryLoginResponse">
-
-
         SELECT
         lm.employee_code,
         u.fullname,
@@ -20,16 +18,16 @@
         department d ON u.department_code = d.code
         LEFT JOIN
         unit un ON u.unit_code = un.code
-        WHERE
-        (lm.employee_code, lm.login_time) IN (
-        SELECT
-        employee_code, MAX(login_time) AS latest_login_time
-        FROM
-        login_management
-        GROUP BY
-        employee_code
-        )
         <where>
+            (lm.employee_code, lm.login_time) IN (
+            SELECT
+            employee_code,
+            MAX(login_time) AS latest_login_time
+            FROM
+            login_management
+            GROUP BY
+            employee_code, date
+            )
         <if test="keyword != null and keyword != ''">
             AND (
             LOWER(u.fullname) LIKE CONCAT('%', LOWER(#{keyword}), '%')
@@ -50,7 +48,7 @@
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
         </if>
-        ORDER BY lm.login_time DESC
+        order by date desc
     </select>
     <select id="listHistoryLoginDetail" resultType="com.checkin.dto.response.HistoryLoginResponse">
 
@@ -77,7 +75,7 @@
             login_management lm ON u.employee_code = lm.employee_code
         WHERE
             u.employee_code = #{employeeCode}
-        and lm.date = #{date}
+        and lm.date = #{date} order by lm.date desc, lm.login_time desc
     </select>
 
 </mapper>

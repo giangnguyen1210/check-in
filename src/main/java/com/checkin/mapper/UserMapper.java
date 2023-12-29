@@ -25,5 +25,6 @@ public interface UserMapper {
     Integer updateUser(UserRequest request);
 
     Integer deActivateUser(UserRequest request);
+    Integer activateUser(UserRequest request);
 
 }

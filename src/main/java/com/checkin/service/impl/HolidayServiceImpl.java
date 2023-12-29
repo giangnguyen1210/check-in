@@ -40,14 +40,14 @@ public class HolidayServiceImpl implements HolidayService {
             if(request!=null && !request.getName().equals("")){
                 holidayMapper.createHoliday(request);
                 baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorDesc("Tạo mới ngày nghỉ thành công");
             }else{
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-                baseResponse.setErrorDesc("Event Name is null");
+                baseResponse.setErrorDesc("Tạo mới thất bại, Tên ngày nghỉ không được trống");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail, Event existed!");
+            baseResponse.setErrorDesc("Tạo mới thất bại, Tên ngày nghỉ đã tồn tại");
         }
 
         return baseResponse;
@@ -57,6 +57,7 @@ public class HolidayServiceImpl implements HolidayService {
         BaseResponse baseResponse = new BaseResponse();
         List<HolidayResponse> list = holidayMapper.getListHoliday(request);
         baseResponse.setTotalRecords(list.size());
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setData(list);
         return baseResponse;
     }
@@ -69,16 +70,15 @@ public class HolidayServiceImpl implements HolidayService {
             if(request!=null && !request.getName().equals("")){
                 holidayMapper.updateHoliday(request);
                 baseResponse.setErrorCode(HttpStatus.OK.name());
-                baseResponse.setErrorDesc("Create success");
+                baseResponse.setErrorDesc("Chỉnh sửa thành công");
             }else{
                 baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-                baseResponse.setErrorDesc("Event Name is null");
+                baseResponse.setErrorDesc("Tạo mới thất bại, Tên ngày nghỉ không được trống");
             }
         }else{
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
-            baseResponse.setErrorDesc("Create fail, Event existed!");
+            baseResponse.setErrorDesc("Tạo mới thất bại, Tên ngày nghỉ đã tồn tại");
         }
-
         return baseResponse;
     }
 }

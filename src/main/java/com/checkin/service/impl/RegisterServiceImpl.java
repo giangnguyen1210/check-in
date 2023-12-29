@@ -69,6 +69,7 @@ public class RegisterServiceImpl implements RegisterService {
         BaseResponse baseResponse = new BaseResponse();
         List<RegisterResponse> list = registerMapper.getListRegister(request);
         baseResponse.setTotalRecords(list.size());
+        baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setData(list);
         return baseResponse;
     }
@@ -77,7 +78,9 @@ public class RegisterServiceImpl implements RegisterService {
     public BaseResponse updateRegister(RegisterRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         if(request.getName()==null){
-            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Tên khảo sát không được trống");
+            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            baseResponse.setErrorDesc("Tên khảo sát không được trống");
+            return baseResponse;
         }
         if(request.getQuestion1()!=null){
             if(request.getTypeOfQuestion1Id()==null){
@@ -103,7 +106,6 @@ public class RegisterServiceImpl implements RegisterService {
         } else {
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("chỉnh sửa thất bại");
-            return baseResponse;
         }
         return baseResponse;
     }

@@ -35,4 +35,10 @@ public class UserController {
     public ResponseEntity<BaseResponse> deActivate(@RequestBody UserRequest request){
         return new ResponseEntity<>(userService.deActivateUser(request), HttpStatus.OK);
     }
+
+    @PostMapping("/activate")
+    public ResponseEntity<BaseResponse> activate(@RequestBody UserRequest request){
+        return new ResponseEntity<>(userService.activateUser(request), HttpStatus.OK);
+    }
+
 }
