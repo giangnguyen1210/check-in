@@ -6,7 +6,6 @@ import com.checkin.dto.response.BaseResponse;
 import com.checkin.dto.response.SurveyResponse;
 import com.checkin.mapper.SurveyMapper;
 import com.checkin.service.SurveyService;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -113,5 +112,11 @@ public class SurveyServiceImpl implements SurveyService {
             return baseResponse;
         }
         return baseResponse;
+    }
+
+    @Override
+    public BaseResponse deleteSurvey(SurveyRequest request){
+        Integer delete = surveyMapper.deleteSurvey(request);
+        return new BaseResponse(delete, HttpStatus.OK.name(), "Xoá thành công khảo sát");
     }
 }

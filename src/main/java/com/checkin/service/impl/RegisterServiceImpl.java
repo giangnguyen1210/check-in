@@ -109,4 +109,10 @@ public class RegisterServiceImpl implements RegisterService {
         }
         return baseResponse;
     }
+
+    @Override
+    public BaseResponse deleteRegister(RegisterRequest request){
+        Integer delete = registerMapper.deleteRegister(request);
+        return new BaseResponse(delete, HttpStatus.OK.name(), "Xoá thành công đăng ký");
+    }
 }

@@ -40,6 +40,10 @@
                          option_question_2=#{optionQuestion2}
         where code = #{code}
     </update>
+    <update id="deleteRegister">
+        update register set
+            status_id = 3 where code =#{code}
+    </update>
     <select id="getNextCode" resultType="com.checkin.dto.response.RegisterResponse">
         SELECT * FROM register ORDER BY code DESC LIMIT 1
     </select>
@@ -81,6 +85,7 @@
         LEFT JOIN
         type_of_question toq2  ON s.type_of_question_2_id = toq2.id
         <where>
+            status_id !=3 or status_id is null
             <if test="code != null and code != ''">
                 AND (
                 LOWER(s.code) LIKE CONCAT('%', LOWER(#{code}), '%')

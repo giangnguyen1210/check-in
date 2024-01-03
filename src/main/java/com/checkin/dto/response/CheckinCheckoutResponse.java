@@ -24,4 +24,5 @@ public class CheckinCheckoutResponse {
     private String unitCode;
     private Integer genderId;
     private Integer statusId;
+    private Date month;
 }

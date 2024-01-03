@@ -12,7 +12,8 @@ public interface HistoryLoginService {
 
     BaseResponse getHistoryDetail(HistoryLoginRequest request);
 
-    BaseResponse exportHistoryLogin(HistoryLoginRequest request);
-    BaseResponse exportHistoryLoginDetail(HistoryLoginRequest request);
 
+    File exportHistoryLoginDetail(HistoryLoginRequest request);
+
+    File exportHistoryLogin(HistoryLoginRequest request);
 }

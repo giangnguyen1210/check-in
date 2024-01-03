@@ -7,4 +7,6 @@ import lombok.Data;
 public class HistoryLoginRequest extends HistoryLoginResponse {
     private Integer page;
     private Integer limit;
+
+
 }

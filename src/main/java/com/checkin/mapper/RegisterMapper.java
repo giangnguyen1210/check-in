@@ -17,5 +17,5 @@ public interface RegisterMapper {
     Integer updateRegister(RegisterRequest request);
 
 
-
+    Integer deleteRegister(RegisterRequest request);
 }

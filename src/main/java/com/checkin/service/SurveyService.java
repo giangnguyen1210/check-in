@@ -9,4 +9,6 @@ public interface SurveyService {
 
     BaseResponse getListSurvey(SurveyRequest request);
     BaseResponse updateSurvey(SurveyRequest request);
+
+    BaseResponse deleteSurvey(SurveyRequest request);
 }

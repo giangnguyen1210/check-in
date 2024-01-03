@@ -18,6 +18,8 @@ public interface SurveyMapper {
 
     Integer updateSurvey(SurveyRequest request);
 
+    Integer deleteSurvey(SurveyRequest request);
+
 
 
 }

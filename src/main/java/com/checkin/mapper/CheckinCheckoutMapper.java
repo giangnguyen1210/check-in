@@ -10,4 +10,6 @@ import java.util.List;
 public interface CheckinCheckoutMapper {
     List<CheckinCheckoutResponse> listCheckinCheckout(CheckinCheckoutRequest request);
     List<CheckinCheckoutResponse> listCheckinCheckoutDetail(CheckinCheckoutRequest request);
+
+    List<CheckinCheckoutResponse> totalCheckin(CheckinCheckoutRequest request);
 }

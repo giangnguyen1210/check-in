@@ -30,23 +30,23 @@ public class UserServiceImpl implements UserService {
         String hashedPassword = passwordEncoder.encode(defaultPassword);
         request.setPassword(hashedPassword);
         UserResponse checkEmailExist = userMapper.findByEmail(request.getEmail());
-        if(request.getFullname()==null || request.getFullname().equals("")){
+        if(request.getFullname()==null || request.getFullname().isEmpty()){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Họ và tên không được để trống");
             return baseResponse;
-        }else if(request.getDepartmentCode() == null ||  request.getDepartmentCode().equals("")){
+        }else if(request.getDepartmentCode() == null || request.getDepartmentCode().isEmpty()){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Phòng ban không được để trống");
             return baseResponse;
-        }else if(request.getUnitCode() == null||  request.getUnitCode().equals("")){
+        }else if(request.getUnitCode() == null|| request.getUnitCode().isEmpty()){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Đơn vị không được để trống");
             return baseResponse;
-        }else if(request.getJobTitleCode() == null ||  request.getJobTitleCode().equals("")){
+        }else if(request.getJobTitleCode() == null || request.getJobTitleCode().isEmpty()){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Chức danh không được để trống");
             return baseResponse;
-        }else if(request.getPositionCode() == null ||  request.getPositionCode().equals("")){
+        }else if(request.getPositionCode() == null || request.getPositionCode().isEmpty()){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Vị trí không được để trống");
             return baseResponse;
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     public BaseResponse getListUser(UserRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         List<UserResponse> list = userMapper.getListUser(request);
-        baseResponse.setTotalRecords(list.size());
+        baseResponse.setTotalRecords(userMapper.countUser(request));
         baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setData(list);
         return baseResponse;

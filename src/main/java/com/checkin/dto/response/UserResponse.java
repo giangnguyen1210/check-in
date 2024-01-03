@@ -38,6 +38,7 @@ public class UserResponse {
     private List<String> employeeCodes;
     private Date createdTime;
     private Date updatedTime;
+    private Integer numberWrongPassword;
 
 
 }

@@ -14,4 +14,6 @@ public interface UserService {
     BaseResponse deActivateUser(UserRequest request);
 
     BaseResponse activateUser(UserRequest request);
+
+
 }

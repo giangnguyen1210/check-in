@@ -5,15 +5,21 @@ import com.checkin.dto.response.BaseResponse;
 import com.checkin.dto.response.HistoryLoginResponse;
 import com.checkin.mapper.HistoryLoginMapper;
 import com.checkin.service.HistoryLoginService;
+import com.checkin.utils.ExportUtils;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.*;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -25,7 +31,7 @@ public class HistoryLoginServiceImpl implements HistoryLoginService {
     public BaseResponse getListHistoryLogin(HistoryLoginRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         List<HistoryLoginResponse> list = historyLoginMapper.listHistoryLogin(request);
-        baseResponse.setTotalRecords(list.size());
+        baseResponse.setTotalRecords(historyLoginMapper.countHistoryLogin(request).size());
         baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setData(list);
         return baseResponse;
@@ -40,45 +46,46 @@ public class HistoryLoginServiceImpl implements HistoryLoginService {
         baseResponse.setData(list);
         return baseResponse;
     }
-    @Override
-    public BaseResponse exportHistoryLogin(HistoryLoginRequest request) {
-        try {
-            BaseResponse baseResponse = new BaseResponse();
-            String path = "/Users/hongnguyen/Desktop/downloads/login/";
-            List<HistoryLoginResponse> responses = historyLoginMapper.listHistoryLogin(request);
-            File file = ResourceUtils.getFile("classpath:templates/history_login.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(responses);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,dataSource);
-            JasperExportManager.exportReportToPdfFile(jasperPrint, path+"history_login.pdf");
-            baseResponse.setErrorCode(HttpStatus.OK.name());
-            baseResponse.setErrorDesc("Export successful. File saved as: " + "history_login.pdf");
-            return baseResponse;
-        } catch (JRException | FileNotFoundException e) {
-            // Handle exceptions gracefully
-            e.printStackTrace(); // Log the exception or use a logging framework
-            return new BaseResponse("Error during export: " + e.getMessage());
-        }
-    }
-    @Override
-    public BaseResponse exportHistoryLoginDetail(HistoryLoginRequest request) {
-        try {
-            BaseResponse baseResponse = new BaseResponse();
-            String path = "/Users/hongnguyen/Desktop/downloads/login/";
-            List<HistoryLoginResponse> responses = historyLoginMapper.listHistoryLoginDetail(request);
-            File file = ResourceUtils.getFile("classpath:templates/history_login_detail.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(responses);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,dataSource);
-            JasperExportManager.exportReportToPdfFile(jasperPrint, path+"history_login_detail.pdf");
 
-            baseResponse.setErrorCode(HttpStatus.OK.name());
-            baseResponse.setErrorDesc("Export successful. File saved as: " + "history_login_detail.pdf");
-            return baseResponse;
-        } catch (JRException | FileNotFoundException e) {
-            // Handle exceptions gracefully
-            e.printStackTrace(); // Log the exception or use a logging framework
-            return new BaseResponse("Error during export: " + e.getMessage());
+    @Override
+    public File exportHistoryLoginDetail(HistoryLoginRequest request) {
+        File file = null;
+        try {
+            file = File.createTempFile("out", ".tmp");
+            file.deleteOnExit();
+            Resource resource = new ClassPathResource("templates/login_detail.jasper");
+            FileOutputStream fos = new FileOutputStream(file);
+            InputStream inputStream = resource.getInputStream();
+            System.out.println("inputStream"+inputStream);
+            List<HistoryLoginResponse> list = historyLoginMapper.listHistoryLoginDetail(request);
+            Map<String, Object> parameters = new HashMap<>();
+            ExportUtils.exportReport(inputStream, fos, parameters, list, "pdf");
+
+
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
         }
+        return file;
+    }
+
+    @Override
+    public File exportHistoryLogin(HistoryLoginRequest request) {
+        File file = null;
+        try {
+            file = File.createTempFile("out", ".tmp");
+            file.deleteOnExit();
+            Resource resource = new ClassPathResource("templates/history_login.jasper");
+           FileOutputStream fos = new FileOutputStream(file);
+                 InputStream inputStream = resource.getInputStream();
+                System.out.println("inputStream"+inputStream);
+                List<HistoryLoginResponse> list = historyLoginMapper.listHistoryLogin(request);
+                Map<String, Object> parameters = new HashMap<>();
+                ExportUtils.exportReport(inputStream, fos, parameters, list, "pdf");
+
+
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
+        }
+        return file;
     }
 }

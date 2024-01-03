@@ -28,4 +28,9 @@ public class RegisterController {
     public ResponseEntity<BaseResponse> updateRegister(@RequestBody RegisterRequest request){
         return new ResponseEntity<>(RegisterService.updateRegister(request), HttpStatus.OK);
     }
+
+    @PostMapping("/delete")
+    public ResponseEntity<BaseResponse> deleteRegister(@RequestBody RegisterRequest request){
+        return new ResponseEntity<>(RegisterService.deleteRegister(request), HttpStatus.OK);
+    }
 }

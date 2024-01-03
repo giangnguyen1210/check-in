@@ -1,7 +1,9 @@
 package com.checkin.security;
 
+import com.checkin.mapper.SettingSessionMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -11,12 +13,14 @@ import java.util.Date;
 
 @Component
 public class JwtGenerator {
+    @Autowired
+    private SettingSessionMapper mapper;
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     public String generateToken(Authentication authentication){
         String username = authentication.getName();
-
+        Integer expire = mapper.getSetting().getIntervalTime() * 1000*60;
         Date currentDate  = new Date();
-        Date expireDate = new Date(currentDate.getTime()+ SecurityConstants.JWT_EXPIRATION);
+        Date expireDate = new Date(currentDate.getTime()+expire);
 
         String token = Jwts.builder()
                 .setSubject(username)

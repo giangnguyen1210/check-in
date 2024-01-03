@@ -45,10 +45,11 @@
             AND u.status_id = #{statusId}
         </if>
     </where>
+        order by date desc
         <if test="limit > 0">
             OFFSET (#{page} - 1) * #{limit} FETCH NEXT #{limit} ROWS ONLY
         </if>
-        order by date desc
+
     </select>
     <select id="listHistoryLoginDetail" resultType="com.checkin.dto.response.HistoryLoginResponse">
 
@@ -76,6 +77,50 @@
         WHERE
             u.employee_code = #{employeeCode}
         and lm.date = #{date} order by lm.date desc, lm.login_time desc
+    </select>
+    <select id="countHistoryLogin" resultType="com.checkin.dto.response.HistoryLoginResponse">
+        SELECT
+        lm.employee_code,
+        u.fullname,
+        d.name AS department_name,
+        un.name AS unit_name,
+        lm.login_time,
+        lm.date
+        FROM
+        login_management lm
+        JOIN
+        users u ON lm.employee_code = u.employee_code
+        LEFT JOIN
+        department d ON u.department_code = d.code
+        LEFT JOIN
+        unit un ON u.unit_code = un.code
+        <where>
+            (lm.employee_code, lm.login_time) IN (
+            SELECT
+            employee_code,
+            MAX(login_time) AS latest_login_time
+            FROM
+            login_management
+            GROUP BY
+            employee_code, date
+            )
+            <if test="keyword != null and keyword != ''">
+                AND (
+                LOWER(u.fullname) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+                OR u.email LIKE CONCAT('%', #{keyword}, '%')
+                OR u.employee_code LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="departmentCode != null and departmentCode != ''">
+                AND u.department_code = #{departmentCode}
+            </if>
+            <if test="genderId != null and genderId != ''">
+                AND u.gender_id = #{genderId}
+            </if>
+            <if test="statusId != null and statusId != ''">
+                AND u.status_id = #{statusId}
+            </if>
+        </where>
     </select>
 
 </mapper>

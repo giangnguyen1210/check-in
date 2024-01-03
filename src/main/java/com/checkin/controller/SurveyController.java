@@ -29,4 +29,9 @@ public class SurveyController {
     public ResponseEntity<BaseResponse> updateSurvey(@RequestBody SurveyRequest request){
         return new ResponseEntity<>(surveyService.updateSurvey(request), HttpStatus.OK);
     }
+
+    @PostMapping("/delete")
+    public ResponseEntity<BaseResponse> deleteSurvey(@RequestBody SurveyRequest request){
+        return new ResponseEntity<>(surveyService.deleteSurvey(request), HttpStatus.OK);
+    }
 }

@@ -11,4 +11,5 @@ public interface HistoryLoginMapper {
     List<HistoryLoginResponse> listHistoryLogin(HistoryLoginRequest request);
 
     List<HistoryLoginResponse> listHistoryLoginDetail(HistoryLoginRequest request);
+    List<HistoryLoginResponse> countHistoryLogin(HistoryLoginRequest request);
 }

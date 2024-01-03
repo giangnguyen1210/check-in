@@ -1,20 +1,30 @@
 package com.checkin.service.impl;
 
 import com.checkin.dto.request.CheckinCheckoutRequest;
+import com.checkin.dto.request.HistoryLoginRequest;
 import com.checkin.dto.response.BaseResponse;
 import com.checkin.dto.response.CheckinCheckoutResponse;
+import com.checkin.dto.response.HistoryLoginResponse;
 import com.checkin.mapper.CheckinCheckoutMapper;
 import com.checkin.service.HistoryCheckinCheckoutService;
+import com.checkin.utils.ExportUtils;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HistoryCheckinCheckoutServiceImpl implements HistoryCheckinCheckoutService {
@@ -24,7 +34,7 @@ public class HistoryCheckinCheckoutServiceImpl implements HistoryCheckinCheckout
     public BaseResponse getListCheckinCheckout(CheckinCheckoutRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         List<CheckinCheckoutResponse> list = checkinCheckoutMapper.listCheckinCheckout(request);
-        baseResponse.setTotalRecords(list.size());
+        baseResponse.setTotalRecords(checkinCheckoutMapper.totalCheckin(request).size());
         baseResponse.setErrorCode(HttpStatus.OK.name());
         baseResponse.setData(list);
         return baseResponse;
@@ -39,48 +49,48 @@ public class HistoryCheckinCheckoutServiceImpl implements HistoryCheckinCheckout
         return baseResponse;
     }
 
+
+
     @Override
-    public BaseResponse exportHistoryCheckinCheckout(CheckinCheckoutRequest request) {
+    public File exportHistoryCheckinCheckoutDetail(CheckinCheckoutRequest request) {
+        File file = null;
         try {
-            BaseResponse baseResponse = new BaseResponse();
-            String path = "/Users/hongnguyen/Desktop/downloads/checkin-checkout/";
-            List<CheckinCheckoutResponse> responses = checkinCheckoutMapper.listCheckinCheckout(request);
-            File file = ResourceUtils.getFile("classpath:templates/history_checkin.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(responses);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,dataSource);
-            JasperExportManager.exportReportToPdfFile(jasperPrint, path+"history_checkin.pdf");
-            baseResponse.setErrorCode(HttpStatus.OK.name());
-            baseResponse.setErrorDesc("Export successful. File saved as: " + "history_checkin.pdf");
-            return baseResponse;
-        } catch (JRException | FileNotFoundException e) {
-            // Handle exceptions gracefully
-            e.printStackTrace(); // Log the exception or use a logging framework
-            return new BaseResponse("Error during export: " + e.getMessage());
+            file = File.createTempFile("out", ".tmp");
+            file.deleteOnExit();
+            Resource resource = new ClassPathResource("templates/history_checkin_detail.jasper");
+            FileOutputStream fos = new FileOutputStream(file);
+            InputStream inputStream = resource.getInputStream();
+            System.out.println("inputStream"+inputStream);
+            List<CheckinCheckoutResponse> list = checkinCheckoutMapper.listCheckinCheckoutDetail(request);
+            Map<String, Object> parameters = new HashMap<>();
+            ExportUtils.exportReport(inputStream, fos, parameters, list, "pdf");
+
+
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
         }
+        return file;
     }
 
     @Override
-    public BaseResponse exportHistoryCheckinCheckoutDetail(CheckinCheckoutRequest request) {
+    public File exportHistoryCheckinCheckout(CheckinCheckoutRequest request) {
+        File file = null;
         try {
-            BaseResponse baseResponse = new BaseResponse();
-            String path = "/Users/hongnguyen/Desktop/downloads/checkin-checkout/";
-            List<CheckinCheckoutResponse> responses = checkinCheckoutMapper.listCheckinCheckoutDetail(request);
-            File file = ResourceUtils.getFile("classpath:templates/history_checkin_detail.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(responses);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,dataSource);
-            JasperExportManager.exportReportToPdfFile(jasperPrint, path+"history_checkin_detail.pdf");
-            baseResponse.setErrorCode(HttpStatus.OK.name());
-            baseResponse.setErrorDesc("Export successful. File saved as: " + "history_checkin_detail.pdf");
-            return baseResponse;
-        } catch (JRException | FileNotFoundException e) {
-            // Handle exceptions gracefully
-            e.printStackTrace(); // Log the exception or use a logging framework
-            return new BaseResponse("Error during export: " + e.getMessage());
+            file = File.createTempFile("out", ".tmp");
+            file.deleteOnExit();
+            Resource resource = new ClassPathResource("templates/history_checkin.jasper");
+            FileOutputStream fos = new FileOutputStream(file);
+            InputStream inputStream = resource.getInputStream();
+            System.out.println("inputStream"+inputStream);
+            List<CheckinCheckoutResponse> list = checkinCheckoutMapper.listCheckinCheckout(request);
+            Map<String, Object> parameters = new HashMap<>();
+            ExportUtils.exportReport(inputStream, fos, parameters, list, "pdf");
+
+
+        } catch (Exception e) {
+            throw new ServiceException(e.getMessage());
         }
+        return file;
     }
-
-
 
 }

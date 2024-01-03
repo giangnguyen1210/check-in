@@ -8,4 +8,6 @@ public interface RegisterService {
 
     BaseResponse getListRegister(RegisterRequest request);
     BaseResponse updateRegister(RegisterRequest request);
+
+    BaseResponse deleteRegister(RegisterRequest request);
 }
