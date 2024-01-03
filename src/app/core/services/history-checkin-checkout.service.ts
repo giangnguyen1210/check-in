@@ -27,13 +27,13 @@ export class CheckinCheckoutService {
   exportHistoryCheckin(history: any){
     const url = `${this.apiUrl}/admin/history-checkin-checkout/export`;
     const headers = this.headerService.getHeaders()
-    return this.http.post(url, history,{ headers });
+    return this.http.post(url, history,{ responseType: 'arraybuffer', headers });
   }
 
   exportHistoryCheckinDetail(history: any){
     const url = `${this.apiUrl}/admin/history-checkin-checkout/export-detail`;
     const headers = this.headerService.getHeaders()
-    return this.http.post(url, history,{ headers });
+    return this.http.post(url, history,{ responseType: 'arraybuffer', headers });
   }
 
  

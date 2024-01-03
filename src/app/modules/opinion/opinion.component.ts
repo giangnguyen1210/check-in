@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BaseResponse } from 'src/app/core/models/response';
-import { CommonService } from 'src/app/core/services/common.service';
 import { DepartmentService } from 'src/app/core/services/department.service';
 import { OpinionService } from 'src/app/core/services/opinion.service';
-import { UnitService } from 'src/app/core/services/unit.service';
 import { UserService } from 'src/app/core/services/users.service';
 @Component({
   selector: 'app-opinion',

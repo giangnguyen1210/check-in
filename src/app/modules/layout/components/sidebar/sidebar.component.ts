@@ -14,6 +14,7 @@ export class SidebarComponent {
   isDropdownOpen:boolean = false;
   isDropdownCategoryOpen: boolean = false;
   isDropdownStatisticOpen: boolean = false;
+  isDropdownSettingOpen: boolean = false;
 
 
   toggleDropdownCategory() {
@@ -28,4 +29,5 @@ export class SidebarComponent {
     this.isDropdownStatisticOpen = !this.isDropdownStatisticOpen;
   }
 
+ 
 }

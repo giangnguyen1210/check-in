@@ -27,13 +27,13 @@ export class HistoryLoginService {
   exportHistoryLogin(history: any){
     const url = `${this.apiUrl}/admin/history-login/export`;
     const headers = this.headerService.getHeaders()
-    return this.http.post(url, history,{ headers });
+    return this.http.post(url, history,{ responseType: 'arraybuffer',headers });
   }
 
   exportHistoryLoginDetail(history: any){
     const url = `${this.apiUrl}/admin/history-login/export-detail`;
     const headers = this.headerService.getHeaders()
-    return this.http.post(url, history,{ headers });
+    return this.http.post(url, history,{ responseType: 'arraybuffer',headers });
   }
 
  

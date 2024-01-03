@@ -13,9 +13,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgxTimepickerModule } from 'ngx-timepicker';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { ToastrModule } from 'ngx-toastr';
-import { OpinionComponent } from './modules/opinion/opinion.component';
-
-
+import { SettingComponent } from './modules/setting/setting.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +31,7 @@ import { OpinionComponent } from './modules/opinion/opinion.component';
     NgxTimepickerModule,
     NgxMaterialTimepickerModule,
     ToastrModule.forRoot(), 
+    
   ],
   providers: [
     {

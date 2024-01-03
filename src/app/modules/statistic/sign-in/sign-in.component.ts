@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { HistoryLoginService } from 'src/app/core/services/history-login.service';
 import { BaseResponse } from 'src/app/core/models/response';
 import { ToastrService } from 'ngx-toastr';
+import { createFileType, downLoadFile } from 'src/app/core/utils/export.util';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -54,7 +55,10 @@ export class SignInComponent implements OnInit{
   employeeCode: any;
   formDate: any;
   response!: BaseResponse;
- 
+  totalSize = 1;
+  pageSize = 5;
+  pageNumber = 1;
+  page:any;
   formatTime(time: any) {
     if(time==null){
       return '';
@@ -125,42 +129,39 @@ export class SignInComponent implements OnInit{
     }
     this.historyLoginService.exportHistoryLoginDetail(json).subscribe(
       (data: any) => {
-        this.response = data;
-        console.log(this.response);
-        if( this.response.errorCode ==="OK"){
-          this.toastr.success(this.response.errorDesc);
-        }else{
-          this.toastr.error(this.response.errorDesc);
-        }
+          downLoadFile(
+            data,
+            createFileType('pdf'),
+            'History_login_' + new Date().toDateString()
+          );
       },
       error => {
         console.error('Error downloading file:', error);
       }
     );
   }
+
   exportFile(): void {
     const json = {
-      keyword: this.formSearch.get('keyword').value,
-      statusId: this.formSearch.get('statusId').value,
-      genderId: this.formSearch.get('genderId').value,
-      departmentCode: this.formSearch.get('departmentCode').value,
-      unitCode: this.formSearch.get('unitCode').value,
-    };
-    this.historyLoginService.exportHistoryLogin(json).subscribe(
-      (data: any) => {
-        this.response = data;
-        if( this.response.errorCode ==="OK"){
-          this.toastr.success(this.response.errorDesc);
-        }else{
-          this.toastr.error(this.response.errorDesc);
-        }
-      },
-      error => {
-        console.error('Error downloading file:', error);
-      }
-    );
+          keyword: this.formSearch.get('keyword').value,
+          statusId: this.formSearch.get('statusId').value,
+          genderId: this.formSearch.get('genderId').value,
+          departmentCode: this.formSearch.get('departmentCode').value,
+          unitCode: this.formSearch.get('unitCode').value,
+        };
+        this.historyLoginService.exportHistoryLogin(json).subscribe(
+          (data: any) => {
+            // Handle file path response
+            downLoadFile(
+              data,
+              createFileType('pdf'),
+              'History_login_' + new Date().toDateString()
+            );
+          }
+          
+        );
   }
-  
+
   
   getStatusService(){
     this.commonService.getStatusList().subscribe(
@@ -190,15 +191,47 @@ export class SignInComponent implements OnInit{
       genderId: this.formSearch.get('genderId').value,
       departmentCode: this.formSearch.get('departmentCode').value,
       unitCode: this.formSearch.get('unitCode').value,
+      page: this.pageNumber,
+      limit: this.pageSize,
     };
     this.historyLoginService.getHistoryLoginList(json).subscribe(
       (data) => {
         this.historyLoginList = data;
+        this.totalSize = data.totalRecords;
+        this.page = Math.round(this.totalSize / this.pageSize);
       },
       (error) => {
         console.error('API Error:', error);
       }
     );
+  }
+  currentPage(page: number) {
+    this.pageNumber = page;
+    this.getHistoryListService();
+  }
+
+  range(end: number): number[] {
+    const result = [];
+    for (let i = 1; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
+  }
+
+  nextPage(): void {
+    if (this.pageNumber < this.totalSize) {
+      console.log(this.totalSize);
+      this.pageNumber++;
+      this.getHistoryListService();
+      
+    }
+  }
+
+  prevPage(): void {
+    if (this.pageNumber > 1) {
+      this.pageNumber--;
+      this.getHistoryListService();
+    }
   }
   getHistoryDetailService(){
     const json={

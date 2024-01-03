@@ -48,6 +48,8 @@ export class FormSurveyComponent implements OnInit {
   showModal: boolean = false;
   showModalEdit: boolean = false;
   response!: BaseResponse;
+  showModalDelete: boolean = false;
+  selectedSurvey: any;
 
   //ng oninit
   ngOnInit(): void {
@@ -161,6 +163,31 @@ export class FormSurveyComponent implements OnInit {
     }
   }
 
+  deleteSurvey(survey: any){
+    this.showModalDelete =true;
+    this.selectedSurvey = survey;
+  }
+
+  confirmDelete(){
+    const json={
+      ...this.selectedSurvey
+    }
+    this.surveyService.deleteSurvey(json).subscribe(
+      (data) => {
+        // console.log(data);
+        this.response = data;
+        if (this.response.errorCode === "OK") {
+          this.showModalDelete = false;
+          this.toastr.success(this.response.errorDesc);
+          this.getSurveyService();
+        }else{
+          this.toastr.error(this.response.errorDesc);
+        }
+      })
+  }
+  cancelDelete(){
+    this.showModalDelete = false;
+  }
   updateSurvey() {
 
     const optionTextArray = this.option1.value.map((option: Option) => option.optionText);

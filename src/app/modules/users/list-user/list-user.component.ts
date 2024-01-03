@@ -7,7 +7,6 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { DepartmentService } from 'src/app/core/services/department.service';
 import { UnitService } from 'src/app/core/services/unit.service';
 import { UserService } from 'src/app/core/services/users.service';
-import { formatDate } from 'src/app/core/utils/format.util';
 @Component({
   selector: 'app-list-user',
   templateUrl: './list-user.component.html',
@@ -63,11 +62,11 @@ export class ListUserComponent implements OnInit {
   showModal: boolean = false;
   showModalEdit: boolean = false;
   selectedUserCodes: string[] = [];
-  page: any = 1;
-  limit: any = 10;
-  totalPages: number = 0;
-  totalRecords: any;
+  totalSize = 1;
+  pageSize = 10;
+  pageNumber = 1;
   response!: BaseResponse;
+  page: any;
   //ng oninit
   ngOnInit(): void {
     this.initFormSearch();
@@ -78,6 +77,11 @@ export class ListUserComponent implements OnInit {
     this.getDepartmentService();
     this.getUnitService();
     this.getPositionService();
+  }
+
+  changePage(size: any) {
+    this.pageNumber = size;
+    this.getUserService();
   }
 
   onCheckboxChange(user: any) {
@@ -346,8 +350,8 @@ export class ListUserComponent implements OnInit {
       genderId: this.formSearch.get('genderId').value,
       departmentCode: this.formSearch.get('departmentCode').value,
       jobTitleCode: this.formSearch.get('jobTitleCode').value,
-      page: this.page,
-      limit: this.limit
+      page: this.pageNumber,
+      limit: this.pageSize,
     };
     console.log(json);
     this.userService.getUserList(json).subscribe(
@@ -357,8 +361,13 @@ export class ListUserComponent implements OnInit {
 
           this.userList = data;
           console.log(data.totalRecords);
-          // Kiểm tra nếu có trang tiếp theo
-          this.totalPages = data.totalRecords;
+          this.totalSize = data.totalRecords;
+          this.page = Math.floor(this.totalSize / this.pageSize)+1;
+          console.log(this.page);
+
+          
+          
+          console.log(this.totalSize);
         }
         console.log(this.userList);
       },
@@ -366,20 +375,39 @@ export class ListUserComponent implements OnInit {
         console.error('API Error:', error);
       }
     );
+    console.log(this.totalSize, this.pageSize);
+
   }
 
   nextPage(): void {
-    if (this.page < this.totalPages) {
-      this.page++;
+    if (this.pageNumber < this.totalSize) {
+      console.log(this.totalSize);
+      this.pageNumber++;
       this.getUserService();
+      if (this.pageNumber * this.pageSize >= this.totalSize && this.page >= 3) {
+        this.page = this.totalSize - 2;
+      }
     }
   }
 
   prevPage(): void {
-    if (this.page > 1) {
-      this.page--;
+    if (this.pageNumber > 1) {
+      this.pageNumber--;
       this.getUserService();
     }
+  }
+
+  currentPage(page: number) {
+    this.pageNumber = page;
+    this.getUserService();
+  }
+
+  range(end: number): number[] {
+    const result = [];
+    for (let i = 1; i <= end; i++) {
+      result.push(i);
+    }
+    return result;
   }
 
   get f() {

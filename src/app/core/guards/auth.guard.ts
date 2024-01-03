@@ -11,13 +11,21 @@ import { AuthService } from '../services/auth.service';
 export class AuthGuard implements CanActivate {
     constructor(private authService: AuthService, private router: Router) { }
 
+
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): boolean {
         // console.log(this.authService.isLoggedIn());
         // console.log(next.url);
+        const token = localStorage.getItem('token');
+        const isExpired = this.authService.isTokenExpired(token);
+        // console.log(isExpired);
         // console.log(state.url);
+        if(isExpired){
+            this.router.navigateByUrl('/auth/sign-in')
+            localStorage.removeItem('token')
+        }
         if (this.authService.isLoggedIn()) {
             // 1.check router contais /auth
             // redirect /home

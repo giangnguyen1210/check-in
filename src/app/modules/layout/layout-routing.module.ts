@@ -37,6 +37,13 @@ const routes: Routes = [
     canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
   },
   {
+    path: 'setting',
+    component: LayoutComponent,
+    loadChildren: () => import('../setting/setting.module').then((m) => m.SettingModule),
+    canActivate: [AuthGuard], // Apply the AuthGuard to the entire dashboard module
+  }
+  ,
+  {
     path: 'opinion',
     component: LayoutComponent,
     loadChildren: () => import('../opinion/opinion.module').then((m) => m.OpinionModule),

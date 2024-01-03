@@ -22,6 +22,7 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const token = localStorage.getItem('token');
     const isExpired = this.authService.isTokenExpired(token);
+    // console.log(isExpired);
     if (!isExpired) {
       req = req.clone({
         setHeaders: {

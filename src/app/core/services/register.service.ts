@@ -31,4 +31,11 @@ export class RegisterService {
     
   }
 
+  deleteRegister(user:any): Observable<any>{
+    const headers = this.headerService.getHeaders();
+    const url = `${this.apiUrl}/admin/register/delete`;
+    return this.http.post(url, user, { headers });
+    
+  }
+
 }

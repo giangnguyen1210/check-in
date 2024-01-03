@@ -31,4 +31,11 @@ export class SurveyService {
     
   }
 
+  deleteSurvey(user:any): Observable<any>{
+    const headers = this.headerService.getHeaders();
+    const url = `${this.apiUrl}/admin/survey/delete`;
+    return this.http.post(url, user, { headers });
+    
+  }
+
 }

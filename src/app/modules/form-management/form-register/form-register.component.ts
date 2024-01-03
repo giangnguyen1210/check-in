@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Option } from 'src/app/core/models/response';
+import { ToastrService } from 'ngx-toastr';
+import { BaseResponse, Option } from 'src/app/core/models/response';
 import { RegisterService } from 'src/app/core/services/\u001Dregister.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/users.service';
@@ -33,22 +34,12 @@ export class FormRegisterComponent implements OnInit{
     return formattedDate;
   }
   //constructor
-  constructor(private registerService: RegisterService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
-  nameImage: any;
+  constructor(private registerService: RegisterService, private toastr: ToastrService, private commonService: CommonService, private router: Router, private fb: FormBuilder) {}
   formSearch: any;
   formRegister!: FormGroup;
   formRegisterEdit!: FormGroup;
-  isSubmit = false;
-  userList: any;
-  roleList: any;
-  statusList: any;
-  stt: any;
-  unitList:any;
-  genderList: any;
   objectList: any;
-  positionList: any;
   toqList: any;
-  jobTitleList: any;
   registerList: any;
   showModal: boolean=false;
   showModalEdit: boolean = false;
@@ -56,7 +47,10 @@ export class FormRegisterComponent implements OnInit{
   selectedChild: any;
   listOption: any;
   childOptions!: { id: number, name: string }[];
+  showModalDelete: boolean = false;
+  selectedRegister: any;
 
+  response!: BaseResponse;
   //ng oninit
   ngOnInit(): void {
     this.initFormSearch();
@@ -199,6 +193,33 @@ export class FormRegisterComponent implements OnInit{
     }
   }
 
+
+  deleteRegister(register: any){
+    this.showModalDelete =true;
+    this.selectedRegister = register;
+  }
+
+  confirmDelete(){
+    const json={
+      ...this.selectedRegister
+    }
+    this.registerService.deleteRegister(json).subscribe(
+      (data) => {
+        // console.log(data);
+        this.response = data;
+        if (this.response.errorCode === "OK") {
+          this.showModalDelete = false;
+          this.toastr.success(this.response.errorDesc);
+          this.getRegisterService();
+        }else{
+          this.toastr.error(this.response.errorDesc);
+        }
+      })
+  }
+
+  cancelDelete(){
+    this.showModalDelete = false;
+  }
   cancelEdit(){
     this.showModalEdit=false;
   }

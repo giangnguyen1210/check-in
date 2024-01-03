@@ -1,0 +1,87 @@
+<div class="h-full ml-14 mt-14 pt-4 pl-4 mb-10 md:ml-64">
+    <!-- <app-fis></app-fis> -->
+    
+    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" [attr.id]="tabsId" [attr.data-tabs-toggle]="tabsToggle" role="tablist">
+          <li *ngFor="let tab of tabs" class="me-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 rounded-t-lg"
+                    [class.hover:text-gray-600]="tab.isActive"
+                    [class.hover:border-gray-300]="tab.isActive"
+                    [class.dark:hover:text-gray-300]="tab.isActive"
+                    [attr.id]="tab.id"
+                    [attr.data-tabs-target]="tab.dataTabsTarget"
+                    type="button" role="tab" [attr.aria-controls]="tab.id" [attr.aria-selected]="tab.isActive"
+                    (click)="onTabClick(tab)">
+              {{tab.label}}
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div [attr.id]="tabsContentId">
+        <div *ngFor="let tab of tabs" [ngClass]="tab.isActive?'':'hidden'" class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" [attr.id]="tab.id" role="tabpanel" [attr.aria-labelledby]="tab.id">
+          <div *ngIf="tab.id=='password'">
+            <form [formGroup]="formPassword" class="mx-auto pt-5">
+                <div class="relative z-0 w-full mb-2 group">
+                    <label for="minLength" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Độ dài tối thiểu<span class="text-red-500">*</span></label>
+                    <input type="number" formControlName="minLength" id="minLengthInput" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số">
+                </div>
+                <div class="relative z-0 w-full mb-2 group">
+                    <label for="maxLength" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Độ dài tối đa<span class="text-red-500">*</span></label>
+                    <input type="number" formControlName="maxLength" id="maxLength" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số">
+                </div>
+                <div class="relative z-0 w-full mb-2 group">
+                    <label for="minChar" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Số lượng ký tự chữ cái tối thiểu<span class="text-red-500">*</span></label>
+                    <input type="number" formControlName="minChar" id="minChar" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số">
+                </div>
+                <div class="relative z-0 w-full mb-2 group">
+                    <label for="minNumber" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Số lượng ký tự chữ số tối thiểu<span class="text-red-500">*</span></label>
+                    <input type="number" formControlName="minNumber" id="minNumber" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số">
+                </div>
+                <div class="relative z-0 w-full mb-2 group">
+                    <label for="minSpecialChar" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Số lượng ký tự đặc biệt thiểu<span class="text-red-500">*</span></label>
+                    <input type="number" formControlName="minSpecialChar" id="minSpecialChar" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số">
+                </div>
+                <div class="relative z-0 w-full mb-2 group">
+                    <label for="timeExpire" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Thời gian hết hạn mật khẩu<span class="text-red-500">*</span></label>
+                    <input type="number" formControlName="timeExpire" id="timeExpire" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số">
+                </div>
+                <div class="mt-4 flex">
+                    <button (click)="editPassword()" class="flex-shrink-0 text-blue-500 border border-blue-500 py-1 px-4 rounded-lg focus:outline-none" >Chỉnh sửa</button>
+                    <button (click)="submitPassword()" type="button" class="flex items-center bg-green-500 text-white py-1 px-4 rounded-lg focus:outline-none">
+                        Lưu
+                    </button>
+                </div>
+            </form>
+            </div>
+            <div *ngIf="tab.id=='session'">
+                <form [formGroup]="formSession" class="mx-auto pt-5">
+                    <div class="relative z-0 w-full mb-2 group">
+                        <label for="intervalTime" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Thời gian tồn tại phiên đăng nhập<span class="text-red-500">*</span></label>
+                        <input type="number" formControlName="intervalTime" id="intervalTimeInput" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số (phút)">
+                    </div>
+                    <div class="relative z-0 w-full mb-2 group">
+                        <label for="maxWrongTime" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Số lần tối đa đăng nhập sai<span class="text-red-500">*</span></label>
+                        <input type="number" formControlName="maxWrongTime" id="maxWrongTime" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số">
+                    </div>
+                    <div class="relative z-0 w-full mb-2 group">
+                        <label for="maxTime" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Số lần tối đa đăng nhập trong ngày<span class="text-red-500">*</span></label>
+                        <input type="number" formControlName="maxTime" id="maxTime" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số">
+                    </div>
+                    <div class="relative z-0 w-full mb-2 group">
+                        <label for="timeLoginAgain" class="mb-2 pr-4 text-sm min-w-[250px] block font-medium text-gray-900 dark:text-white">Thời gian đăng nhập lại(khi vượt quá số lần đăng nhập sai)<span class="text-red-500">*</span></label>
+                        <input type="number" formControlName="timeLoginAgain" id="timeLoginAgain" class="pt-2 pb-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nhập số (phút)">
+                    </div>
+                   
+                    <div class="mt-4 flex">
+                        <button (click)="editSession()" class="flex-shrink-0 text-blue-500 border border-blue-500 py-1 px-4 rounded-lg focus:outline-none" >Chỉnh sửa</button>
+                        <button (click)="submitSession()" type="button" class="flex items-center bg-green-500 text-white py-1 px-4 rounded-lg focus:outline-none">
+                            Lưu
+                        </button>
+                    </div>
+                </form>
+                </div>
+        </div>
+         
+      </div>
+
+  </div>
