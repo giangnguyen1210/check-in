@@ -22,6 +22,7 @@ public interface UserMapper {
     List<UserResponse> getListUser(UserRequest request);
 
     UserResponse getNextCode();
+    int checkCodeExisted(String employeeCode);
 
     Integer updateUser(UserRequest request);
 
@@ -38,5 +39,7 @@ public interface UserMapper {
     Integer updateLoginIfRight(UserRequest request);
 
     UserLoginResponse getUserLoginHistory(String employeeCode, String email);
+
+    Integer insertChangePasswordHistory(UserRequest request);
 
 }

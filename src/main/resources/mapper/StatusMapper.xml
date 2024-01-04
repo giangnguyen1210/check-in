@@ -12,4 +12,7 @@
     <select id="checkStatusExist" resultType="java.lang.Integer">
         select * from status where name=#{name}
     </select>
+    <select id="listUserStatus" resultType="com.checkin.dto.response.StatusResponse">
+        select * from status where id = 1 or id =2
+    </select>
 </mapper>

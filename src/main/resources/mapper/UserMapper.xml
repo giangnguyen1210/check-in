@@ -178,14 +178,20 @@
         values (now(), #{employeeCode})
     </insert>
     <insert id="insertLoginHistory">
-        insert into users_login_history (employee_code, email, number_wrong_password,date,time,status_id)
+        insert into users_login_wrong_history (employee_code, email, number_wrong_password,date,time,status_id)
         values(#{employeeCode}, #{email}, 1, now(),now(),5)
     </insert>
+    <insert id="insertChangePasswordHistory">
+        insert into change_password_history (last_time,employee_code) values(now(),#{employeeCode})
+    </insert>
     <select id="getUserLoginHistory" resultType="com.checkin.dto.response.UserLoginResponse">
-        select * from users_login_history where email=#{email} and status_id=5 limit 1
+        select * from users_login_wrong_history where email=#{email} and status_id=5 limit 1
+    </select>
+    <select id="checkCodeExisted" resultType="java.lang.Integer">
+        select count(*) from users where employee_code = #{employeeCode}
     </select>
     <update id="updateLoginHistory">
-        update users_login_history
+        update users_login_wrong_history
         set
            number_wrong_password = #{numberWrongPassword},
            time=now()
@@ -193,7 +199,7 @@
 
     </update>
     <update id="updateLoginIfRight">
-        update users_login_history
+        update users_login_wrong_history
         set
             status_id = 6
         where employee_code =#{employeeCode} and status_id = 5

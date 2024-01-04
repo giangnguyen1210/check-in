@@ -71,6 +71,16 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
+    public BaseResponse listUserStatus() {
+        BaseResponse baseResponse = new BaseResponse();
+        List<StatusResponse> statuses = statusMapper.listUserStatus();
+        baseResponse.setData(statuses);
+        baseResponse.setErrorCode(HttpStatus.OK.name());
+        baseResponse.setTotalRecords(statuses.size());
+        return baseResponse;
+    }
+
+    @Override
     public BaseResponse createStatus(StatusRequest request) {
         BaseResponse baseResponse = new BaseResponse();
         Integer status = statusMapper.checkStatusExist(request);

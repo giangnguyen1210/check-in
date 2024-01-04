@@ -1,10 +1,7 @@
 package com.checkin.service.impl;
 import com.checkin.dto.request.UserRequest;
 import com.checkin.dto.response.*;
-import com.checkin.mapper.OTPMapper;
-import com.checkin.mapper.SettingPasswordMapper;
-import com.checkin.mapper.SettingSessionMapper;
-import com.checkin.mapper.UserMapper;
+import com.checkin.mapper.*;
 import com.checkin.security.JwtGenerator;
 import com.checkin.service.AuthService;
 import io.jsonwebtoken.Claims;
@@ -50,12 +47,21 @@ public class AuthServiceImpl implements AuthService {
     private SettingPasswordMapper passwordMapper;
     @Autowired
     private SettingSessionMapper sessionMapper;
+    @Autowired
+    private LoginHistoryMapper loginHistoryMapper;
     private static final String SECRET_KEY = "check-in"; // Thay thế bằng khoá bí mật thực tế của bạn
 
     @Override
     public BaseResponse login(UserRequest request) {
         AuthResponse authResponse = new AuthResponse("");
         UserResponse user = userMapper.findByEmail(request.getEmail());
+
+        if(user==null){
+            authResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            authResponse.setErrorDesc("Người dùng đã bị deactive");
+            return authResponse;
+        }
+        request.setEmployeeCode(user.getEmployeeCode());
         UserLoginResponse userLoginResponse = userMapper.getUserLoginHistory(user.getEmployeeCode(), user.getEmail());
         if(userLoginResponse!=null &&userLoginResponse.getNumberWrongPassword()>=sessionMapper.getSetting().getMaxWrongTime()) {
             Date dbDate = userLoginResponse.getDate();
@@ -85,7 +91,6 @@ public class AuthServiceImpl implements AuthService {
             }
         }
         else{
-
             if(user.getRoleId()!=1){
                 authResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
                 authResponse.setErrorDesc("Bạn không có quyền truy cập");
@@ -105,10 +110,20 @@ public class AuthServiceImpl implements AuthService {
 
                     // Lấy thông tin người dùng
                     String username = claims.getSubject();
-                    authResponse.setAccessToken(token);
-                    authResponse.setData(username);
-                    authResponse.setErrorCode(HttpStatus.OK.name());
-                    authResponse.setErrorDesc("Đăng nhập thành công");
+
+                    System.out.println("max time: "+sessionMapper.getSetting().getMaxTime());
+                    if(loginHistoryMapper.countHistoryLogin(request)>sessionMapper.getSetting().getMaxTime()){
+                        authResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+                        authResponse.setErrorDesc("Bạn đã đăng nhập số quá số lần trong ngày là "+sessionMapper.getSetting().getMaxTime());
+                    }else{
+
+                        loginHistoryMapper.createHistoryLogin(request);
+                        authResponse.setErrorDesc("Đăng nhập thành công");
+                        authResponse.setAccessToken(token);
+                        authResponse.setData(username);
+                        authResponse.setErrorCode(HttpStatus.OK.name());
+                    }
+
                 }else{
                     authResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
                     authResponse.setErrorDesc("Mật khẩu không trùng khớp");
@@ -130,8 +145,6 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
         }
-
-
          return authResponse;
     }
 
@@ -199,6 +212,7 @@ public class AuthServiceImpl implements AuthService {
                 userMapper.insertTimeResetPassword(userResponse.getEmployeeCode());
                 baseResponse.setData(reset);
                 baseResponse.setErrorCode(HttpStatus.OK.name());
+//                userMapper.insertChangePasswordHistory(request);
                 baseResponse.setErrorDesc("Đặt lại mật khẩu thành công");
             }
             else {

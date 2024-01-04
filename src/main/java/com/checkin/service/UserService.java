@@ -3,6 +3,7 @@ package com.checkin.service;
 import com.checkin.dto.request.UserRequest;
 import com.checkin.dto.response.BaseResponse;
 import com.checkin.dto.response.UserResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
     BaseResponse createUser(UserRequest request);
@@ -16,4 +17,5 @@ public interface UserService {
     BaseResponse activateUser(UserRequest request);
 
 
+//    BaseResponse importUser(MultipartFile file);
 }

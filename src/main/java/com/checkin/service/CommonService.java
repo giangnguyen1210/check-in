@@ -16,6 +16,8 @@ public interface CommonService {
 
     BaseResponse createJobTitle(JobTitleRequest request);
 
+    BaseResponse listUserStatus();
+
     BaseResponse createStatus(StatusRequest request);
 
     BaseResponse createPosition(PositionRequest request);

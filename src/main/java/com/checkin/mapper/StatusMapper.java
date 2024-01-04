@@ -11,5 +11,7 @@ public interface StatusMapper {
     Integer createStatus(StatusRequest request);
 
     List<StatusResponse> listStatus();
+
+    List<StatusResponse> listUserStatus();
     Integer checkStatusExist(StatusRequest request);
 }

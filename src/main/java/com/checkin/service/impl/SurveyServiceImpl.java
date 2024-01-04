@@ -22,7 +22,7 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public BaseResponse createSurvey(SurveyRequest request) {
         BaseResponse baseResponse = new BaseResponse();
-        if(request.getName().equals("")||request.getName()==null){
+        if(request.getName()==null||request.getName().isEmpty()){
             baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
             baseResponse.setErrorDesc("Tên khảo sát không được trống");
             return baseResponse;

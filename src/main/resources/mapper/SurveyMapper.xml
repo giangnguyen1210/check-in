@@ -15,7 +15,7 @@
                    mandatory_object,
                    completion_rate,
                    start_time,
-                   end_time)
+                   end_time,status_id)
         values
             (#{name},
              #{code},
@@ -27,7 +27,7 @@
              #{mandatoryObject},
              #{completionRate},
              #{startTime},
-             #{endTime})
+             #{endTime},1)
     </insert>
     <update id="updateSurvey">
         update survey set
@@ -86,7 +86,7 @@
         LEFT JOIN
         type_of_question toq2  ON s.type_of_question_2_id = toq2.id
         <where>
-            status_id !=3 or status_id is null
+            (status_id !=3 or status_id is null)
             <if test="code != null and code != ''">
                 AND (
                 LOWER(s.code) LIKE CONCAT('%', LOWER(#{code}), '%')

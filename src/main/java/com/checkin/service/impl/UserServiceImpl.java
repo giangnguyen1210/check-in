@@ -6,13 +6,17 @@ import com.checkin.dto.response.BaseResponse;
 import com.checkin.dto.response.UserResponse;
 import com.checkin.mapper.UserMapper;
 import com.checkin.service.UserService;
+//import com.github.pjfanning.xlsx.StreamingReader;
 import com.google.common.base.Strings;
+//import org.apache.poi.ss.usermodel.Cell;
+//import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -91,9 +95,16 @@ public class UserServiceImpl implements UserService {
         return baseResponse;
     }
 
+
     @Override
     public BaseResponse updateUser(UserRequest request) {
         BaseResponse baseResponse = new BaseResponse();
+        UserResponse checkEmailExist = userMapper.findByEmail(request.getEmail());
+        if(checkEmailExist!=null){
+            baseResponse.setErrorCode(HttpStatus.BAD_REQUEST.name());
+            baseResponse.setErrorDesc("Email đã tồn tại");
+            return baseResponse;
+        }
         if (request == null || Strings.isNullOrEmpty(request.getFullname())
                 || Strings.isNullOrEmpty(request.getEmail())) {
             return new BaseResponse(HttpStatus.BAD_REQUEST.name(),
@@ -130,4 +141,86 @@ public class UserServiceImpl implements UserService {
         return new BaseResponse(deactive, HttpStatus.OK.name(), "Kích hoạt hành công");
 
     }
+
+//    @Override
+//    public BaseResponse importUser(MultipartFile file){
+//        if (file != null) {
+//            try (StreamingReader reader = StreamingReader.builder()
+//                    .rowCacheSize(100)
+//                    .bufferSize(4096)
+//                    .sheetIndex(0)
+//                    .read(file.getInputStream())
+//            ) {
+//
+//                Iterator<Row> rowIterator = reader.iterator();
+//                Row row = rowIterator.next(); // Bỏ qua head
+//                if (!rowIterator.hasNext()) {
+//                    return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "File rỗng");
+//                }
+//                int index = 0;
+//
+//                List<UserResponse> couponList = new ArrayList<>();
+//                List<Map<String, Object>> listError = new ArrayList<>();
+//                while (rowIterator.hasNext()) {
+//                    String error = "";
+//                    row = rowIterator.next();
+//                    UserResponse userResponse1 = new UserResponse();
+//
+//                    Cell fullname = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+//                    Cell unit = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+//                    Cell department = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+//
+//                    String code = "EMPLOYEE-";
+////                    int getCouponNextId = userMapper.getNextCode() + index;
+//                    int getNextId = 0;
+//                    if(userMapper.totalUser()>0 || userMapper.totalUser()==null) {
+//                        UserResponse userResponse = userMapper.getNextCode();
+//                        getNextId = Integer.parseInt(userResponse.getEmployeeCode().substring(userResponse.getEmployeeCode().length() - 4)) + 1;
+//                    }
+//                    String pad = service.padLeft(String.valueOf(getNextId), 4, "0");
+//
+//                    int checkCodeExisted = userMapper.checkCodeExisted(code + pad);
+//                    while(checkCodeExisted > 0){
+//                        index++;
+//                        UserResponse userResponse = userMapper.getNextCode();
+//                        getNextId =  Integer.parseInt(userResponse.getEmployeeCode().substring(userResponse.getEmployeeCode().length() - 4)) + 1 + index;
+//                        pad = service.padLeft(String.valueOf(getNextId), 4, "0");
+//                        checkCodeExisted = userMapper.checkCodeExisted(code + pad);
+//                    }
+//
+//                    userResponse1.setEmployeeCode(code + pad);
+//                    index++;
+//
+//                    if (StringUtils.isEmpty(fullname.getStringCellValue()) || fullname.getStringCellValue().trim().isEmpty() ) {
+//                        error = error + "Dữ liệu cột Tên trống! \n";
+//                    }
+//                    userResponse1.setFullname(fullname.getStringCellValue());
+//                    userResponse1.setDepartment(fullname.getStringCellValue());
+//
+//                    if (StringUtils.isEmpty(unit.getStringCellValue()) || unit.getStringCellValue().trim().isEmpty()) {
+//                        error = error + "Dữ liệu cột trạng thái trống! \n";
+//                    }
+//                    if (!StringUtils.isEmpty(error)) {
+//                        Map<String, Object> map = new HashMap<>();
+//                        map.put("stt", index);
+//                        map.put("errorDesc", error);
+//                        listError.add(map);
+//                    }
+//                }
+//                Map<String, Object> result = new HashMap<>();
+//                result.put("listError", listError);
+//                result.put("listSuccess", couponList);
+//                BaseResponse response = new BaseResponse();
+//                response.setErrorCode(HttpStatus.OK.name());
+//                response.setData(result);
+//                return response;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "Import Gói ưu đãi phí thất bại");
+//            }
+//        } else {
+//            return new BaseResponse(HttpStatus.BAD_REQUEST.name(), "File rỗng");
+//
+//        }
+//    }
 }
