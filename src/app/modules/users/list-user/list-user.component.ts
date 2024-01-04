@@ -123,6 +123,9 @@ export class ListUserComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.base64CccdImage = e.target.result;
+        // this.formUser.patchValue({
+        //   cccdImage: event.target.result
+        // })
       };
 
       reader.readAsDataURL(file);
@@ -134,6 +137,9 @@ export class ListUserComponent implements OnInit {
       var reader = new FileReader();
       reader.onload = (event: any) => {
         this.base64FaceImage = event.target.result;
+        // this.formUser.patchValue({
+        //   faceImage: event.target.result
+        // })
       }
       reader.readAsDataURL(event.target.files[0]);
     }
@@ -313,7 +319,7 @@ export class ListUserComponent implements OnInit {
     );
   }
   getStatusService() {
-    this.commonService.getStatusList().subscribe(
+    this.userService.statusUser({}).subscribe(
       (data) => {
         this.statusList = data;
       },

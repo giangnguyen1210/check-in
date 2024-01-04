@@ -12,6 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthService {
 
   isLoggedIn(): boolean {
+    
     return !!localStorage.getItem(this.TOKEN_KEY);
   }
 

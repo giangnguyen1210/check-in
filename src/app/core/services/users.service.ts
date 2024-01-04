@@ -43,4 +43,10 @@ export class UserService {
     return this.http.post(url, user, { headers });
   }
 
+  statusUser(user: any): Observable<any> {
+    const headers = this.headerService.getHeaders();
+    const url = `${this.apiUrl}/admin/users/status`;
+    return this.http.post(url, user, { headers });
+  }
+
 }
